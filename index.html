@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>無職転生 魔術大全 — Mushoku Tensei Magic Grimoire</title>
+  <title>Mushoku Tensei — Magic Grimoire & Chanting RPG</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-dark: #090b10;
-      --bg-card: #121622;
-      --bg-card-hover: #181f30;
-      --border-magic: #2a344d;
+      --bg-dark: #07090e;
+      --bg-card: #0f131d;
+      --bg-card-hover: #151b2a;
+      --border-magic: #222b3d;
       --border-gold: #c5a059;
+      --gold-glow: rgba(197, 160, 89, 0.35);
       --text-main: #e2e8f0;
-      --text-muted: #8e9bb0;
+      --text-muted: #8391a8;
       --text-gold: #e5c07b;
       --font-title: 'Cinzel', serif;
       --font-jp: 'Noto Serif JP', serif;
-      --font-thai: 'Noto Sans Thai', sans-serif;
+      --font-sans: 'Noto Sans', sans-serif;
       
       --color-water: #38bdf8;
       --color-fire: #f87171;
@@ -30,137 +31,140 @@
       --color-dragon: #f43f5e;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: var(--font-thai);
+      font-family: var(--font-sans);
       min-height: 100vh;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.09) 0%, transparent 60%),
         radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
     }
 
-    /* Ambient Magic Particles */
     #particle-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
       z-index: 0;
       opacity: 0.6;
     }
 
-    /* Container */
     .container {
       position: relative;
       z-index: 1;
-      max-width: 1300px;
+      max-width: 1340px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 5rem;
+      padding: 2rem 1.5rem 6rem;
+    }
+
+    /* Top Nav Tabs */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab-btn {
+      background: rgba(18, 22, 34, 0.85);
+      border: 1px solid var(--border-magic);
+      color: var(--text-muted);
+      padding: 0.8rem 1.8rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-family: var(--font-title);
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-tab-btn:hover {
+      color: #fff;
+      border-color: rgba(197, 160, 89, 0.5);
+      background: rgba(24, 31, 48, 0.9);
+    }
+
+    .nav-tab-btn.active {
+      color: #07090e;
+      background: linear-gradient(135deg, #d4af37, #f3e5ab);
+      border-color: #f3e5ab;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     }
 
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 3.5rem;
-      position: relative;
+      margin-bottom: 2.5rem;
     }
 
     .badge-sub {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.35rem 1rem;
+      padding: 0.35rem 1.1rem;
       border-radius: 9999px;
       background: rgba(197, 160, 89, 0.12);
-      border: 1px solid rgba(197, 160, 89, 0.3);
+      border: 1px solid rgba(197, 160, 89, 0.35);
       color: var(--border-gold);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     h1.main-title {
       font-family: var(--font-title);
-      font-size: 3.2rem;
+      font-size: 3rem;
       font-weight: 900;
       letter-spacing: 3px;
       background: linear-gradient(135deg, #ffffff 20%, #d4af37 60%, #aa7c11 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .subtitle-jp {
       font-family: var(--font-jp);
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       color: var(--text-gold);
       letter-spacing: 4px;
-      margin-bottom: 1rem;
-      opacity: 0.9;
+      margin-bottom: 0.75rem;
     }
 
-    .header-desc {
-      max-width: 720px;
-      margin: 0 auto;
-      color: var(--text-muted);
-      font-size: 1rem;
-      line-height: 1.7;
+    /* Tab Views */
+    .tab-view { display: none; }
+    .tab-view.active { display: block; animation: fadeIn 0.35s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Top Stats & Quick Actions */
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .stat-pill {
-      background: rgba(18, 22, 34, 0.7);
-      border: 1px solid var(--border-magic);
-      backdrop-filter: blur(10px);
-      padding: 0.6rem 1.4rem;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-    }
-
-    .stat-pill strong {
-      color: var(--border-gold);
-      font-size: 1.15rem;
-      font-family: var(--font-title);
-    }
-
-    /* Controls & Filters */
+    /* Control Panel */
     .control-panel {
-      background: rgba(18, 22, 34, 0.75);
+      background: rgba(15, 19, 29, 0.85);
       border: 1px solid var(--border-magic);
       backdrop-filter: blur(16px);
-      border-radius: 20px;
-      padding: 1.75rem;
-      margin-bottom: 2.5rem;
+      border-radius: 18px;
+      padding: 1.5rem;
+      margin-bottom: 2.2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
     .search-box {
       position: relative;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .search-box i {
@@ -169,20 +173,19 @@
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .search-box input {
       width: 100%;
-      background: rgba(10, 14, 23, 0.85);
+      background: rgba(9, 11, 16, 0.85);
       border: 1px solid var(--border-magic);
-      padding: 0.95rem 1.25rem 0.95rem 3.25rem;
+      padding: 0.9rem 1.25rem 0.9rem 3.1rem;
       border-radius: 12px;
       color: white;
-      font-size: 1rem;
-      font-family: inherit;
+      font-size: 0.95rem;
       outline: none;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
     .search-box input:focus {
@@ -193,7 +196,7 @@
     .filters-row {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
     }
 
     .filter-group {
@@ -204,11 +207,11 @@
     }
 
     .filter-label {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--text-muted);
-      min-width: 80px;
+      min-width: 85px;
       font-weight: 600;
     }
 
@@ -222,12 +225,11 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-magic);
       color: var(--text-muted);
-      padding: 0.4rem 0.95rem;
+      padding: 0.35rem 0.9rem;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-family: inherit;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
@@ -235,8 +237,7 @@
 
     .chip-btn:hover {
       background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
-      border-color: #3b4b6e;
+      color: #fff;
     }
 
     .chip-btn.active {
@@ -246,14 +247,13 @@
       font-weight: 600;
     }
 
-    /* Grid of Spells */
+    /* Grimoire Spell Cards */
     .spell-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 1.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+      gap: 1.6rem;
     }
 
-    /* Spell Card */
     .spell-card {
       background: var(--bg-card);
       border: 1px solid var(--border-magic);
@@ -263,45 +263,40 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.25s ease, border-color 0.25s ease;
     }
 
     .spell-card:hover {
       transform: translateY(-4px);
       border-color: rgba(197, 160, 89, 0.4);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
 
     .spell-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--border-magic), transparent);
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
     }
 
-    .spell-card[data-element*="น้ำ"]::before { background: linear-gradient(90deg, transparent, var(--color-water), transparent); }
-    .spell-card[data-element*="ไฟ"]::before { background: linear-gradient(90deg, transparent, var(--color-fire), transparent); }
-    .spell-card[data-element*="ดิน"]::before { background: linear-gradient(90deg, transparent, var(--color-earth), transparent); }
-    .spell-card[data-element*="ลม"]::before { background: linear-gradient(90deg, transparent, var(--color-wind), transparent); }
-    .spell-card[data-element*="การรักษา"]::before { background: linear-gradient(90deg, transparent, var(--color-heal), transparent); }
-    .spell-card[data-element*="มังกร"]::before { background: linear-gradient(90deg, transparent, var(--color-dragon), transparent); }
+    .spell-card[data-element*="Water"]::before { background: linear-gradient(90deg, transparent, var(--color-water), transparent); }
+    .spell-card[data-element*="Fire"]::before { background: linear-gradient(90deg, transparent, var(--color-fire), transparent); }
+    .spell-card[data-element*="Earth"]::before { background: linear-gradient(90deg, transparent, var(--color-earth), transparent); }
+    .spell-card[data-element*="Healing"]::before { background: linear-gradient(90deg, transparent, var(--color-heal), transparent); }
+    .spell-card[data-element*="Dragon"]::before { background: linear-gradient(90deg, transparent, var(--color-dragon), transparent); }
 
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 0.9rem;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .spell-names h3 {
       font-size: 1.25rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 0.2rem;
     }
 
     .spell-en {
@@ -311,16 +306,9 @@
       letter-spacing: 1px;
     }
 
-    .badges {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.35rem;
-    }
-
     .badge-rank {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 6px;
       font-weight: 600;
       background: rgba(255, 255, 255, 0.06);
@@ -331,70 +319,59 @@
     .badge-rank.king { background: rgba(234, 179, 8, 0.15); color: #fde047; border-color: rgba(234, 179, 8, 0.3); }
     .badge-rank.god { background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.3); }
 
-    .badge-elem {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* Incantation Section */
     .incantation-block {
-      background: rgba(9, 11, 16, 0.65);
+      background: rgba(7, 9, 14, 0.7);
       border: 1px solid rgba(42, 52, 77, 0.6);
       border-radius: 12px;
-      padding: 1.1rem;
+      padding: 1rem;
       margin: 0.9rem 0;
-      position: relative;
     }
 
     .incant-jp {
       font-family: var(--font-jp);
       font-size: 0.95rem;
-      color: #f1f5f9;
+      color: #f8fafc;
       line-height: 1.6;
       margin-bottom: 0.5rem;
       font-weight: 600;
     }
 
     .incant-romaji {
-      font-size: 0.8rem;
-      color: #94a3b8;
+      font-size: 0.82rem;
+      color: #cbd5e1;
       font-style: italic;
-      margin-bottom: 0.75rem;
-      line-height: 1.4;
+      line-height: 1.45;
+      letter-spacing: 0.3px;
     }
 
     .incant-th {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-gold);
       line-height: 1.5;
-      font-weight: 500;
       border-top: 1px dashed rgba(197, 160, 89, 0.25);
-      padding-top: 0.65rem;
+      padding-top: 0.5rem;
+      margin-top: 0.5rem;
     }
 
-    /* Spell Meta & Info */
     .spell-desc {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 0.75rem;
-      flex-grow: 1;
+      line-height: 1.5;
+      margin-bottom: 0.6rem;
     }
 
     .spell-condition {
       background: rgba(255, 255, 255, 0.02);
       border-left: 2px solid var(--border-gold);
-      padding: 0.5rem 0.75rem;
-      font-size: 0.78rem;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.76rem;
       color: #cbd5e1;
-      margin-bottom: 1.1rem;
-      border-radius: 0 6px 6px 0;
+      margin-bottom: 1rem;
     }
 
-    /* Card Actions */
     .card-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       margin-top: auto;
     }
 
@@ -403,15 +380,14 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-magic);
       color: var(--text-main);
-      padding: 0.55rem;
+      padding: 0.5rem 0.4rem;
       border-radius: 8px;
-      font-size: 0.8rem;
-      font-family: inherit;
+      font-size: 0.78rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       transition: all 0.2s ease;
     }
 
@@ -421,14 +397,402 @@
       color: var(--border-gold);
     }
 
+    /* ======================================================== */
+    /* TRAINING MODE STYLES (PURE JP + ROMAJI ONLY) */
+    /* ======================================================== */
+    .training-panel {
+      background: rgba(15, 19, 29, 0.85);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .training-config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .config-card {
+      background: rgba(7, 9, 14, 0.6);
+      border: 1px solid var(--border-magic);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+
+    .config-card h4 {
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      color: var(--border-gold);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .config-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      font-size: 0.88rem;
+    }
+
+    .config-item input[type="number"], .config-item select {
+      background: #090b10;
+      border: 1px solid var(--border-magic);
+      color: #fff;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      width: 70px;
+      text-align: center;
+    }
+
+    .config-item select { width: 140px; text-align: left; }
+
+    .btn-train-start {
+      background: linear-gradient(135deg, #d4af37, #b8860b);
+      color: #07090e;
+      border: none;
+      font-family: var(--font-title);
+      font-weight: 700;
+      padding: 0.9rem 2.5rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 1rem auto 0;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-train-start:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Training Arena Display (JP + ROMAJI) */
+    .training-stage {
+      display: none;
+      background: #0d111b;
+      border: 2px solid var(--border-gold);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    .stage-counter {
+      font-family: var(--font-title);
+      font-size: 0.9rem;
+      color: var(--text-gold);
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+
+    .stage-title {
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-title);
+    }
+
+    .chant-box-huge {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(197, 160, 89, 0.3);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      margin: 0 auto 2rem;
+      max-width: 900px;
+    }
+
+    .chant-box-huge .jp-huge {
+      font-family: var(--font-jp);
+      font-size: 1.65rem;
+      line-height: 1.8;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .chant-box-huge .romaji-huge {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--border-gold);
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+
+    .mic-control-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-mic-record {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--border-gold);
+      color: var(--border-gold);
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+    }
+
+    .btn-mic-record:hover {
+      background: rgba(197, 160, 89, 0.2);
+      transform: scale(1.05);
+    }
+
+    .btn-mic-record.recording {
+      background: #dc2626;
+      border-color: #ef4444;
+      color: #fff;
+      animation: micPulse 1.2s infinite;
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.7);
+    }
+
+    @keyframes micPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .speech-transcript-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed var(--border-magic);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      max-width: 800px;
+      margin: 0 auto 1.5rem;
+      min-height: 60px;
+      font-size: 1rem;
+      color: #94a3b8;
+    }
+
+    .speech-transcript-box.active {
+      border-color: var(--border-gold);
+      color: #f1f5f9;
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+
+    .result-badge.success { background: rgba(52, 211, 153, 0.2); border: 1px solid #34d399; color: #34d399; }
+    .result-badge.partial { background: rgba(251, 191, 36, 0.2); border: 1px solid #fbbf24; color: #fbbf24; }
+    .result-badge.fail { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; color: #f87171; }
+
+    /* ======================================================== */
+    /* BALANCED RPG BATTLE STYLES */
+    /* ======================================================== */
+    .battle-arena {
+      background: #090d16;
+      border: 2px solid var(--border-gold);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      margin-bottom: 2.5rem;
+    }
+
+    .battle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-magic);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .battle-status-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .combatant-card {
+      background: rgba(18, 22, 34, 0.7);
+      border: 1px solid var(--border-magic);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .combatant-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .combatant-name {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      color: #fff;
+    }
+
+    .combatant-type {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-gold);
+      color: var(--border-gold);
+    }
+
+    .bar-container {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 9999px;
+      height: 14px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-magic);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.4s ease;
+    }
+
+    .bar-fill.hp { background: linear-gradient(90deg, #ef4444, #22c55e); }
+    .bar-fill.mp { background: linear-gradient(90deg, #38bdf8, #818cf8); }
+
+    .bar-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Battle Log Screen */
+    .battle-log {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid var(--border-magic);
+      border-radius: 12px;
+      padding: 1rem;
+      min-height: 100px;
+      max-height: 140px;
+      overflow-y: auto;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: #e2e8f0;
+    }
+
+    .battle-log .log-crit { color: #fde047; font-weight: 700; }
+    .battle-log .log-hit { color: #38bdf8; }
+    .battle-log .log-enemy { color: #f87171; }
+    .battle-log .log-combo { color: #c084fc; font-weight: 700; }
+
+    /* Battle Actions (Pokemon 4-Slot Grid + Quick Cast) */
+    .battle-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .spell-slot-btn {
+      background: rgba(22, 28, 44, 0.9);
+      border: 1px solid var(--border-magic);
+      border-radius: 12px;
+      padding: 1rem;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .spell-slot-btn:hover {
+      border-color: var(--border-gold);
+      background: rgba(30, 39, 62, 0.95);
+      transform: translateY(-2px);
+    }
+
+    .spell-slot-btn .slot-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spell-slot-btn .slot-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .spell-slot-btn .slot-cost {
+      font-size: 0.78rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .spell-slot-btn .slot-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .battle-quick-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-quick-voice {
+      background: rgba(197, 160, 89, 0.15);
+      border: 1px solid var(--border-gold);
+      color: var(--border-gold);
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-quick-voice:hover {
+      background: rgba(197, 160, 89, 0.3);
+      color: #fff;
+    }
+
     /* Modal */
     .modal-backdrop {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.78);
       backdrop-filter: blur(8px);
       z-index: 1000;
       display: none;
@@ -438,7 +802,7 @@
     }
 
     .modal-content {
-      background: #111522;
+      background: #0f131d;
       border: 1px solid var(--border-gold);
       border-radius: 20px;
       width: 100%;
@@ -446,30 +810,25 @@
       max-height: 90vh;
       overflow-y: auto;
       padding: 2.2rem;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(197, 160, 89, 0.15);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(197, 160, 89, 0.2);
       position: relative;
     }
 
     .modal-close {
       position: absolute;
-      top: 1.25rem;
-      right: 1.25rem;
-      background: none;
-      border: none;
+      top: 1.25rem; right: 1.25rem;
+      background: none; border: none;
       color: var(--text-muted);
       font-size: 1.3rem;
       cursor: pointer;
     }
 
-    .modal-close:hover {
-      color: white;
-    }
+    .modal-close:hover { color: white; }
 
-    /* Toast Notification */
+    /* Toast */
     .toast {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+      bottom: 2rem; right: 2rem;
       background: rgba(18, 22, 34, 0.95);
       border: 1px solid var(--border-gold);
       color: #fff;
@@ -481,12 +840,6 @@
       align-items: center;
       gap: 0.75rem;
       font-size: 0.9rem;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
     }
 
     /* Footer */
@@ -500,19 +853,13 @@
       line-height: 1.8;
     }
 
-    footer a {
-      color: var(--border-gold);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    footer a { color: var(--border-gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
     @media (max-width: 768px) {
       h1.main-title { font-size: 2.2rem; }
       .spell-grid { grid-template-columns: 1fr; }
-      .stats-bar { gap: 1rem; }
+      .battle-status-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -521,377 +868,335 @@
 
   <div class="container">
     <header>
-      <div class="badge-sub"><i class="fa-solid fa-scroll"></i> ROXY'S ARCHIVE OF INCANTATIONS</div>
+      <div class="badge-sub"><i class="fa-solid fa-scroll"></i> ROXY'S ACADEMY OF INCANTATIONS</div>
       <h1 class="main-title">MUSHOKU TENSEI</h1>
-      <div class="subtitle-jp">無職転生 〜異世界行ったら本気だす〜 魔術大全</div>
-      <p class="header-desc">
-        คลังรวบรวมบทสวดและคำร่ายเวทมนตร์ฉบับสมบูรณ์จากเรื่อง <em>เกิดชาตินี้พี่ต้องเป็นเทพ (Mushoku Tensei)</em>
-        พร้อมต้นฉบับภาษาญี่ปุ่น, คำอ่าน Romaji, คำแปลไทยสไตล์พากย์อนิเมะ, ระดับชั้น และเงื่อนไขการใช้งาน
-      </p>
-
-      <div class="stats-bar">
-        <div class="stat-pill"><i class="fa-solid fa-book-sparkles"></i> รวมคาถา: <strong id="total-spells">19</strong> บท</div>
-        <div class="stat-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> หมวดหมู่: <strong>6</strong> ธาตุ</div>
-        <div class="stat-pill"><i class="fa-solid fa-crown"></i> สูงสุด: <strong>ระดับราชา / โบราณ</strong></div>
+      <div class="subtitle-jp">無職転生 〜魔術大全・詠唱修練・魔導戦記〜</div>
+      
+      <!-- Top Navigation Tabs -->
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" data-tab="grimoire-tab">
+          <i class="fa-solid fa-book-sparkles"></i> 1. Grimoire Archive
+        </button>
+        <button class="nav-tab-btn" data-tab="training-tab">
+          <i class="fa-solid fa-microphone-lines"></i> 2. Chanting Training (JP/Romaji)
+        </button>
+        <button class="nav-tab-btn" data-tab="battle-tab">
+          <i class="fa-solid fa-dragon"></i> 3. Spell Battle RPG
+        </button>
       </div>
     </header>
 
-    <!-- Controls & Filters -->
-    <div class="control-panel">
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาคาถา (เช่น คิวมูโลนิมบัส, Cumulonimbus, 雷帝, Healing, น้ำแข็ง)...">
+    <!-- ======================================================== -->
+    <!-- TAB 1: GRIMOIRE ARCHIVE VIEW -->
+    <!-- ======================================================== -->
+    <div id="grimoire-tab" class="tab-view active">
+      <div class="control-panel">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Search spells (e.g. Cumulonimbus, Water Ball, 雷帝, Healing, 氷結)...">
+        </div>
+
+        <div class="filters-row">
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-gem"></i> Element:</span>
+            <div class="filter-chips" id="element-filters">
+              <button class="chip-btn active" data-elem="all">All Elements</button>
+              <button class="chip-btn" data-elem="Water"><i class="fa-solid fa-droplet" style="color:var(--color-water)"></i> Water / Ice</button>
+              <button class="chip-btn" data-elem="Fire"><i class="fa-solid fa-fire" style="color:var(--color-fire)"></i> Fire</button>
+              <button class="chip-btn" data-elem="Earth"><i class="fa-solid fa-mountain" style="color:var(--color-earth)"></i> Earth</button>
+              <button class="chip-btn" data-elem="Healing"><i class="fa-solid fa-hand-holding-heart" style="color:var(--color-heal)"></i> Healing / Divine</button>
+              <button class="chip-btn" data-elem="Dragon"><i class="fa-solid fa-dragon" style="color:var(--color-dragon)"></i> Dragon / Summon</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-layer-group"></i> Tier & Rank:</span>
+            <div class="filter-chips" id="rank-filters">
+              <button class="chip-btn active" data-rank="all">All Ranks</button>
+              <button class="chip-btn" data-rank="Elementary">Elementary (初級)</button>
+              <button class="chip-btn" data-rank="Intermediate">Intermediate (中級)</button>
+              <button class="chip-btn" data-rank="Advanced">Advanced (上級)</button>
+              <button class="chip-btn" data-rank="Saint">Saint (聖級)</button>
+              <button class="chip-btn" data-rank="King">King (王級)</button>
+              <button class="chip-btn" data-rank="Unique">Unique / Dragon (神・帝級)</button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="filters-row">
-        <div class="filter-group">
-          <span class="filter-label"><i class="fa-solid fa-gem"></i> ธาตุ:</span>
-          <div class="filter-chips" id="element-filters">
-            <button class="chip-btn active" data-elem="all">ทั้งหมด</button>
-            <button class="chip-btn" data-elem="น้ำ"><i class="fa-solid fa-droplet" style="color:var(--color-water)"></i> น้ำ / เหมันต์</button>
-            <button class="chip-btn" data-elem="ไฟ"><i class="fa-solid fa-fire" style="color:var(--color-fire)"></i> ไฟ</button>
-            <button class="chip-btn" data-elem="ดิน"><i class="fa-solid fa-mountain" style="color:var(--color-earth)"></i> ดิน</button>
-            <button class="chip-btn" data-elem="การรักษา"><i class="fa-solid fa-hand-holding-heart" style="color:var(--color-heal)"></i> การรักษา / ศักดิ์สิทธิ์</button>
-            <button class="chip-btn" data-elem="มังกร"><i class="fa-solid fa-dragon" style="color:var(--color-dragon)"></i> มังกรโบราณ / อัญเชิญ</button>
+      <div class="spell-grid" id="spell-container"></div>
+      <div id="no-results" style="display:none; text-align:center; padding: 4rem 1rem; color: var(--text-muted);">
+        <i class="fa-solid fa-book-circle-exclamation" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-gold);"></i>
+        <h3>No incantations match your filter</h3>
+        <p>Try clearing search keywords or selecting different element chips.</p>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: CHANTING TRAINING VIEW (PURE JP + ROMAJI ONLY) -->
+    <!-- ======================================================== -->
+    <div id="training-tab" class="tab-view">
+      <div class="training-panel">
+        <h2 style="font-family:var(--font-title); color:#fff; margin-bottom:0.5rem; text-align:center;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--border-gold)"></i> CHANTING PRACTICE TRIAL
+        </h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-bottom:1.8rem;">
+          Configure your custom practice session. In training mode, only <strong>Japanese Script & Romaji</strong> are displayed.
+        </p>
+
+        <div class="training-config-grid">
+          <!-- Element Selector -->
+          <div class="config-card">
+            <h4><i class="fa-solid fa-droplet"></i> ELEMENT SELECTION</h4>
+            <div class="config-item">
+              <span>Target Element:</span>
+              <select id="train-element-select">
+                <option value="All">All Elements (全属性)</option>
+                <option value="Water" selected>Water / Ice (水・氷属性)</option>
+                <option value="Fire">Fire (火属性)</option>
+                <option value="Earth">Earth (土属性)</option>
+                <option value="Healing">Healing (治癒魔術)</option>
+                <option value="Dragon">Dragon Summon (龍神・召喚)</option>
+              </select>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
+              Filter training spells by their elemental origin.
+            </p>
+          </div>
+
+          <!-- Tier 1 Generator -->
+          <div class="config-card">
+            <h4><i class="fa-solid fa-shield-halved"></i> TIER 1 (LOW ~ MID)</h4>
+            <div class="config-item">
+              <span>Elementary ~ Intermediate:</span>
+              <input type="number" id="train-tier1-count" min="0" max="5" value="1">
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
+              Elementary (初級) & Intermediate (中級) spells.
+            </p>
+          </div>
+
+          <!-- Tier 2 Generator -->
+          <div class="config-card">
+            <h4><i class="fa-solid fa-crown"></i> TIER 2 (HIGH ~ GOD)</h4>
+            <div class="config-item">
+              <span>Advanced ~ Saint ~ King ~ God:</span>
+              <input type="number" id="train-tier2-count" min="0" max="5" value="1">
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
+              Advanced (上級), Saint (聖級), King (王級) & Ancient (帝・神級).
+            </p>
           </div>
         </div>
 
-        <div class="filter-group">
-          <span class="filter-label"><i class="fa-solid fa-layer-group"></i> ระดับ:</span>
-          <div class="filter-chips" id="rank-filters">
-            <button class="chip-btn active" data-rank="all">ทุกระดับ</button>
-            <button class="chip-btn" data-rank="ระดับต้น">ระดับต้น (Elementary)</button>
-            <button class="chip-btn" data-rank="ระดับกลาง">ระดับกลาง (Intermediate)</button>
-            <button class="chip-btn" data-rank="ระดับสูง">ระดับสูง (Advanced)</button>
-            <button class="chip-btn" data-rank="ระดับศักดิ์สิทธิ์">ระดับศักดิ์สิทธิ์ (Saint)</button>
-            <button class="chip-btn" data-rank="ระดับราชา">ระดับราชา (King)</button>
-            <button class="chip-btn" data-rank="โบราณ">ระดับโบราณ (Unique)</button>
-          </div>
+        <button class="btn-train-start" id="btn-start-training">
+          <i class="fa-solid fa-bolt"></i> GENERATE TRAINING QUEUE
+        </button>
+      </div>
+
+      <!-- Training Stage Box -->
+      <div class="training-stage" id="training-stage-box">
+        <div class="stage-counter" id="train-counter-text">SPELL 1 / 2</div>
+        <h3 class="stage-title" id="train-spell-name">Water Ball</h3>
+
+        <div class="chant-box-huge">
+          <div class="jp-huge" id="train-jp-text">「汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール」</div>
+          <div class="romaji-huge" id="train-romaji-text">Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru</div>
+        </div>
+
+        <div class="mic-control-center">
+          <button class="btn-mic-record" id="train-mic-btn" title="Click to Chant via Microphone">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+          <button class="action-btn" id="train-play-tts-btn" style="max-width: 160px; padding: 0.8rem 1.2rem;">
+            <i class="fa-solid fa-volume-high"></i> Listen Master
+          </button>
+        </div>
+
+        <div class="speech-transcript-box" id="train-transcript-box">
+          <i class="fa-solid fa-ear-listen" style="margin-right: 0.5rem;"></i>
+          <span id="train-transcript-text">Press microphone button and chant the incantation in Japanese or Romaji...</span>
+        </div>
+
+        <div id="train-result-box" style="margin-bottom: 1.5rem;"></div>
+
+        <div style="display:flex; justify-content:center; gap:1rem;">
+          <button class="action-btn" id="train-prev-btn" style="max-width: 140px; padding:0.6rem 1.2rem;">
+            <i class="fa-solid fa-arrow-left"></i> Previous
+          </button>
+          <button class="action-btn" id="train-next-btn" style="max-width: 140px; padding:0.6rem 1.2rem;">
+            Next Spell <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Spell Grid -->
-    <div class="spell-grid" id="spell-container">
-      <!-- Populated via JavaScript -->
+    <!-- ======================================================== -->
+    <!-- TAB 3: BALANCED SPELL BATTLE RPG VIEW -->
+    <!-- ======================================================== -->
+    <div id="battle-tab" class="tab-view">
+      <div class="battle-arena">
+        <div class="battle-header">
+          <div>
+            <h2 style="font-family:var(--font-title); color:#fff;">
+              <i class="fa-solid fa-shield-halved" style="color:var(--border-gold)"></i> DUNGEON COMBAT SIMULATOR
+            </h2>
+            <p style="color:var(--text-muted); font-size:0.85rem;">
+              Balanced Turn-Based Chanting Battle. Low-tier spells cast fast & enable combos; High-tier spells consume heavy MP!
+            </p>
+          </div>
+          <div>
+            <label style="color:var(--border-gold); font-size:0.85rem; margin-right:0.5rem;">Select Opponent:</label>
+            <select id="battle-enemy-select" style="background:#090b10; border:1px solid var(--border-gold); color:#fff; padding:0.4rem 0.8rem; border-radius:8px;">
+              <option value="treant">Ancient Treant (Weak: Fire, Resists: Water)</option>
+              <option value="crawler" selected>Iron Crawler (Weak: Ice/Lightning, Resists: Earth)</option>
+              <option value="salamander">Magma Salamander (Weak: Water/Ice, Absorbs: Fire)</option>
+              <option value="wyvern">Red Wyvern (Weak: Cumulonimbus / Dragon Gates)</option>
+            </select>
+            <button class="action-btn" id="btn-restart-battle" style="display:inline-flex; width:auto; padding:0.4rem 1rem; margin-left:0.5rem;">
+              <i class="fa-solid fa-rotate-right"></i> Reset Battle
+            </button>
+          </div>
+        </div>
+
+        <!-- Combatants Status -->
+        <div class="battle-status-row">
+          <!-- Player -->
+          <div class="combatant-card">
+            <div class="combatant-title">
+              <span class="combatant-name"><i class="fa-solid fa-hat-wizard" style="color:var(--color-water)"></i> Rudeus (Player)</span>
+              <span class="combatant-type" id="player-status-tag">Status: Ready</span>
+            </div>
+            <div class="bar-text">
+              <span>HP: <strong id="player-hp-text">500 / 500</strong></span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill hp" id="player-hp-bar" style="width: 100%;"></div>
+            </div>
+            <div class="bar-text" style="margin-top:0.3rem;">
+              <span>MP: <strong id="player-mp-text">350 / 350</strong></span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill mp" id="player-mp-bar" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <!-- Enemy -->
+          <div class="combatant-card">
+            <div class="combatant-title">
+              <span class="combatant-name" id="enemy-name-text"><i class="fa-solid fa-bug" style="color:var(--color-fire)"></i> Iron Crawler</span>
+              <span class="combatant-type" id="enemy-elem-tag">Beast / Armor</span>
+            </div>
+            <div class="bar-text">
+              <span>Enemy HP: <strong id="enemy-hp-text">800 / 800</strong></span>
+              <span id="enemy-weakness-hint" style="color:var(--color-water)">Weakness: Ice / Thunder</span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill hp" id="enemy-hp-bar" style="width: 100%;"></div>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;" id="enemy-status-desc">
+              Heavily armored labyrinth beast. Vulnerable to Water Splash + Freeze combos!
+            </div>
+          </div>
+        </div>
+
+        <!-- Battle Combat Log -->
+        <div class="battle-log" id="battle-log-box">
+          <div>[SYSTEM] Combat initialized. Select a spell action from your deck below or utilize Free Chanting!</div>
+        </div>
+
+        <!-- Spell Action Slots -->
+        <div style="margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="font-family:var(--font-title); color:var(--border-gold); font-size:0.95rem;">
+            <i class="fa-solid fa-wand-magic"></i> YOUR ACTIVE SPELL DECK (CLICK TO CHANT)
+          </h4>
+          <span style="font-size:0.78rem; color:var(--text-muted);">Turn: <strong id="battle-turn-count" style="color:#fff;">1</strong></span>
+        </div>
+
+        <div class="battle-actions-grid" id="battle-slots-container">
+          <!-- 4 slots populated dynamically -->
+        </div>
+
+        <!-- Free Chanting & Quick Cast Option -->
+        <div class="battle-quick-bar">
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            <i class="fa-solid fa-circle-info" style="color:var(--border-gold)"></i> 
+            <strong>Pro Mage Tip:</strong> Say ANY spell from the 19 incantations aloud via Voice Quick-Cast!
+          </div>
+          <button class="btn-quick-voice" id="btn-quick-voice-cast">
+            <i class="fa-solid fa-microphone-lines"></i> VOICE QUICK-CAST (ANY SPELL)
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- Empty State -->
-    <div id="no-results" style="display:none; text-align:center; padding: 4rem 1rem; color: var(--text-muted);">
-      <i class="fa-solid fa-book-circle-exclamation" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-gold);"></i>
-      <h3>ไม่พบบทเวทที่ค้นหา</h3>
-      <p>ลองเปลี่ยนคำค้นหาหรือตัวกรองธาตุและระดับคาถา</p>
+    <!-- Modal for Spell Details & Chanting Trigger -->
+    <div class="modal-backdrop" id="spell-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast-msg">
+      <i class="fa-solid fa-circle-check" style="color: #34d399"></i>
+      <span id="toast-text">Action completed</span>
     </div>
 
     <footer>
-      <p>คัมภีร์เวทมนตร์นี้สร้างขึ้นเพื่อการศึกษาและการแปลสำหรับแฟนพันธุ์แท้ <strong>เกิดชาตินี้พี่ต้องเป็นเทพ (Mushoku Tensei)</strong></p>
-      <p>GitHub Repository: <a href="https://github.com/NongZen/Mushoku-Tensei-Mahou" target="_blank">NongZen/Mushoku-Tensei-Mahou</a> • จัดทำโดย NongZen</p>
+      <p>Mushoku Tensei Magic Grimoire & RPG Combat Simulator — Created for true fans of <strong>Mushoku Tensei: Jobless Reincarnation</strong></p>
+      <p>Repository: <a href="https://github.com/NongZen/Mushoku-Tensei-Mahou" target="_blank">NongZen/Mushoku-Tensei-Mahou</a> • Maintained by NongZen</p>
     </footer>
   </div>
 
-  <!-- Inspection Modal -->
-  <div class="modal-backdrop" id="spell-modal">
-    <div class="modal-content">
-      <button class="modal-close" id="modal-close-btn">&times;</button>
-      <div id="modal-body"></div>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div class="toast" id="toast-msg">
-    <i class="fa-solid fa-circle-check" style="color: #34d399"></i>
-    <span id="toast-text">คัดลอกบทสวดเรียบร้อยแล้ว</span>
-  </div>
-
   <script>
-    // Embedded Spell Data
-    const spellsData = [
-      {
-        "id": 1,
-        "name": "ฮีลลิ่ง (Healing)",
-        "jp": "神なる力は芳醇なる糧、力失いしかの者に再び立ち上がる力を与えん『ヒーリング』",
-        "romaji": "Kami naru chikara wa hōjun naru kate, chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen, \"Hīringu\"",
-        "th": "พลังแห่งทวยเทพคือโอสถอันอุดม จงมอบพลังลุกขึ้นยืนใหม่อีกคราแก่ผู้สูญสิ้นเรี่ยวแรง 'ฮีลลิ่ง'!",
-        "en": "Healing",
-        "element": "การรักษา (Healing / 神聖・治癒)",
-        "rank": "ระดับต้น (Elementary / 初級)",
-        "effect": "รักษาอาการบาดเจ็บทั่วไป แผลฟกช้ำ ห้ามเลือด แผลขนาดเล็กถึงปานกลาง และฟื้นฟูเรี่ยวแรง",
-        "condition": "ต้องแตะสัมผัสร่างกายของผู้บาดเจ็บและถ่ายทอดพลังเวทเพื่อฟื้นฟูเนื้อเยื่อ",
-        "casters": ["เซนิธ (Zenith)", "รูเดียส (Rudeus)", "ร็อกซี (Roxy)"]
-      },
-      {
-        "id": 2,
-        "name": "วอเตอร์บอล (Water Ball)",
-        "jp": "汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール",
-        "romaji": "Nanji no motomeru tokoro ni ōinaru mizu no kago aran, seiryō naru seseragi no nagare o ima koko ni, Wōtā Bōru",
-        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งวารีอันยิ่งใหญ่ กระแสน้ำอันเย็นฉ่ำจงปรากฏ ณ ที่แห่งนี้ 'วอเตอร์บอล'!",
-        "en": "Water Ball",
-        "element": "น้ำ (Water / 水)",
-        "rank": "ระดับต้น (Elementary / 初級)",
-        "effect": "สร้างก้อนมวลน้ำขนาดเท่ากำปั้นและยิงพุ่งออกไปกระแทกเป้าหมาย หรือใช้สร้างน้ำสำหรับดื่ม/ใช้งาน",
-        "condition": "ร่ายเพื่อกำหนดจุดกำเนิดและทิศทางการยิง ควบคุมปริมาณน้ำและความเร็วตามการจ่ายมานา",
-        "casters": ["รูเดียส (Rudeus)", "ร็อกซี (Roxy)"]
-      },
-      {
-        "id": 3,
-        "name": "คิวมูโลนิมบัส (Cumulonimbus)",
-        "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！我が願いを叶え、凶暴なる恵みをもたらし、矮小なる存在に力を見せつけよ！神なる金槌を金床に打ち付けて畏怖を示し、大地を水で埋め尽くせ！ああ、雨よ！全てを押し流し、あらゆるものを駆逐せよ！キュムロニンバス！",
-        "romaji": "Yūdai naru mizu no seirei ni shite, ten ni agarishi raitei no ōji yo! Waga negai o kanae, kyōbō naru megumi o motorashi, waishō naru sonzai ni chikara o misetsukeyo! Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi, daichi o mizu de umetsukuse! Aa, ame yo! Subete o oshinagashi, arayuru mono o kuchiku seyo! Kyumuroninbasu!",
-        "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร องค์ชายแห่งสายฟ้าผู้ขึ้นสู่สรวงสวรรค์! จงดลบันดาลความปรารถนาของข้า นำพามาซึ่งพรอันดุดัน และสำแดงฤทธานุภาพต่อเหล่าตัวตนอันกระจ้อยร่อย! จงเหวี่ยงค้อนแห่งทวยเทพฟาดลงบนทั่งเพื่อแสดงความน่าเกรงขาม และกลืนกินผืนพสุธาให้ท่วมท้นด้วยสายน้ำ! โอ้ สายฝนเอ๋ย! จงชะล้างทุกสิ่ง และกวาดล้างสรรพสิ่งให้สูญสิ้น! 'คิวมูโลนิมบัส'!",
-        "en": "Cumulonimbus",
-        "element": "น้ำ / ลม (Hybrid Water + Wind / 水・風混合)",
-        "rank": "ระดับศักดิ์สิทธิ์ (Saint / 水聖級)",
-        "effect": "เรียกเมฆฝนฟ้าคะนองยักษ์ปกคลุมท้องฟ้าเป็นวงกว้าง เกิดพายุฝนกระหน่ำ ฟ้าผ่ารุนแรง และลมกรรโชกในรัศมีหลายกิโลเมตร",
-        "condition": "ต้องใช้เวลาท่องบทร่ายยาวนาน (มากกว่า 1 นาที) และใช้ปริมาณพลังเวทมหาศาลมาก ต้องร่ายในพื้นที่เปิดโล่ง",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)", "รูเดียส เกรย์แรท (Rudeus)"]
-      },
-      {
-        "id": 4,
-        "name": "เอ็กซ์ฮีลลิ่ง (Ex-Healing)",
-        "jp": "母なる慈愛の女神よ、彼の者の傷を塞ぎ、健やかなる体を取り戻さん、エクスヒーリング！",
-        "romaji": "Haha naru jiai no megami yo, kano mono no kizu o fusagi, sukoyaka naru karada o torimodosan, Ekusu Hīringu!",
-        "th": "ข้าแต่องค์เทวีแห่งความเมตตาผู้เป็นมารดา จงสมานบาดแผลของผู้นี้ และคืนร่างกายอันสมบูรณ์แข็งแรงกลับมา 'เอ็กซ์ฮีลลิ่ง'!",
-        "en": "Ex-Healing",
-        "element": "การรักษา (Healing / 神聖・治癒)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "รักษาอาการบาดเจ็บสาหัส กระดูกหัก อวัยวะฉีกขาด เลือดออกภายใน หรือช่วยชีวิตผู้บาดเจ็บเจียนตายได้อย่างรวดเร็ว",
-        "condition": "ต้องถ่ายทอดพลังเวทสัมผัสแผลโดยตรง ใช้พลังเวทมากกว่าฮีลลิ่งระดับต้น",
-        "casters": ["ร็อกซี (Roxy)", "รูเดียส (Rudeus)"]
-      },
-      {
-        "id": 5,
-        "name": "เบิร์นนิงเพลส (Burning Place)",
-        "jp": "爆炎を身体に、バーニングプレイス！",
-        "romaji": "Bakuen o karada ni, Bāningu Pureisu!",
-        "th": "เปลวเพลิงผลาญจงสถิตทั่วกาย 'เบิร์นนิงเพลส'!",
-        "en": "Burning Place",
-        "element": "ไฟ (Fire / 火)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "จุดระเบิดคลื่นเปลวเพลิงแผ่ออกจากร่างกายรอบทิศทาง สร้างม่านอาคมเพลิงผลักศัตรูที่เข้าประชิดให้กระเด็นออกไป",
-        "condition": "ผู้ร่ายต้องควบคุมจุดศูนย์กลางพลังรอบตัวเองเพื่อไม่ให้ถูกไฟคลอกตัวเอง",
-        "casters": ["ร็อกซี (Roxy)", "มัวร์ (Moore)"]
-      },
-      {
-        "id": 6,
-        "name": "ไอซิเคิลเบรก (Icicle Break)",
-        "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！勇壮なる氷の剣を彼の者に叩き落せ！『氷霜撃(アイシクルブレイク)』",
-        "romaji": "Yūdai naru mizu no seirei ni shite, ten ni agarishi raitei no ōji yo! Yūsō naru kōri no tsurugi o kano mono ni tatakiotose! \"Aishikuru Bureiku\"",
-        "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร เจ้าชายแห่งจักรพรรดิอัสนีผู้สถิตบนฟากฟ้า! จงฟาดฟันดาบน้ำแข็งอันหาญกล้าลงทัณฑ์ผู้นั้น! 'ไอซิเคิลเบรก'!",
-        "en": "Icicle Break",
-        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "ควบแน่นไอน้ำในอากาศเป็นดาบ/หอกน้ำแข็งขนาดยักษ์อันแหลมคมแล้วทิ้งดิ่งกระแทกลงมาบดขยี้เป้าหมายด้วยความรุนแรงจนอาคารพังทลาย",
-        "condition": "ต้องมีระยะเพดานเหนือเป้าหมายให้ดาบน้ำแข็งตกกระทบ สร้างความเสียหายรุนแรงต่อโครงสร้างรอบข้าง",
-        "casters": ["ร็อกซี (Roxy)", "อัศวินวิหารมิลิส (Temple Knights)"]
-      },
-      {
-        "id": 7,
-        "name": "เอิร์ธฟอร์เทรส (Earth Fortress)",
-        "jp": "荘厳なる大地の鎧を纏わん。『土砦(アースフォートレス)』！",
-        "romaji": "Sōgon naru daichi no yoroi o matowan. \"Āsu Fōtoresu\"!",
-        "th": "จงสวมใส่เกราะแห่งปฐพีอันโอ่อ่าสง่างาม 'เอิร์ธฟอร์เทรส'!",
-        "en": "Earth Fortress",
-        "element": "ดิน (Earth / 土)",
-        "rank": "ระดับสูง (Advanced / 上級)",
-        "effect": "ยกผืนดินรอบตัวขึ้นมาเป็นกำแพงป้อมปราการศิลาล้อมรอบอย่างรวดเร็ว ป้องกันการโจมตีและการบุกทะลวงของศัตรู",
-        "condition": "ต้องยืนอยู่บนพื้นดิน/หิน สามารถปล่อยการควบคุมก่อนยอดโดมปิดเพื่อปรับความสูงตามต้องการ",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
-      },
-      {
-        "id": 8,
-        "name": "วอเตอร์สแปลช (Water Splash)",
-        "jp": "落ちる雫を散らしめし、世界は水で覆われん。『水蒸(ウォータースプラッシュ)』！",
-        "romaji": "Ochiru shizuku o chirashimeshi, sekai wa mizu de oowaren. \"Wōtā Supurasshu\"!",
-        "th": "จงโปรยปรายหยาดหยดที่ร่วงหล่น โลกเอ๋ยจงถูกชโลมด้วยสายน้ำ 'วอเตอร์สแปลช'!",
-        "en": "Water Splash",
-        "element": "น้ำ (Water / 水)",
-        "rank": "ระดับต้น (Elementary / 初級)",
-        "effect": "กระจายละอองน้ำและหยาดน้ำจำนวนนับไม่ถ้วนออกไปรอบทิศทาง ชะลอความเร็วศัตรูและชโลมพื้นที่ให้เปียกชุ่ม",
-        "condition": "พลังทำลายต่ำมาก มักใช้คู่กับเวทน้ำแข็งเพื่อทำคอมโบแช่แข็งเป้าหมาย (Frost Nova)",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
-      },
-      {
-        "id": 9,
-        "name": "ไอซิเคิลฟิลด์ (Icicle Field)",
-        "jp": "天より舞い降りし蒼き女神よ、その錫杖を振るいて世界を凍りつかせん！『氷結領域(アイシクルフィールド)』！",
-        "romaji": "Ten yori maioorishi aoki megami yo, sono shakujō o furuite sekai o kooritsukasen! \"Aishikuru Fīrudo\"!",
-        "th": "ข้าแต่องค์เทวีสีครามผู้ร่อนลงมาจากฟากฟ้า จงกวัดแกว่งคทาเยือกแข็งแช่พิภพให้เย็นยะเยือก! 'ไอซิเคิลฟิลด์'!",
-        "en": "Icicle Field",
-        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "ลดอุณหภูมิรอบบริเวณอย่างฉับพลัน แช่แข็งความชื้นและหยดน้ำรอบตัวเป้าหมายจนกลายเป็นรูปปั้นน้ำแข็ง หรือสร้างไอหมอกพรางตัว",
-        "condition": "หากใช้ร่วมกับ Water Splash จะกลายเป็นเวทผสมผสาน 'ฟรอสต์โนวา (Frost Nova)' แช่แข็งศัตรูทั้งกองทัพได้ทันที",
-        "casters": ["ร็อกซี (Roxy)", "มัวร์ (Moore)"]
-      },
-      {
-        "id": 10,
-        "name": "บริซซาร์ดสตอร์ม (Blizzard Storm)",
-        "jp": "霜の王。大いなる雪原の覇王。純白を纏い、一切の熱を刈り取る零の王。死を司りし冷たき王が凍てつかせん！『氷槍吹雪(ブリザードストーム)』！",
-        "romaji": "Shimo no ō. Ōinaru setsugen no haō. Junpaku o matoi, issai no netsu o karitoru zero no ō. Shi o tsukasadorishi tsumetaki ō ga itetsukasen! \"Burizādo Sutōmu\"!",
-        "th": "ราชันแห่งเกล็ดน้ำค้าง จอมราชันแห่งทุ่งหิมะอันยิ่งใหญ่ ราชาแห่งศูนย์สัมบูรณ์ผู้สวมอาภรณ์ขาวบริสุทธิ์และช่วงชิงความร้อนทั้งมวล ราชาผู้เย็นเยียบผู้กุมความตายจงแช่แข็งให้สิ้น! 'บริซซาร์ดสตอร์ม'!",
-        "en": "Blizzard Storm",
-        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
-        "rank": "ระดับสูง (Advanced / 上級)",
-        "effect": "ระดมหอกน้ำแข็งอันแหลมคมนับไม่ถ้วนพุ่งทะลวงเป้าหมายพร้อมกับพายุหิมะน้ำแข็งบดขยี้แนวหลังของศัตรูจนย่อยยับ",
-        "condition": "ต้องใช้สมาธิและพลังเวทระดับสูง ควบคุมวิถีหอกน้ำแข็งให้พุ่งข้ามแนวหน้าเข้าไปถล่มแนวหลัง",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
-      },
-      {
-        "id": 11,
-        "name": "เฟลมสไลซ์ (Flame Slice)",
-        "jp": "焦げたる剣を持ちて敵を切り裂かん、『フレイムスライス』！",
-        "romaji": "Kogetaru ken o mochite teki o kirisakan, \"Fureimu Suraisu\"!",
-        "th": "จงถือดาบที่ลุกไหม้เกรียมเข้าฟาดฟันศัตรู 'เฟลมสไลซ์'!",
-        "en": "Flame Slice",
-        "element": "ไฟ (Fire / 火)",
-        "rank": "ระดับต้น-กลาง (Elementary-Intermediate / 初・中級)",
-        "effect": "สร้างคมดาบเพลิงพุ่งแหวกลมออกไปในระยะกลาง แผดเผาเกราะกระดองของสัตว์อสูรจนร้อนแดง",
-        "condition": "ปล่อยคลื่นดาบเพลิงเป็นแนวเส้นตรงเพื่อเฉือนเกราะของเป้าหมาย",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
-      },
-      {
-        "id": 12,
-        "name": "ไอซ์สแมช (Ice Smash)",
-        "jp": "汝の求める所に大いなる氷の加護あらん、氷河の濁流を受けろ、『氷撃(アイススマッシュ)』",
-        "romaji": "Nanji no motomeru tokoro ni ōinaru kōri no kago aran, hyōga no dakuryū o ukero, \"Aisu Sumasshu\"",
-        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเหมันต์อันยิ่งใหญ่ จงรับกระแสธารอันเชี่ยวกรากแห่งธารน้ำแข็งไปเสีย 'ไอซ์สแมช'!",
-        "en": "Ice Smash",
-        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "ซัดแท่งน้ำแข็งกระแทกทะลวงเข้าใส่เป้าหมายอย่างรุนแรงในระยะประชิด ทำลายเนื้อเยื่อและแช่แข็งบาดแผล",
-        "condition": "เหมาะสำหรับการร่ายอัดระยะประชิด (Zero distance) เพื่อทำลายการฟื้นฟูของศัตรู",
-        "casters": ["เอลินาลิส (Elinalise)"]
-      },
-      {
-        "id": 13,
-        "name": "เฟลมสโธรเวอร์ (Flamethrower)",
-        "jp": "小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)』！",
-        "romaji": "Chiisana kusuburi ga kyodai naru megumi o yakitsukusan, \"Fureimu Surowā\"!",
-        "th": "ประกายไฟอันริบหรี่จงแผดเผาความอุดมสมบูรณ์อันยิ่งใหญ่ให้มอดไหม้ 'เฟลมสโธรเวอร์'!",
-        "en": "Flamethrower",
-        "element": "ไฟ (Fire / 火)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "พ่นเปลวเพลิงแผดเผาอย่างต่อเนื่องเป็นลำยาวออกจากฝ่ามือ เผาไหม้เป้าหมายและยับยั้งการงอกใหม่ของชิ้นส่วนร่างกาย",
-        "condition": "ต้องรักษาการถ่ายเทพลังเวทอย่างต่อเนื่องเพื่อควบคุมระยะและทิศทางของสายเปลวเพลิง",
-        "casters": ["ร็อกซี (Roxy)", "อัศวินวิหารมิลิส (Temple Knights)"]
-      },
-      {
-        "id": 14,
-        "name": "ไชน์ฮีลลิ่ง (Shine Healing)",
-        "jp": "奇跡の天使よ、命の鼓動に天なる息吹を与え給え。天にいただきし太陽。神なる御使は赤を嫌う。光の海に舞い降りて、純白の翼を広げよ。さすれば赤は駆逐されん。『シャインヒーリング』",
-        "romaji": "Kiseki no tenshi yo, inochi no kodō ni tennaru ibuki o ataetamae. Ten ni itadakishi taiyō. Shin naru mitsukai wa aka o kirau. Hikari no umi ni maioorite, junpaku no tsubasa o hirogeyo. Sasureba aka wa kuchiku saren. \"Shain Hīringu\"",
-        "th": "ข้าแต่ทูตสวรรค์แห่งปาฏิหาริย์ โปรดประทานลมหายใจแห่งสวรรค์สู่ชีพจรแห่งชีวิต ดวงตะวันอันสถิตบนฟากฟ้า ทูตแห่งพระผู้เป็นเจ้ารังเกียจโลหิตสีชาด จงร่อนลงสู่ห้วงทะเลแห่งแสงสว่าง สยายปีกสีขาวบริสุทธิ์ เมื่อนั้นสีชาดจักถูกกวาดล้างจนหมดสิ้น 'ไชน์ฮีลลิ่ง'!",
-        "en": "Shine Healing",
-        "element": "การรักษา / ศักดิ์สิทธิ์ (Healing / Divine / 神聖・治癒)",
-        "rank": "ระดับศักดิ์สิทธิ์ (Saint / 治癒聖級)",
-        "effect": "รักษาบาดแผลฉกรรจ์ระดับวิกฤต ห้ามเลือดที่ไหลทะลักอย่างรุนแรง และเยียวยาอวัยวะภายในที่ฉีกขาดขั้นวิกฤต",
-        "condition": "ต้องร่ายบทร่ายขนาดยาวอย่างมีสมาธิ และใช้พลังเวทมหาศาลของผู้ร่าย",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
-      },
-      {
-        "id": 15,
-        "name": "คำสั่งแขนเทียมปฐพี (Earth Arm)",
-        "jp": "土よ、我が腕(かいな)となれ",
-        "romaji": "Tsuchi yo, waga kaina to nare",
-        "th": "ดินเอ๋ย จงมาเป็นแขนของข้า! (คำสั่งถอด: แขนเอ๋ย จงกลับคืนสู่ดิน)",
-        "en": "Earth Prosthetic Arm Command",
-        "element": "ดิน / อุปกรณ์เวทมนตร์ (Earth / Magic Tool / 土・魔道具)",
-        "rank": "คำสั่งควบคุมอุปกรณ์เวทมนตร์ (Magic Tool Command)",
-        "effect": "อุปกรณ์แขนเทียมจะเชื่อมต่อกับปลายแขน ดูดกลืนพลังเวทของผู้ใช้เพื่อขยับนิ้วและฝ่ามือได้ดั่งแขนจริง",
-        "condition": "ต้องสวมอุปกรณ์แขนเทียมเข้ากับแขนก่อน และจ่ายพลังเวทอย่างต่อเนื่องเพื่อคงสภาพการขยับ",
-        "casters": ["ซาโนบา (Zanoba)", "รูเดียส (Rudeus)"]
-      },
-      {
-        "id": 16,
-        "name": "ไลท์นิ่ง (Lightning)",
-        "jp": "雄大なる光の精霊にして、天を支配せし雷帝よ！そびえ立つ者が見えるか！傲慢なりし帝の御敵が！我は神なる剣にてかの者を一撃の元に打倒せんとする者なり！光り輝く力を以って、帝の威を知らしめん！『ライトニング』！",
-        "romaji": "Yūdai naru hikari no seirei ni shite, ten o shihaiseshi raitei yo! Sobietatsu mono ga mieru ka! Gōman narishi tei no miteki ga! Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni datō sen to suru mono nari! Hikarikagayaku chikara o motte, tei no i o shirashimen! \"Raitoningu\"!",
-        "th": "ข้าแต่วิญญาณแห่งแสงสว่างอันเกรียงไกร จักรพรรดิอัสนีผู้ปกครองสรวงสวรรค์! ท่านแลเห็นผู้ที่ตระหง่านอยู่นั่นหรือไม่! เหล่าศัตรูผู้โอหังขององค์จักรพรรดิ! ตัวข้าคือผู้ที่จะพิฆาตมันให้สิ้นซากในดาบเดียวด้วยกระบี่แห่งทวยเทพ! ด้วยพลังอันสว่างเจิดจ้า จงสำแดงศักดานุภาพขององค์จักรพรรดิให้เป็นที่ประจักษ์! 'ไลท์นิ่ง'!",
-        "en": "Lightning",
-        "element": "น้ำ / สายฟ้า (Water / Lightning / 水・雷 / 水王級)",
-        "rank": "ระดับราชา (King / 水王級)",
-        "effect": "บีบอัดพลังงานมหาศาลของเมฆฟ้าคะนองให้รวมเป็นจุดเดียว แล้วฟาดสายฟ้าอัสนีบาตความเร็วสูงทำลายล้างเป้าหมายเดี่ยวในชั่วพริบตา",
-        "condition": "ต้องมีเมฆ Cumulonimbus รองรับอยู่ก่อน หรือต้องร่ายสองบทต่อเนื่องเพื่อบีบอัดพลังเวทโดยไม่ปล่อยให้พลังสลายตัว",
-        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)", "รูเดียส เกรย์แรท (Rudeus)"]
-      },
-      {
-        "id": 17,
-        "name": "เอิร์ธแลนเซอร์ (Earth Lancer)",
-        "jp": "不確かなる神よ！我が呼び声に答え、大地より天を突け！『土槍(アースランサー)』！",
-        "romaji": "Futashikanaru kami yo! Waga yobigoe ni kotae, daichi yori ten o tsuke! \"Āsu Ransā\"!",
-        "th": "ข้าแต่พระผู้เป็นเจ้าผู้ไร้ตัวตนแน่ชัด! จงตอบรับเสียงเพรียกของข้า และแทงทะลุผืนฟ้าจากพสุธา! 'เอิร์ธแลนเซอร์'!",
-        "en": "Earth Lancer",
-        "element": "ดิน (Earth / 土)",
-        "rank": "ระดับกลาง (Intermediate / 中級)",
-        "effect": "สร้างหอกหิน/เสาดินขนาดเท่าหนึ่งคนโอบ พุ่งแทงเสียบขึ้นมาจากใต้พื้นดินด้วยความเร็วสูงทะลวงเป้าหมาย",
-        "condition": "ต้องร่ายโดยมีพื้นดินรองรับ มักใช้เล็งเป้าหมายจากระยะไกลหรือใต้ฝ่าเท้าเพื่อยกตัวเองหนีกับดัก",
-        "casters": ["มัวร์ (Moore)", "อัศวินวิหารมิลิส (Temple Knights)"]
-      },
-      {
-        "id": 18,
-        "name": "ไฟร์บูลเล็ต (Fire Bullet)",
-        "jp": "汝の求める所に大いなる炎の加護あらん――『火弾』",
-        "romaji": "Nanji no motomeru tokoro ni ōinaru honoo no kago aran ―― \"Kadan\"",
-        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเปลวเพลิงอันยิ่งใหญ่―― 'ไฟร์บูลเล็ต'!",
-        "en": "Fire Bullet",
-        "element": "ไฟ (Fire / 火)",
-        "rank": "ระดับต้น (Elementary / 初級)",
-        "effect": "สร้างลูกกระสุนเพลิงขนาดกะทัดรัดและยิงพุ่งเข้าใส่เป้าหมายด้วยความเร็วสูงเพื่อสังหารหรือสะกัดกั้น",
-        "condition": "ต้องการสมาธิในการเล็งเป้าหมาย หากผู้ร่ายถูกโจมตีก่อนบทร่ายจะสมบูรณ์ เวทจะถูกขัดขวาง",
-        "casters": ["นักเวทราชองครักษ์แห่งอาสึรา (Asura Royal Mage)"]
-      },
-      {
-        "id": 19,
-        "name": "การอัญเชิญประตูมังกร (Dragon Gates)",
-        "jp": "その龍はただ忠義にのみ生きる。両の爪は長く、鋭く、決して拳を握れない。かの龍が怒りしとき、拳は握られん。爪は折れ、牙は抜け、しかし思い知るだろう。忠義を握りし龍が、いかなる思いで忠義を捨てたかを！三番目に死んだ龍。最も鋭き瞳を持つ、白銀鱗の龍将。甲龍王ペルギウスの名を以って召喚する――開け『後龍門』、招け『前龍門』",
-        "romaji": "Sono ryū wa tada chūgi ni nomi ikiru. Ryō no tsume wa nagaku, surudoku, kesshite kobushi o nigirenai. Kano ryū ga ikarishi toki, kobushi wa nigiraren. Tsume wa ore, kiba wa nuke, shikashi omoishiru darō. Chūgi o nigirishi ryū ga, ikanaru omoi de chūgi o suteta ka o! Sanbanme ni shinda ryū. Mottomo surudoki hitomi o motsu, hakuginrin no ryūshō. Kōryūō Perugiusu no na o motte shōkan suru ―― Hirake \"Kōryūmon\", Maneke \"Zenryūmon\"",
-        "th": "มังกรตัวนั้นมีชีวิตอยู่เพียงเพื่อความภักดี กรงเล็บทั้งสองข้างยาวและแหลมคม ไม่อาจกำหมัดได้ตลอดกาล ยามเมื่อมังกรตัวนั้นพิโรธ หมัดจักถูกกำแน่น กรงเล็บจักหักสะบั้น เขี้ยวจักหลุดร่วง ทว่าพวกเจ้าจักได้ประจักษ์ ว่ามังกรผู้กุมความภักดีไว้ ต้องแบกรับความรู้สึกเยี่ยงไรยามละทิ้งความภักดีนั้น! มังกรผู้สิ้นชีพเป็นลำดับที่สาม ขุนพลมังกรเกล็ดเงินขาวผู้มีเนตรอันคมกริบที่สุด นามแห่งราชามังกรเกราะเพอร์กิอุส ขออัญเชิญ―― จงเปิดออก 'ประตูมังกรหลัง' จงเชื้อเชิญ 'ประตูมังกรหน้า'!",
-        "en": "Front & Rear Dragon Gates",
-        "element": "มังกรโบราณ / อัญเชิญ (Dragon Secret Art / 召喚)",
-        "rank": "ระดับโบราณ (Unique Ancient / 王〜帝級相当)",
-        "effect": "อัญเชิญบานประตูมังกรขนาดยักษ์สองบานโอบล้อมเป้าหมาย ดูดกลืนพลังเวทและมานาทั้งหมดของศัตรูในบริเวณจนหมดสิ้น ทำให้เวทมนตร์หรือความเป็นอมตะของคู่ต่อสู้ไร้ผล",
-        "condition": "ต้องเป็นผู้สืบทอดวิชาของเผ่ามังกร (ราชามังกรเกราะเพอร์กิอุส) และมีสื่อกลางในการเชื่อมต่อมิติ",
-        "casters": ["ราชามังกรเกราะเพอร์กิอุส (Armored Dragon King Perugius)"]
-      }
-    ];
+    // Embedded Global Spell Database
+    const spellsData = [{"id": 1, "name": "ฮีลลิ่ง (Healing)", "en": "Healing", "jp": "神なる力は芳醇なる糧、力失いしかの者に再び立ち上がる力を与えん『ヒーリング』", "romaji": "Kami naru chikara wa hojun naru kate, chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen, \"Hīringu\"", "th": "พลังแห่งทวยเทพคือโอสถอันอุดม จงมอบพลังลุกขึ้นยืนใหม่อีกคราแก่ผู้สูญสิ้นเรี่ยวแรง 'ฮีลลิ่ง'!", "element": "Healing", "element_th": "การรักษา (Healing / 神聖・治癒)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 15, "power": 35, "type": "heal", "effect": "Heals minor wounds, restores vitality, and cleanses cuts.", "condition": "Touch the wounded subject and infuse healing mana into tissues.", "casters": ["Zenith", "Rudeus", "Roxy"]}, {"id": 2, "name": "วอเตอร์บอล (Water Ball)", "en": "Water Ball", "jp": "汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール", "romaji": "Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru", "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งวารีอันยิ่งใหญ่ กระแสน้ำอันเย็นฉ่ำจงปรากฏ ณ ที่แห่งนี้ 'วอเตอร์บอล'!", "element": "Water", "element_th": "น้ำ (Water / 水)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 10, "power": 30, "type": "damage", "effect": "Manifests a fist-sized sphere of pressurized water and launches it.", "condition": "Focus mana at fingertip, designate trajectory and impact point.", "casters": ["Rudeus", "Roxy"]}, {"id": 3, "name": "คิวมูโลนิมบัส (Cumulonimbus)", "en": "Cumulonimbus", "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！我が願いを叶え、凶暴なる恵みをもたらし、矮小なる存在に力を見せつけよ！神なる金槌を金床に打ち付けて畏怖を示し、大地を水で埋め尽くせ！ああ、雨よ！全てを押し流し、あらゆるものを駆逐せよ！キュムロニンバス！", "romaji": "Yudai naru mizu no seirei ni shite, ten ni agarishi raitei no oji yo! Waga negai o kanae, kyobo naru megumi o motorashi, waisho naru sonzai ni chikara o misetsukeyo! Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi, daichi o mizu de umetsukuse! Aa, ame yo! Subete o oshinagashi, arayuru mono o kuchiku seyo! Kyumuroninbasu!", "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร องค์ชายแห่งสายฟ้าผู้ขึ้นสู่สรวงสวรรค์! จงดลบันดาลความปรารถนาของข้า นำพามาซึ่งพรอันดุดัน และสำแดงฤทธานุภาพต่อเหล่าตัวตนอันกระจ้อยร่อย! จงเหวี่ยงค้อนแห่งทวยเทพฟาดลงบนทั่งเพื่อแสดงความน่าเกรงขาม และกลืนกินผืนพสุธาให้ท่วมท้นด้วยสายน้ำ! โอ้ สายฝนเอ๋ย! จงชะล้างทุกสิ่ง และกวาดล้างสรรพสิ่งให้สูญสิ้น! 'คิวมูโลนิมบัส'!", "element": "Water", "element_th": "น้ำ / ลม (Hybrid Water + Wind / 水・風混合)", "tier": "tier2", "rank": "Saint (水聖級)", "rank_th": "ระดับศักดิ์สิทธิ์ (Saint / 水聖級)", "mp_cost": 100, "power": 160, "type": "damage", "effect": "Summons a massive supercell thundercloud covering kilometers with storm and lightning.", "condition": "Must chant outdoors for over 1 minute. Consumes immense mana reservoir.", "casters": ["Roxy", "Rudeus"]}, {"id": 4, "name": "เอ็กซ์ฮีลลิ่ง (Ex-Healing)", "en": "Ex-Healing", "jp": "母なる慈愛の女神よ、彼の者の傷を塞ぎ、健やかなる体を取り戻さん、エクスヒーリング！", "romaji": "Haha naru jiai no megami yo, kano mono no kizu o fusagi, sukoyaka naru karada o torimodosan, Ekusu Hīringu!", "th": "ข้าแต่องค์เทวีแห่งความเมตตาผู้เป็นมารดา จงสมานบาดแผลของผู้นี้ และคืนร่างกายอันสมบูรณ์แข็งแรงกลับมา 'เอ็กซ์ฮีลลิ่ง'!", "element": "Healing", "element_th": "การรักษา (Healing / 神聖・治癒)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 85, "type": "heal", "effect": "Rapidly mends severe fractures, deep gashes, internal bleeding and critical shock.", "condition": "Direct physical contact with the severe injury is required.", "casters": ["Roxy", "Rudeus"]}, {"id": 5, "name": "เบิร์นนิงเพลส (Burning Place)", "en": "Burning Place", "jp": "爆炎を身体に、バーニングプレイス！", "romaji": "Bakuen o karada ni, Bāninku Pureisu!", "th": "เปลวเพลิงผลาญจงสถิตทั่วกาย 'เบิร์นนิงเพลส'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 65, "type": "damage", "effect": "Unleashes an outward burst of protective flames, repelling close-range attackers.", "condition": "Caster must control the thermal radius around oneself to avoid burns.", "casters": ["Roxy", "Moore"]}, {"id": 6, "name": "ไอซิเคิลเบรก (Icicle Break)", "en": "Icicle Break", "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！勇壮なる氷の剣を彼の者に叩き落せ！『氷霜撃(アイシクルブレイク)』", "romaji": "Yudai naru mizu no seirei ni shite, ten ni agarishi raitei no oji yo! Yuso naru kori no tsurugi o kano mono ni tatakiotose! \"Aishikuru Bureiku\"", "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร เจ้าชายแห่งจักรพรรดิอัสนีผู้สถิตบนฟากฟ้า! จงฟาดฟันดาบน้ำแข็งอันหาญกล้าลงทัณฑ์ผู้นั้น! 'ไอซิเคิลเบรก'!", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 75, "type": "damage", "effect": "Condenses atmospheric vapor into gigantic razor ice blades that crash downwards.", "condition": "Requires vertical ceiling clearance above the target zone.", "casters": ["Roxy", "Temple Knights"]}, {"id": 7, "name": "เอิร์ธฟอร์เทรส (Earth Fortress)", "en": "Earth Fortress", "jp": "荘厳なる大地の鎧を纏わん。『土砦(アースフォートレス)』！", "romaji": "Sogon naru daichi no yoroi o matowan. \"Asu Fotoresu\"!", "th": "จงสวมใส่เกราะแห่งปฐพีอันโอ่อ่าสง่างาม 'เอิร์ธฟอร์เทรส'!", "element": "Earth", "element_th": "ดิน (Earth / 土)", "tier": "tier2", "rank": "Advanced (上級)", "rank_th": "ระดับสูง (Advanced / 上級)", "mp_cost": 50, "power": 90, "type": "defense", "effect": "Erects a towering circular fortress barrier of dense stone surrounding the caster.", "condition": "Caster must be standing on rock/soil ground.", "casters": ["Roxy"]}, {"id": 8, "name": "วอเตอร์สแปลช (Water Splash)", "en": "Water Splash", "jp": "落ちる雫を散らしめし、世界は水で覆われん。『水蒸(ウォータースプラッシュ)』！", "romaji": "Ochiru shizuku o chirashimeshi, sekai wa mizu de oowaren. \"Wota Supurasshu\"!", "th": "จงโปรยปรายหยาดหยดที่ร่วงหล่น โลกเอ๋ยจงถูกชโลมด้วยสายน้ำ 'วอเตอร์สแปลช'!", "element": "Water", "element_th": "น้ำ (Water / 水)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 12, "power": 25, "type": "setup", "effect": "Sprays an omnidirectional shower of fine water, drenching all targets for combo setups.", "condition": "Low raw damage; primes targets for instant freezing Frost Nova combos.", "casters": ["Roxy"]}, {"id": 9, "name": "ไอซิเคิลฟิลด์ (Icicle Field)", "en": "Icicle Field", "jp": "天より舞い降りし蒼き女神よ、その錫杖を振るいて世界を凍りつかせん！『氷結領域(アイシクルフィールド)』！", "romaji": "Ten yori maioorishi aoki megami yo, sono shakujo o furuite sekai o kooritsukasen! \"Aishikuru Firudo\"!", "th": "ข้าแต่องค์เทวีสีครามผู้ร่อนลงมาจากฟากฟ้า จงกวัดแกว่งคทาเยือกแข็งแช่พิภพให้เย็นยะเยือก! 'ไอซิเคิลฟิลด์'!", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 70, "type": "damage", "effect": "Instantly plunges ambient temperature to freeze moisture, locking foes into solid ice.", "condition": "Combo synergy with Water Splash executes instant Frost Nova freeze.", "casters": ["Roxy", "Moore"]}, {"id": 10, "name": "บริซซาร์ดสตอร์ม (Blizzard Storm)", "en": "Blizzard Storm", "jp": "霜の王。大いなる雪原の覇王。純白を纏い、一切の熱を刈り取る零の王。死を司りし冷たき王が凍てつかせん！『氷槍吹雪(ブリザードストーム)』！", "romaji": "Shimo no o. Oinaru setsugen no hao. Junpaku o matoi, issai no netsu o karitoru zero no o. Shi o tsukasadorishi tsumetaki o ga itetsukasen! \"Burizado Sutomu\"!", "th": "ราชันแห่งเกล็ดน้ำค้าง จอมราชันแห่งทุ่งหิมะอันยิ่งใหญ่ ราชาแห่งศูนย์สัมบูรณ์ผู้สวมอาภรณ์ขาวบริสุทธิ์และช่วงชิงความร้อนทั้งมวล ราชาผู้เย็นเยียบผู้กุมความตายจงแช่แข็งให้สิ้น! 'บริซซาร์ดสตอร์ม'!", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier2", "rank": "Advanced (上級)", "rank_th": "ระดับสูง (Advanced / 上級)", "mp_cost": 65, "power": 125, "type": "damage", "effect": "Summons a raging blizzard storm of thousands of piercing ice spears to crush backline foes.", "condition": "Demands strong mental precision to direct spear trajectories over allies.", "casters": ["Roxy"]}, {"id": 11, "name": "เฟลมสไลซ์ (Flame Slice)", "en": "Flame Slice", "jp": "焦げたる剣を持ちて敵を切り裂かん、『フレイムスライス』！", "romaji": "Kogetaru ken o mochite teki o kirisakan, \"Fureimu Suraisu\"!", "th": "จงถือดาบที่ลุกไหม้เกรียมเข้าฟาดฟันศัตรู 'เฟลมสไลซ์'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Elementary-Intermediate (初・中級)", "rank_th": "ระดับต้น-กลาง (Elementary-Intermediate / 初・中級)", "mp_cost": 22, "power": 55, "type": "damage", "effect": "Flings a razor-sharp crescent arc of blazing fire across medium distance.", "condition": "Discharged in a straight cleaving vector to slice armored shells.", "casters": ["Roxy"]}, {"id": 12, "name": "ไอซ์สแมช (Ice Smash)", "en": "Ice Smash", "jp": "汝の求める所に大いなる氷の加護あらん、氷河の濁流を受けろ、『氷撃(アイススマッシュ)』", "romaji": "Nanji no motomeru tokoro ni oinaru kori no kago aran, hyoga no dakuryu o ukero, \"Aisu Sumasshu\"", "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเหมันต์อันยิ่งใหญ่ จงรับกระแสธารอันเชี่ยวกรากแห่งธารน้ำแข็งไปเสีย 'ไอซ์สแมช'!", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 70, "type": "damage", "effect": "Impales targets at zero-range with high-velocity glacial pillars.", "condition": "Extremely lethal when unleashed point-blank against regenerating beasts.", "casters": ["Elinalise"]}, {"id": 13, "name": "เฟลมสโธรเวอร์ (Flamethrower)", "en": "Flamethrower", "jp": "小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)』！", "romaji": "Chiisana kusuburi ga kyodai naru megumi o yakitsukusan, \"Fureimu Surowa\"!", "th": "ประกายไฟอันริบหรี่จงแผดเผาความอุดมสมบูรณ์อันยิ่งใหญ่ให้มอดไหม้ 'เฟลมสโธรเวอร์'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 80, "type": "damage", "effect": "Channels an uninterrupted torrent of searing flame to burn targets and prevent regeneration.", "condition": "Continuous stream requiring sustained mana discharge.", "casters": ["Roxy", "Temple Knights"]}, {"id": 14, "name": "ไชน์ฮีลลิ่ง (Shine Healing)", "en": "Shine Healing", "jp": "奇跡の天使よ、命の鼓動に天なる息吹を与え給え。天にいただきし太陽。神なる御使は赤を嫌う。光の海に舞い降りて、純白の翼を広げよ。さすれば赤は駆逐されん。『シャインヒーリング』", "romaji": "Kiseki no tenshi yo, inochi no kodo ni tennaru ibuki o ataetamae. Ten ni itadakishi taiyo. Shin naru mitsukai wa aka o kirau. Hikari no umi ni maioorite, junpaku no tsubasa o hirogeyo. Sasureba aka wa kuchiku saren. \"Shain Hīringu\"", "th": "ข้าแต่ทูตสวรรค์แห่งปาฏิหาริย์ โปรดประทานลมหายใจแห่งสวรรค์สู่ชีพจรแห่งชีวิต ดวงตะวันอันสถิตบนฟากฟ้า ทูตแห่งพระผู้เป็นเจ้ารังเกียจโลหิตสีชาด จงร่อนลงสู่ห้วงทะเลแห่งแสงสว่าง สยายปีกสีขาวบริสุทธิ์ เมื่อนั้นสีชาดจักถูกกวาดล้างจนหมดสิ้น 'ไชน์ฮีลลิ่ง'!", "element": "Healing", "element_th": "การรักษา / ศักดิ์สิทธิ์ (Healing / Divine / 神聖・治癒)", "tier": "tier2", "rank": "Saint (治癒聖級)", "rank_th": "ระดับศักดิ์สิทธิ์ (Saint / 治癒聖級)", "mp_cost": 95, "power": 170, "type": "heal", "effect": "Saint-tier restoration that seals life-threatening hemorrhages and restores vital organs.", "condition": "Requires lengthy incantation and serene concentration; cannot regenerate severed limbs.", "casters": ["Roxy"]}, {"id": 15, "name": "คำสั่งแขนเทียมปฐพี (Earth Arm)", "en": "Earth Prosthetic Arm Command", "jp": "土よ、我が腕(かいな)となれ", "romaji": "Tsuchi yo, waga kaina to nare", "th": "ดินเอ๋ย จงมาเป็นแขนของข้า! (คำสั่งถอด: แขนเอ๋ย จงกลับคืนสู่ดิน)", "element": "Earth", "element_th": "ดิน / อุปกรณ์เวทมนตร์ (Earth / Magic Tool / 土・魔道具)", "tier": "tier1", "rank": "Tool Command (魔道具)", "rank_th": "คำสั่งควบคุมอุปกรณ์เวทมนตร์ (Magic Tool Command)", "mp_cost": 20, "power": 50, "type": "buff", "effect": "Awakens the prosthetic earth arm to sync with user nerves for enhanced physical grip.", "condition": "Requires fitted Zariff Prosthetic Arm artifact.", "casters": ["Zanoba", "Rudeus"]}, {"id": 16, "name": "ไลท์นิ่ง (Lightning)", "en": "Lightning", "jp": "雄大なる光の精霊にして、天を支配せし雷帝よ！そびえ立つ者が見えるか！傲慢なりし帝の御敵が！我は神なる剣にてかの者を一撃の元に打倒せんとする者なり！光り輝く力を以って、帝の威を知らしめん！『ライトニング』！", "romaji": "Yudai naru hikari no seirei ni shite, ten o shihaiseshi raitei yo! Sobietatsu mono ga mieru ka! Goman narishi tei no miteki ga! Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni dato sen to suru mono nari! Hikarikagayaku chikara o motte, tei no i o shirashimen! \"Raitoningu\"!", "th": "ข้าแต่วิญญาณแห่งแสงสว่างอันเกรียงไกร จักรพรรดิอัสนีผู้ปกครองสรวงสวรรค์! ท่านแลเห็นผู้ที่ตระหง่านอยู่นั่นหรือไม่! เหล่าศัตรูผู้โอหังขององค์จักรพรรดิ! ตัวข้าคือผู้ที่จะพิฆาตมันให้สิ้นซากในดาบเดียวด้วยกระบี่แห่งทวยเทพ! ด้วยพลังอันสว่างเจิดจ้า จงสำแดงศักดานุภาพขององค์จักรพรรดิให้เป็นที่ประจักษ์! 'ไลท์นิ่ง'!", "element": "Water", "element_th": "น้ำ / สายฟ้า (Water / Lightning / 水・雷 / 水王級)", "tier": "tier2", "rank": "King (水王級)", "rank_th": "ระดับราชา (King / 水王級)", "mp_cost": 150, "power": 240, "type": "damage", "effect": "Compresses cumulonimbus thundercloud mana to blast down a single pinpoint godbolt of lightning.", "condition": "Must compress high density mana; capable of overwhelming even high dragon armor.", "casters": ["Roxy", "Rudeus"]}, {"id": 17, "name": "เอิร์ธแลนเซอร์ (Earth Lancer)", "en": "Earth Lancer", "jp": "不確かなる神よ！我が呼び声に答え、大地より天を突け！『土槍(アースランサー)』！", "romaji": "Futashikanaru kami yo! Waga yobigoe ni kotae, daichi yori ten o tsuke! \"Asu Ransa\"!", "th": "ข้าแต่พระผู้เป็นเจ้าผู้ไร้ตัวตนแน่ชัด! จงตอบรับเสียงเพรียกของข้า และแทงทะลุผืนฟ้าจากพสุธา! 'เอิร์ธแลนเซอร์'!", "element": "Earth", "element_th": "ดิน (Earth / 土)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 75, "type": "damage", "effect": "Erupts a stone lance from deep underground beneath the target at blinding speed.", "condition": "Requires solid earth surface; can also launch caster upward to evade snares.", "casters": ["Moore", "Temple Knights"]}, {"id": 18, "name": "ไฟร์บูลเล็ต (Fire Bullet)", "en": "Fire Bullet", "jp": "汝の求める所に大いなる炎の加護あらん――『火弾』", "romaji": "Nanji no motomeru tokoro ni oinaru honoo no kago aran ―― \"Kadan\"", "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเปลวเพลิงอันยิ่งใหญ่―― 'ไฟร์บูลเล็ต'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 15, "power": 40, "type": "damage", "effect": "Launches a compact, high-velocity projectile of pure blazing fire.", "condition": "High accuracy projectile; interrupts enemy channeling.", "casters": ["Asura Royal Mage"]}, {"id": 19, "name": "การอัญเชิญประตูมังกร (Dragon Gates)", "en": "Front & Rear Dragon Gates", "jp": "その龍はただ忠義にのみ生きる。両の爪は長く、鋭く、決して拳を握れない。かの龍が怒りしとき、拳は握られん。爪は折れ、牙は抜け、しかし思い知るだろう。忠義を握りし龍が、いかなる思いで忠義を捨てたかを！三番目に死んだ龍。最も鋭き瞳を持つ、白銀鱗の龍将。甲龍王ペルギウスの名を以って召喚する――開け『後龍門』、招け『前龍門』", "romaji": "Sono ryu wa tada chugi ni nomi ikiru. Ryo no tsume wa nagaku, surudoku, kesshite kobushi o nigirenai. Kano ryu ga ikarishi toki, kobushi wa nigiraren. Tsume wa ore, kiba wa nuke, shikashi omoishiru daro. Chugi o nigirishi ryu ga, ikanaru omoi de chugi o suteta ka o! Sanbanme ni shinda ryu. Mottomo surudoki hitomi o motsu, hakuginrin no ryusho. Koryuo Perugiusu no na o motte shokan suru ―― Hirake \"Koryumon\", Maneke \"Zenryumon\"", "th": "มังกรตัวนั้นมีชีวิตอยู่เพียงเพื่อความภักดี กรงเล็บทั้งสองข้างยาวและแหลมคม ไม่อาจกำหมัดได้ตลอดกาล ยามเมื่อมังกรตัวนั้นพิโรธ หมัดจักถูกกำแน่น กรงเล็บจักหักสะบั้น เขี้ยวจักหลุดร่วง ทว่าพวกเจ้าจักได้ประจักษ์ ว่ามังกรผู้กุมความภักดีไว้ ต้องแบกรับความรู้สึกเยี่ยงไรยามละทิ้งความภักดีนั้น! มังกรผู้สิ้นชีพเป็นลำดับที่สาม ขุนพลมังกรเกล็ดเงินขาวผู้มีเนตรอันคมกริบที่สุด นามแห่งราชามังกรเกราะเพอร์กิอุส ขออัญเชิญ―― จงเปิดออก 'ประตูมังกรหลัง' จงเชื้อเชิญ 'ประตูมังกรหน้า'!", "element": "Dragon", "element_th": "มังกรโบราณ / อัญเชิญ (Dragon Secret Art / 召喚)", "tier": "tier2", "rank": "Unique Ancient (王〜帝級相当)", "rank_th": "ระดับโบราณ (Unique Ancient / 王〜帝級相当)", "mp_cost": 220, "power": 320, "type": "damage", "effect": "Summons pair of legendary dragon gates flanking the enemy, completely draining all mana and breaking immortality.", "condition": "Ancient dragon heritage secret technique; absolute nullification of enemy spells.", "casters": ["Armored Dragon King Perugius"]}];
 
-    // DOM Elements
+    // -------------------------------------------------------------
+    // NAVIGATION TAB SWITCHER
+    // -------------------------------------------------------------
+    const navTabBtns = document.querySelectorAll('.nav-tab-btn');
+    const tabViews = document.querySelectorAll('.tab-view');
+
+    navTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        navTabBtns.forEach(b => b.classList.remove('active'));
+        tabViews.forEach(v => v.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetView = document.getElementById(btn.dataset.tab);
+        if (targetView) targetView.classList.add('active');
+      });
+    });
+
+    // -------------------------------------------------------------
+    // 1. GRIMOIRE ARCHIVE LOGIC
+    // -------------------------------------------------------------
     const spellContainer = document.getElementById('spell-container');
     const searchInput = document.getElementById('search-input');
     const elemFilterBtns = document.querySelectorAll('#element-filters .chip-btn');
     const rankFilterBtns = document.querySelectorAll('#rank-filters .chip-btn');
     const noResults = document.getElementById('no-results');
-    const toast = document.getElementById('toast-msg');
-    const toastText = document.getElementById('toast-text');
-    const spellModal = document.getElementById('spell-modal');
-    const modalBody = document.getElementById('modal-body');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
 
     let currentElem = 'all';
     let currentRank = 'all';
     let searchQuery = '';
 
-    // Render Function
-    function renderSpells() {
+    function renderGrimoire() {
       spellContainer.innerHTML = '';
-      
-      const filtered = spellsData.filter(spell => {
-        // Element filter
-        const matchElem = (currentElem === 'all') || spell.element.includes(currentElem);
-        
-        // Rank filter
-        const matchRank = (currentRank === 'all') || spell.rank.includes(currentRank);
-        
-        // Search filter
+      const filtered = spellsData.filter(s => {
+        const matchElem = (currentElem === 'all') || s.element.toLowerCase().includes(currentElem.toLowerCase());
+        const matchRank = (currentRank === 'all') || s.rank.toLowerCase().includes(currentRank.toLowerCase());
         const q = searchQuery.toLowerCase().trim();
-        const matchSearch = !q || 
-          spell.name.toLowerCase().includes(q) ||
-          spell.en.toLowerCase().includes(q) ||
-          spell.jp.toLowerCase().includes(q) ||
-          spell.romaji.toLowerCase().includes(q) ||
-          spell.th.toLowerCase().includes(q) ||
-          spell.element.toLowerCase().includes(q) ||
-          spell.casters.some(c => c.toLowerCase().includes(q));
+        const matchSearch = !q ||
+          s.en.toLowerCase().includes(q) ||
+          s.jp.toLowerCase().includes(q) ||
+          s.romaji.toLowerCase().includes(q) ||
+          s.name.toLowerCase().includes(q) ||
+          s.element.toLowerCase().includes(q) ||
+          s.casters.some(c => c.toLowerCase().includes(q));
 
         return matchElem && matchRank && matchSearch;
       });
@@ -906,48 +1211,45 @@
           card.setAttribute('data-element', spell.element);
 
           let rankBadgeClass = 'badge-rank';
-          if (spell.rank.includes('ศักดิ์สิทธิ์')) rankBadgeClass += ' saint';
-          else if (spell.rank.includes('ราชา')) rankBadgeClass += ' king';
-          else if (spell.rank.includes('โบราณ') || spell.rank.includes('จักรพรรดิ')) rankBadgeClass += ' god';
+          if (spell.rank.includes('Saint')) rankBadgeClass += ' saint';
+          else if (spell.rank.includes('King')) rankBadgeClass += ' king';
+          else if (spell.rank.includes('Unique')) rankBadgeClass += ' god';
 
           card.innerHTML = `
             <div class="card-top">
               <div class="spell-names">
-                <h3>${spell.name}</h3>
-                <div class="spell-en">${spell.en}</div>
+                <h3>${spell.en}</h3>
+                <div class="spell-en">${spell.name}</div>
               </div>
-              <div class="badges">
-                <span class="${rankBadgeClass}">${spell.rank.split('(')[0].trim()}</span>
-                <span class="badge-elem">${spell.element.split('(')[0].trim()}</span>
+              <div style="text-align:right">
+                <span class="${rankBadgeClass}">${spell.rank}</span>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">${spell.element}</div>
               </div>
             </div>
 
             <div class="incantation-block">
               <div class="incant-jp">「${spell.jp}」</div>
               <div class="incant-romaji">${spell.romaji}</div>
-              <div class="incant-th"><strong>พากย์ไทย:</strong> "${spell.th}"</div>
+              <div class="incant-th"><strong>Dub Ref:</strong> "${spell.th}"</div>
             </div>
 
             <div class="spell-desc">
-              <strong>ผลลัพธ์:</strong> ${spell.effect}
+              <strong>Effect:</strong> ${spell.effect}
             </div>
 
             <div class="spell-condition">
-              <strong>เงื่อนไข:</strong> ${spell.condition}
+              <strong>Cost:</strong> ${spell.mp_cost} MP • <strong>Requirement:</strong> ${spell.condition}
             </div>
 
             <div class="card-actions">
-              <button class="action-btn" onclick="copyChant('${spell.jp.replace(/'/g, "\\'")}', 'ภาษาญี่ปุ่น')">
-                <i class="fa-regular fa-copy"></i> คัดลอก JP
+              <button class="action-btn" onclick="copyChant('${spell.jp.replace(/'/g, "\'")}', 'Japanese')">
+                <i class="fa-regular fa-copy"></i> Copy JP
               </button>
-              <button class="action-btn" onclick="copyChant('${spell.th.replace(/'/g, "\\'")}', 'คำแปลไทย')">
-                <i class="fa-solid fa-feather"></i> คัดลอก TH
+              <button class="action-btn" onclick="playVoice('${spell.jp.replace(/'/g, "\'")}')">
+                <i class="fa-solid fa-volume-high"></i> Voice
               </button>
-              <button class="action-btn" onclick="playVoice('${spell.jp.replace(/'/g, "\\'")}')">
-                <i class="fa-solid fa-volume-high"></i> เสียงร่าย
-              </button>
-              <button class="action-btn" onclick="openDetails(${spell.id})">
-                <i class="fa-solid fa-eye"></i> เจาะลึก
+              <button class="action-btn" onclick="startSinglePractice(${spell.id})">
+                <i class="fa-solid fa-dumbbell"></i> Practice
               </button>
             </div>
           `;
@@ -956,13 +1258,12 @@
       }
     }
 
-    // Filter Listeners
     elemFilterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         elemFilterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentElem = btn.dataset.elem;
-        renderSpells();
+        renderGrimoire();
       });
     });
 
@@ -971,102 +1272,618 @@
         rankFilterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentRank = btn.dataset.rank;
-        renderSpells();
+        renderGrimoire();
       });
     });
 
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value;
-      renderSpells();
+      renderGrimoire();
     });
 
-    // Copy Utility
+    // -------------------------------------------------------------
+    // 2. CHANTING TRAINING MODE (PURE JP + ROMAJI ONLY)
+    // -------------------------------------------------------------
+    let trainingQueue = [];
+    let currentTrainIndex = 0;
+
+    const btnStartTraining = document.getElementById('btn-start-training');
+    const trainElementSelect = document.getElementById('train-element-select');
+    const trainTier1Count = document.getElementById('train-tier1-count');
+    const trainTier2Count = document.getElementById('train-tier2-count');
+    const trainingStageBox = document.getElementById('training-stage-box');
+
+    const trainCounterText = document.getElementById('train-counter-text');
+    const trainSpellName = document.getElementById('train-spell-name');
+    const trainJpText = document.getElementById('train-jp-text');
+    const trainRomajiText = document.getElementById('train-romaji-text');
+    const trainMicBtn = document.getElementById('train-mic-btn');
+    const trainPlayTtsBtn = document.getElementById('train-play-tts-btn');
+    const trainTranscriptBox = document.getElementById('train-transcript-box');
+    const trainTranscriptText = document.getElementById('train-transcript-text');
+    const trainResultBox = document.getElementById('train-result-box');
+    const trainPrevBtn = document.getElementById('train-prev-btn');
+    const trainNextBtn = document.getElementById('train-next-btn');
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    btnStartTraining.addEventListener('click', () => {
+      const selectedElem = trainElementSelect.value;
+      const t1Count = parseInt(trainTier1Count.value) || 0;
+      const t2Count = parseInt(trainTier2Count.value) || 0;
+
+      let pool = spellsData;
+      if (selectedElem !== 'All') {
+        pool = pool.filter(s => s.element.toLowerCase().includes(selectedElem.toLowerCase()));
+      }
+
+      const t1Pool = shuffle(pool.filter(s => s.tier === 'tier1'));
+      const t2Pool = shuffle(pool.filter(s => s.tier === 'tier2'));
+
+      const selectedT1 = t1Pool.slice(0, t1Count);
+      const selectedT2 = t2Pool.slice(0, t2Count);
+
+      trainingQueue = [...selectedT1, ...selectedT2];
+
+      if (trainingQueue.length === 0) {
+        showToast('No spells found matching the selected element/tier criteria.');
+        return;
+      }
+
+      currentTrainIndex = 0;
+      trainingStageBox.style.display = 'block';
+      loadTrainingSpell(currentTrainIndex);
+      trainingStageBox.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    window.startSinglePractice = function(spellId) {
+      const spell = spellsData.find(s => s.id === spellId);
+      if (!spell) return;
+
+      trainingQueue = [spell];
+      currentTrainIndex = 0;
+
+      // Switch to training tab
+      navTabBtns.forEach(b => b.classList.remove('active'));
+      tabViews.forEach(v => v.classList.remove('active'));
+      const trainTabBtn = document.querySelector('.nav-tab-btn[data-tab="training-tab"]');
+      if (trainTabBtn) trainTabBtn.classList.add('active');
+      document.getElementById('training-tab').classList.add('active');
+
+      trainingStageBox.style.display = 'block';
+      loadTrainingSpell(0);
+      trainingStageBox.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    function loadTrainingSpell(idx) {
+      if (idx < 0 || idx >= trainingQueue.length) return;
+      const spell = trainingQueue[idx];
+
+      trainCounterText.textContent = `PRACTICE STAGE: ${idx + 1} / ${trainingQueue.length} (${spell.rank})`;
+      trainSpellName.textContent = spell.en;
+      trainJpText.textContent = `「${spell.jp}」`;
+      trainRomajiText.textContent = spell.romaji;
+
+      trainTranscriptText.textContent = 'Press microphone button and chant the incantation in Japanese or Romaji...';
+      trainTranscriptBox.classList.remove('active');
+      trainResultBox.innerHTML = '';
+      trainMicBtn.classList.remove('recording');
+
+      trainPrevBtn.disabled = (idx === 0);
+      trainNextBtn.disabled = (idx === trainingQueue.length - 1);
+    }
+
+    trainPrevBtn.addEventListener('click', () => {
+      if (currentTrainIndex > 0) {
+        currentTrainIndex--;
+        loadTrainingSpell(currentTrainIndex);
+      }
+    });
+
+    trainNextBtn.addEventListener('click', () => {
+      if (currentTrainIndex < trainingQueue.length - 1) {
+        currentTrainIndex++;
+        loadTrainingSpell(currentTrainIndex);
+      }
+    });
+
+    trainPlayTtsBtn.addEventListener('click', () => {
+      const spell = trainingQueue[currentTrainIndex];
+      if (spell) playVoice(spell.jp);
+    });
+
+    // -------------------------------------------------------------
+    // ACCENT-TOLERANT VOICE RECOGNITION ENGINE
+    // -------------------------------------------------------------
+    let recognition = null;
+    let isRecording = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'ja-JP';
+
+      recognition.onstart = () => {
+        isRecording = true;
+        trainMicBtn.classList.add('recording');
+        trainTranscriptText.textContent = 'Listening to mana waves... (Speak now!)';
+        trainTranscriptBox.classList.add('active');
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          transcript += event.results[i][0].transcript;
+        }
+        trainTranscriptText.textContent = `Heard: "${transcript}"`;
+
+        if (event.results[0].isFinal) {
+          evaluateChant(transcript, trainingQueue[currentTrainIndex]);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        isRecording = false;
+        trainMicBtn.classList.remove('recording');
+        trainTranscriptText.textContent = `Speech detection error: ${event.error}`;
+      };
+
+      recognition.onend = () => {
+        isRecording = false;
+        trainMicBtn.classList.remove('recording');
+      };
+    } else {
+      trainTranscriptText.textContent = 'Note: Web Speech API is not supported in this browser. Please use Chrome/Edge on Desktop/Android.';
+    }
+
+    trainMicBtn.addEventListener('click', () => {
+      if (!recognition) {
+        // Fallback prompt for browsers without speech API
+        const manualInput = prompt('Enter or paste your chant (JP / Romaji / Keywords):', '');
+        if (manualInput) {
+          evaluateChant(manualInput, trainingQueue[currentTrainIndex]);
+        }
+        return;
+      }
+
+      if (isRecording) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    });
+
+    function cleanString(str) {
+      return str.replace(/[「」『』、。・\s!?]/g, '').toLowerCase();
+    }
+
+    function evaluateChant(spoken, targetSpell) {
+      const cleanSpoken = cleanString(spoken);
+      const cleanTarget = cleanString(targetSpell.jp);
+
+      // Extract magic anchors (core keywords)
+      const anchors = [];
+      if (targetSpell.jp.includes('水の精霊')) anchors.push('水の精霊', '水');
+      if (targetSpell.jp.includes('光の精霊')) anchors.push('光の精霊', '光');
+      if (targetSpell.jp.includes('雷帝')) anchors.push('雷帝');
+      if (targetSpell.jp.includes('神なる力')) anchors.push('神なる力', '神');
+      if (targetSpell.jp.includes('大いなる')) anchors.push('大いなる');
+      if (targetSpell.jp.includes('ウォーター')) anchors.push('ウォーター', 'water');
+      if (targetSpell.jp.includes('キュムロニンバス')) anchors.push('キュムロニンバス', 'cumulonimbus');
+      if (targetSpell.jp.includes('ライトニング')) anchors.push('ライトニング', 'lightning');
+      if (targetSpell.jp.includes('ヒーリング')) anchors.push('ヒーリング', 'healing');
+      if (targetSpell.jp.includes('氷結')) anchors.push('氷結', '氷');
+
+      let matchedAnchors = 0;
+      anchors.forEach(a => {
+        if (cleanSpoken.includes(cleanString(a))) matchedAnchors++;
+      });
+
+      // Calculate string character overlap
+      let overlapCount = 0;
+      for (const char of cleanSpoken) {
+        if (cleanTarget.includes(char)) overlapCount++;
+      }
+      const similarityRatio = cleanTarget.length > 0 ? (overlapCount / cleanTarget.length) : 0;
+
+      // Accent-Tolerant verdict
+      const isAnchorMatched = (anchors.length > 0 && matchedAnchors >= Math.ceil(anchors.length * 0.4));
+      const isSimilarityPass = similarityRatio >= 0.35 || cleanSpoken.includes(cleanString(targetSpell.en));
+
+      if (similarityRatio >= 0.75 || (isAnchorMatched && similarityRatio >= 0.5)) {
+        trainResultBox.innerHTML = `
+          <div class="result-badge success">
+            <i class="fa-solid fa-circle-check"></i> S-RANK CHANT MASTER! (Spell Cast Successfully)
+          </div>
+          <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.5rem;">
+            Mana resonance: Over 85% accuracy. Your pronunciation harmonized flawlessly with the incantation.
+          </p>
+        `;
+      } else if (isAnchorMatched || isSimilarityPass) {
+        trainResultBox.innerHTML = `
+          <div class="result-badge partial">
+            <i class="fa-solid fa-triangle-exclamation"></i> A-RANK / PASS (Accent Deviation Tolerated)
+          </div>
+          <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.5rem;">
+            Core magical anchors recognized! While accent differed from native Tokyo Japanese, the magic spell triggered effectively!
+          </p>
+        `;
+      } else {
+        trainResultBox.innerHTML = `
+          <div class="result-badge fail">
+            <i class="fa-solid fa-xmark"></i> CHANT FIZZLED (Mana Backfire)
+          </div>
+          <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.5rem;">
+            Accuracy under 40%. Listen to Master's pronunciation and chant the Romaji syllables steadily.
+          </p>
+        `;
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 3. BALANCED SPELL BATTLE RPG ENGINE
+    // -------------------------------------------------------------
+    const enemiesData = {
+      crawler: {
+        name: "Iron Crawler",
+        type: "Beast / Heavy Armor",
+        maxHp: 750,
+        atk: 45,
+        weakness: ["Water", "Ice", "Lightning"],
+        resistance: ["Earth"],
+        desc: "Labyrinth creature with impenetrable carapace. Highly weak against Ice & Lightning!",
+        icon: "fa-bug"
+      },
+      treant: {
+        name: "Ancient Forest Treant",
+        type: "Plant / Wood Spirit",
+        maxHp: 900,
+        atk: 50,
+        weakness: ["Fire"],
+        resistance: ["Water", "Earth"],
+        desc: "Towering ancient wood beast. Extreme vulnerability to Fire magic!",
+        icon: "fa-tree"
+      },
+      salamander: {
+        name: "Magma Salamander",
+        type: "Fire Beast",
+        maxHp: 800,
+        atk: 60,
+        weakness: ["Water", "Ice"],
+        resistance: ["Fire"],
+        desc: "Blazing reptile that absorbs fire. Water & Ice spells deal double damage!",
+        icon: "fa-fire-flame-curved"
+      },
+      wyvern: {
+        name: "Red Wyvern of the Blade Ridge",
+        type: "Dragon / Apex Beast",
+        maxHp: 1400,
+        atk: 85,
+        weakness: ["Lightning", "Dragon"],
+        resistance: ["Fire", "Earth"],
+        desc: "Apex aerial beast. Requires high tier Lightning or Dragon Gates to shatter!",
+        icon: "fa-dragon"
+      }
+    };
+
+    let battleState = {
+      playerHp: 500,
+      playerMaxHp: 500,
+      playerMp: 350,
+      playerMaxMp: 350,
+      enemyKey: 'crawler',
+      enemyHp: 750,
+      enemyMaxHp: 750,
+      turn: 1,
+      soaked: false, // Combo setup via Water Splash
+      activeDeck: [2, 8, 6, 16], // Default deck: Water Ball, Water Splash, Icicle Break, Lightning
+      isOver: false
+    };
+
+    const playerHpText = document.getElementById('player-hp-text');
+    const playerHpBar = document.getElementById('player-hp-bar');
+    const playerMpText = document.getElementById('player-mp-text');
+    const playerMpBar = document.getElementById('player-mp-bar');
+
+    const enemyNameText = document.getElementById('enemy-name-text');
+    const enemyElemTag = document.getElementById('enemy-elem-tag');
+    const enemyHpText = document.getElementById('enemy-hp-text');
+    const enemyHpBar = document.getElementById('enemy-hp-bar');
+    const enemyWeaknessHint = document.getElementById('enemy-weakness-hint');
+    const enemyStatusDesc = document.getElementById('enemy-status-desc');
+
+    const battleLogBox = document.getElementById('battle-log-box');
+    const battleTurnCount = document.getElementById('battle-turn-count');
+    const battleEnemySelect = document.getElementById('battle-enemy-select');
+    const btnRestartBattle = document.getElementById('btn-restart-battle');
+    const battleSlotsContainer = document.getElementById('battle-slots-container');
+    const btnQuickVoiceCast = document.getElementById('btn-quick-voice-cast');
+
+    function logBattle(html) {
+      battleLogBox.innerHTML += `<div>${html}</div>`;
+      battleLogBox.scrollTop = battleLogBox.scrollHeight;
+    }
+
+    function initBattle() {
+      const eKey = battleEnemySelect.value;
+      const enemy = enemiesData[eKey];
+      battleState.enemyKey = eKey;
+      battleState.playerHp = battleState.playerMaxHp;
+      battleState.playerMp = battleState.playerMaxMp;
+      battleState.enemyHp = enemy.maxHp;
+      battleState.enemyMaxHp = enemy.maxHp;
+      battleState.turn = 1;
+      battleState.soaked = false;
+      battleState.isOver = false;
+
+      // Contextual Deck based on enemy
+      if (eKey === 'treant') {
+        battleState.activeDeck = [18, 11, 13, 5]; // Fire deck
+      } else if (eKey === 'crawler') {
+        battleState.activeDeck = [8, 9, 6, 16]; // Water & Ice combo deck
+      } else if (eKey === 'salamander') {
+        battleState.activeDeck = [2, 12, 10, 3]; // Water barrage deck
+      } else {
+        battleState.activeDeck = [3, 16, 14, 19]; // Saint/King/Dragon deck
+      }
+
+      enemyNameText.innerHTML = `<i class="fa-solid ${enemy.icon}"></i> ${enemy.name}`;
+      enemyElemTag.textContent = enemy.type;
+      enemyWeaknessHint.textContent = `Weakness: ${enemy.weakness.join(' / ')}`;
+      enemyStatusDesc.textContent = enemy.desc;
+
+      updateBattleUI();
+      renderBattleSlots();
+      battleLogBox.innerHTML = `<div>[ENCOUNTER] A ferocious <strong>${enemy.name}</strong> appeared! Prepare your incantations.</div>`;
+    }
+
+    function updateBattleUI() {
+      playerHpText.textContent = `${Math.max(0, battleState.playerHp)} / ${battleState.playerMaxHp}`;
+      playerHpBar.style.width = `${Math.max(0, (battleState.playerHp / battleState.playerMaxHp) * 100)}%`;
+
+      playerMpText.textContent = `${Math.max(0, battleState.playerMp)} / ${battleState.playerMaxMp}`;
+      playerMpBar.style.width = `${Math.max(0, (battleState.playerMp / battleState.playerMaxMp) * 100)}%`;
+
+      enemyHpText.textContent = `${Math.max(0, battleState.enemyHp)} / ${battleState.enemyMaxHp}`;
+      enemyHpBar.style.width = `${Math.max(0, (battleState.enemyHp / battleState.enemyMaxHp) * 100)}%`;
+
+      battleTurnCount.textContent = battleState.turn;
+    }
+
+    function renderBattleSlots() {
+      battleSlotsContainer.innerHTML = '';
+      battleState.activeDeck.forEach(spellId => {
+        const spell = spellsData.find(s => s.id === spellId);
+        if (!spell) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'spell-slot-btn';
+        btn.innerHTML = `
+          <div class="slot-top">
+            <span class="slot-name">${spell.en}</span>
+            <span class="slot-cost">${spell.mp_cost} MP</span>
+          </div>
+          <div class="slot-desc">${spell.rank} • ${spell.element} (Power: ${spell.power})</div>
+        `;
+
+        btn.addEventListener('click', () => {
+          if (battleState.isOver) return;
+          triggerBattleChant(spell);
+        });
+
+        battleSlotsContainer.appendChild(btn);
+      });
+    }
+
+    function triggerBattleChant(spell) {
+      if (battleState.playerMp < spell.mp_cost) {
+        logBattle(`<span class="log-enemy">[INSUFFICIENT MP] You need ${spell.mp_cost} MP to cast ${spell.en}!</span>`);
+        return;
+      }
+
+      // Open Modal Chanting Box for Battle
+      const modal = document.getElementById('spell-modal');
+      const modalBody = document.getElementById('modal-body');
+
+      modalBody.innerHTML = `
+        <div style="font-family:var(--font-title); color:var(--border-gold); font-size:0.85rem; margin-bottom:0.25rem;">
+          COMBAT CHANT PHASE • ${spell.rank}
+        </div>
+        <h2 style="font-size:1.6rem; color:#fff; margin-bottom:1rem;">${spell.en}</h2>
+        <div style="background:rgba(0,0,0,0.6); border:1px solid var(--border-gold); border-radius:12px; padding:1.2rem; margin-bottom:1.2rem;">
+          <div style="font-family:var(--font-jp); font-size:1.25rem; color:#fff; line-height:1.7; margin-bottom:0.6rem;">
+            「${spell.jp}」
+          </div>
+          <div style="color:var(--border-gold); font-size:0.95rem; font-style:italic;">
+            ${spell.romaji}
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <button class="btn-mic-record" id="battle-modal-mic" style="margin: 0 auto 0.75rem;">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+          <div style="font-size:0.85rem; color:var(--text-muted);" id="battle-modal-status">
+            Click microphone and recite the chant to cast!
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+          <button class="action-btn" onclick="executeSpellCast(${spell.id}, true)">
+            <i class="fa-solid fa-forward"></i> Fast Cast (Simulate 100%)
+          </button>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+
+      const micBtn = document.getElementById('battle-modal-mic');
+      const statusText = document.getElementById('battle-modal-status');
+
+      if (recognition) {
+        micBtn.onclick = () => {
+          recognition.start();
+          micBtn.classList.add('recording');
+          statusText.textContent = 'Listening to incantation...';
+
+          recognition.onresult = (e) => {
+            const transcript = e.results[0][0].transcript;
+            modal.style.display = 'none';
+            executeSpellCast(spell.id, false, transcript);
+          };
+        };
+      }
+    }
+
+    window.executeSpellCast = function(spellId, isSimulated, transcript = '') {
+      document.getElementById('spell-modal').style.display = 'none';
+      if (battleState.isOver) return;
+
+      const spell = spellsData.find(s => s.id === spellId);
+      if (!spell) return;
+
+      battleState.playerMp -= spell.mp_cost;
+
+      const enemy = enemiesData[battleState.enemyKey];
+      let damageMultiplier = 1.0;
+      let isWeak = enemy.weakness.some(w => spell.element.toLowerCase().includes(w.toLowerCase()));
+      let isResist = enemy.resistance.some(r => spell.element.toLowerCase().includes(r.toLowerCase()));
+
+      if (isWeak) damageMultiplier *= 2.0;
+      if (isResist) damageMultiplier *= 0.5;
+
+      // Synergy Combo Check: Water Splash -> Ice / Lightning
+      let comboTriggered = false;
+      if (battleState.soaked && (spell.en.includes('Ice') || spell.en.includes('Icicle') || spell.en.includes('Lightning') || spell.en.includes('Blizzard'))) {
+        comboTriggered = true;
+        damageMultiplier *= 1.8;
+      }
+
+      if (spell.type === 'setup') {
+        battleState.soaked = true;
+      }
+
+      let baseDamage = spell.power * (0.9 + Math.random() * 0.25);
+      let finalDamage = Math.round(baseDamage * damageMultiplier);
+
+      if (spell.type === 'heal') {
+        battleState.playerHp = Math.min(battleState.playerMaxHp, battleState.playerHp + spell.power * 2);
+        logBattle(`[CAST] You chanted <strong>${spell.en}</strong>! Restored <span style="color:#34d399">+${spell.power * 2} HP</span>!`);
+      } else {
+        battleState.enemyHp -= finalDamage;
+        if (comboTriggered) {
+          logBattle(`<span class="log-combo">[FROST NOVA COMBO!]</span> Soaked target hit by freezing mana! Dealt <span class="log-crit">${finalDamage} DMG</span>!`);
+          battleState.soaked = false;
+        } else if (isWeak) {
+          logBattle(`<span class="log-crit">[SUPER EFFECTIVE!]</span> ${spell.en} exploited enemy weakness! Dealt <span class="log-crit">${finalDamage} DMG</span>!`);
+        } else {
+          logBattle(`<span class="log-hit">[SPELL CAST]</span> You chanted <strong>${spell.en}</strong>! Dealt ${finalDamage} damage to ${enemy.name}.`);
+        }
+      }
+
+      updateBattleUI();
+
+      // Check Enemy Defeat
+      if (battleState.enemyHp <= 0) {
+        battleState.isOver = true;
+        evaluateBattleRank();
+        return;
+      }
+
+      // Enemy Counterattack Turn
+      setTimeout(() => {
+        if (battleState.isOver) return;
+
+        let enemyDmg = Math.round(enemy.atk * (0.8 + Math.random() * 0.4));
+        battleState.playerHp -= enemyDmg;
+        logBattle(`<span class="log-enemy">[ENEMY TURN]</span> ${enemy.name} retaliated fiercely! Inflicted ${enemyDmg} damage to you.`);
+
+        battleState.turn++;
+        updateBattleUI();
+
+        if (battleState.playerHp <= 0) {
+          battleState.isOver = true;
+          logBattle(`<span class="log-enemy" style="font-size:1.1rem; font-weight:700;">[DEFEAT] You collapsed from exhaustion! Rank: F</span>`);
+        }
+      }, 700);
+    };
+
+    function evaluateBattleRank() {
+      let grade = 'A';
+      if (battleState.turn <= 3 && battleState.playerHp >= 350) grade = 'S (Divine Archmage)';
+      else if (battleState.turn <= 5) grade = 'A (Saint Class Mage)';
+      else if (battleState.turn <= 8) grade = 'B (Advanced Mage)';
+      else grade = 'C (Apprentice Mage)';
+
+      logBattle(`
+        <div style="background:rgba(212,175,55,0.2); border:1px solid var(--border-gold); padding:0.8rem; border-radius:10px; margin-top:0.6rem;">
+          <h3 style="color:#fde047;"><i class="fa-solid fa-trophy"></i> VICTORY ACHIEVED!</h3>
+          <div>Final Combat Evaluation Grade: <strong style="font-size:1.2rem; color:#fff;">${grade}</strong></div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">Completed in ${battleState.turn} turns with ${battleState.playerHp} HP remaining.</div>
+        </div>
+      `);
+    }
+
+    btnRestartBattle.addEventListener('click', initBattle);
+    battleEnemySelect.addEventListener('change', initBattle);
+
+    btnQuickVoiceCast.addEventListener('click', () => {
+      const spellName = prompt('QUICK-CAST VOICE: Say or type any spell name or chant (e.g. "Cumulonimbus", "Water Ball", "Lightning"):');
+      if (!spellName) return;
+
+      const found = spellsData.find(s => 
+        s.en.toLowerCase().includes(spellName.toLowerCase()) || 
+        s.jp.includes(spellName) ||
+        s.romaji.toLowerCase().includes(spellName.toLowerCase())
+      );
+
+      if (found) {
+        logBattle(`<span class="log-crit">[QUICK CAST ACTIVATED]</span> Instantaneous mana flow for <strong>${found.en}</strong>!`);
+        executeSpellCast(found.id, true);
+      } else {
+        logBattle(`<span class="log-enemy">[QUICK CAST FAILED]</span> No incantation recognized for "${spellName}".`);
+      }
+    });
+
+    // -------------------------------------------------------------
+    // UTILITIES
+    // -------------------------------------------------------------
     window.copyChant = function(text, label) {
       navigator.clipboard.writeText(text).then(() => {
-        showToast(`คัดลอกบทสวด (${label}) แล้ว!`);
-      }).catch(() => {
-        showToast(`คัดลอกไม่สำเร็จ`);
+        showToast(`Copied ${label} to clipboard!`);
       });
     };
 
-    // Text to Speech
     window.playVoice = function(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'ja-JP';
         utterance.rate = 0.9;
-        utterance.pitch = 1.05;
         window.speechSynthesis.speak(utterance);
-        showToast('กำลังท่องบทร่ายเวทมนตร์...');
+        showToast('Chanting incantation...');
       } else {
-        showToast('เบราว์เซอร์ไม่รองรับ Text-to-Speech');
+        showToast('Text-to-Speech not supported in this browser.');
       }
     };
 
-    // Details Modal
-    window.openDetails = function(id) {
-      const spell = spellsData.find(s => s.id === id);
-      if (!spell) return;
-
-      modalBody.innerHTML = `
-        <div style="font-family: var(--font-title); color: var(--border-gold); font-size: 0.9rem; margin-bottom: 0.25rem;">
-          ${spell.en} • ${spell.rank}
-        </div>
-        <h2 style="font-size: 1.8rem; margin-bottom: 1.25rem; color: #fff;">${spell.name}</h2>
-
-        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-magic); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
-          <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">ต้นฉบับภาษาญี่ปุ่น (Chant):</div>
-          <div style="font-family: var(--font-jp); font-size: 1.15rem; color: #f8fafc; line-height: 1.7; margin-bottom: 0.75rem;">「${spell.jp}」</div>
-          <div style="color: #cbd5e1; font-size: 0.9rem; font-style: italic; margin-bottom: 1rem;">${spell.romaji}</div>
-          <div style="color: var(--border-gold); font-size: 1.05rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.75rem;">
-            <strong>บทแปลอนิเมะไทย:</strong> "${spell.th}"
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 10px;">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">ธาตุและประเภท:</div>
-            <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;">${spell.element}</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 10px;">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">ผู้เคยร่ายในเรื่อง:</div>
-            <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem; color: #38bdf8;">${spell.casters.join(', ')}</div>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 1rem;">
-          <h4 style="color: var(--text-gold); font-size: 0.95rem; margin-bottom: 0.4rem;">ผลลัพธ์และอานุภาพ:</h4>
-          <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">${spell.effect}</p>
-        </div>
-
-        <div>
-          <h4 style="color: var(--text-gold); font-size: 0.95rem; margin-bottom: 0.4rem;">ข้อกำหนด & เคล็ดลับการร่าย:</h4>
-          <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">${spell.condition}</p>
-        </div>
-      `;
-
-      spellModal.style.display = 'flex';
-    };
-
-    modalCloseBtn.addEventListener('click', () => {
-      spellModal.style.display = 'none';
-    });
-
-    spellModal.addEventListener('click', (e) => {
-      if (e.target === spellModal) spellModal.style.display = 'none';
-    });
-
-    // Toast
     function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      const toastText = document.getElementById('toast-text');
       toastText.textContent = msg;
       toast.style.display = 'flex';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 2500);
+      setTimeout(() => { toast.style.display = 'none'; }, 2400);
     }
 
-    // Particle Canvas Animation
+    document.getElementById('modal-close-btn').addEventListener('click', () => {
+      document.getElementById('spell-modal').style.display = 'none';
+    });
+
+    // Particles Canvas Animation
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -1079,9 +1896,7 @@
     resizeCanvas();
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
@@ -1105,22 +1920,18 @@
       }
     }
 
-    for (let i = 0; i < 55; i++) {
-      particles.push(new Particle());
-    }
+    for (let i = 0; i < 50; i++) particles.push(new Particle());
 
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
+      particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
 
-    // Initial Render
-    renderSpells();
+    // Initial Renders
+    renderGrimoire();
+    initBattle();
   </script>
 </body>
 </html>
