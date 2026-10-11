@@ -1,0 +1,18 @@
+{
+  "name": "mushoku-tensei-mahou",
+  "version": "1.0.0",
+  "description": "Mushoku Tensei Magic Incantations & Grimoire Web Archive",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "mushoku-tensei",
+    "magic",
+    "incantations",
+    "grimoire",
+    "anime"
+  ],
+  "author": "NongZen <gemini.nongzen@gmail.com>",
+  "license": "MIT"
+}

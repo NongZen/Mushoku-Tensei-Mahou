@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無職転生 魔術大全 — Mushoku Tensei Magic Grimoire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #090b10;
+      --bg-card: #121622;
+      --bg-card-hover: #181f30;
+      --border-magic: #2a344d;
+      --border-gold: #c5a059;
+      --text-main: #e2e8f0;
+      --text-muted: #8e9bb0;
+      --text-gold: #e5c07b;
+      --font-title: 'Cinzel', serif;
+      --font-jp: 'Noto Serif JP', serif;
+      --font-thai: 'Noto Sans Thai', sans-serif;
+      
+      --color-water: #38bdf8;
+      --color-fire: #f87171;
+      --color-earth: #fbbf24;
+      --color-wind: #34d399;
+      --color-heal: #a78bfa;
+      --color-dragon: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-thai);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+    }
+
+    /* Ambient Magic Particles */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+
+    .badge-sub {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      background: rgba(197, 160, 89, 0.12);
+      border: 1px solid rgba(197, 160, 89, 0.3);
+      color: var(--border-gold);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1.main-title {
+      font-family: var(--font-title);
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #ffffff 20%, #d4af37 60%, #aa7c11 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle-jp {
+      font-family: var(--font-jp);
+      font-size: 1.35rem;
+      color: var(--text-gold);
+      letter-spacing: 4px;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .header-desc {
+      max-width: 720px;
+      margin: 0 auto;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* Top Stats & Quick Actions */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(18, 22, 34, 0.7);
+      border: 1px solid var(--border-magic);
+      backdrop-filter: blur(10px);
+      padding: 0.6rem 1.4rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .stat-pill strong {
+      color: var(--border-gold);
+      font-size: 1.15rem;
+      font-family: var(--font-title);
+    }
+
+    /* Controls & Filters */
+    .control-panel {
+      background: rgba(18, 22, 34, 0.75);
+      border: 1px solid var(--border-magic);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 1.75rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid var(--border-magic);
+      padding: 0.95rem 1.25rem 0.95rem 3.25rem;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--border-gold);
+      box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+    }
+
+    .filters-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      min-width: 80px;
+      font-weight: 600;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-magic);
+      color: var(--text-muted);
+      padding: 0.4rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .chip-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border-color: #3b4b6e;
+    }
+
+    .chip-btn.active {
+      background: rgba(197, 160, 89, 0.15);
+      border-color: var(--border-gold);
+      color: var(--border-gold);
+      font-weight: 600;
+    }
+
+    /* Grid of Spells */
+    .spell-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.75rem;
+    }
+
+    /* Spell Card */
+    .spell-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-magic);
+      border-radius: 18px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .spell-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(197, 160, 89, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .spell-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--border-magic), transparent);
+    }
+
+    .spell-card[data-element*="น้ำ"]::before { background: linear-gradient(90deg, transparent, var(--color-water), transparent); }
+    .spell-card[data-element*="ไฟ"]::before { background: linear-gradient(90deg, transparent, var(--color-fire), transparent); }
+    .spell-card[data-element*="ดิน"]::before { background: linear-gradient(90deg, transparent, var(--color-earth), transparent); }
+    .spell-card[data-element*="ลม"]::before { background: linear-gradient(90deg, transparent, var(--color-wind), transparent); }
+    .spell-card[data-element*="การรักษา"]::before { background: linear-gradient(90deg, transparent, var(--color-heal), transparent); }
+    .spell-card[data-element*="มังกร"]::before { background: linear-gradient(90deg, transparent, var(--color-dragon), transparent); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.9rem;
+      gap: 0.75rem;
+    }
+
+    .spell-names h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .spell-en {
+      font-family: var(--font-title);
+      font-size: 0.8rem;
+      color: var(--text-gold);
+      letter-spacing: 1px;
+    }
+
+    .badges {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.35rem;
+    }
+
+    .badge-rank {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .badge-rank.saint { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.3); }
+    .badge-rank.king { background: rgba(234, 179, 8, 0.15); color: #fde047; border-color: rgba(234, 179, 8, 0.3); }
+    .badge-rank.god { background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.3); }
+
+    .badge-elem {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Incantation Section */
+    .incantation-block {
+      background: rgba(9, 11, 16, 0.65);
+      border: 1px solid rgba(42, 52, 77, 0.6);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin: 0.9rem 0;
+      position: relative;
+    }
+
+    .incant-jp {
+      font-family: var(--font-jp);
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .incant-romaji {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-style: italic;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .incant-th {
+      font-size: 0.9rem;
+      color: var(--text-gold);
+      line-height: 1.5;
+      font-weight: 500;
+      border-top: 1px dashed rgba(197, 160, 89, 0.25);
+      padding-top: 0.65rem;
+    }
+
+    /* Spell Meta & Info */
+    .spell-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 0.75rem;
+      flex-grow: 1;
+    }
+
+    .spell-condition {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 2px solid var(--border-gold);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      margin-bottom: 1.1rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* Card Actions */
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-magic);
+      color: var(--text-main);
+      padding: 0.55rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(197, 160, 89, 0.15);
+      border-color: var(--border-gold);
+      color: var(--border-gold);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-content {
+      background: #111522;
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.2rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(197, 160, 89, 0.15);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: white;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(18, 22, 34, 0.95);
+      border: 1px solid var(--border-gold);
+      color: #fff;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(42, 52, 77, 0.5);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    footer a {
+      color: var(--border-gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      h1.main-title { font-size: 2.2rem; }
+      .spell-grid { grid-template-columns: 1fr; }
+      .stats-bar { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="container">
+    <header>
+      <div class="badge-sub"><i class="fa-solid fa-scroll"></i> ROXY'S ARCHIVE OF INCANTATIONS</div>
+      <h1 class="main-title">MUSHOKU TENSEI</h1>
+      <div class="subtitle-jp">無職転生 〜異世界行ったら本気だす〜 魔術大全</div>
+      <p class="header-desc">
+        คลังรวบรวมบทสวดและคำร่ายเวทมนตร์ฉบับสมบูรณ์จากเรื่อง <em>เกิดชาตินี้พี่ต้องเป็นเทพ (Mushoku Tensei)</em>
+        พร้อมต้นฉบับภาษาญี่ปุ่น, คำอ่าน Romaji, คำแปลไทยสไตล์พากย์อนิเมะ, ระดับชั้น และเงื่อนไขการใช้งาน
+      </p>
+
+      <div class="stats-bar">
+        <div class="stat-pill"><i class="fa-solid fa-book-sparkles"></i> รวมคาถา: <strong id="total-spells">19</strong> บท</div>
+        <div class="stat-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> หมวดหมู่: <strong>6</strong> ธาตุ</div>
+        <div class="stat-pill"><i class="fa-solid fa-crown"></i> สูงสุด: <strong>ระดับราชา / โบราณ</strong></div>
+      </div>
+    </header>
+
+    <!-- Controls & Filters -->
+    <div class="control-panel">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="ค้นหาคาถา (เช่น คิวมูโลนิมบัส, Cumulonimbus, 雷帝, Healing, น้ำแข็ง)...">
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-group">
+          <span class="filter-label"><i class="fa-solid fa-gem"></i> ธาตุ:</span>
+          <div class="filter-chips" id="element-filters">
+            <button class="chip-btn active" data-elem="all">ทั้งหมด</button>
+            <button class="chip-btn" data-elem="น้ำ"><i class="fa-solid fa-droplet" style="color:var(--color-water)"></i> น้ำ / เหมันต์</button>
+            <button class="chip-btn" data-elem="ไฟ"><i class="fa-solid fa-fire" style="color:var(--color-fire)"></i> ไฟ</button>
+            <button class="chip-btn" data-elem="ดิน"><i class="fa-solid fa-mountain" style="color:var(--color-earth)"></i> ดิน</button>
+            <button class="chip-btn" data-elem="การรักษา"><i class="fa-solid fa-hand-holding-heart" style="color:var(--color-heal)"></i> การรักษา / ศักดิ์สิทธิ์</button>
+            <button class="chip-btn" data-elem="มังกร"><i class="fa-solid fa-dragon" style="color:var(--color-dragon)"></i> มังกรโบราณ / อัญเชิญ</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label"><i class="fa-solid fa-layer-group"></i> ระดับ:</span>
+          <div class="filter-chips" id="rank-filters">
+            <button class="chip-btn active" data-rank="all">ทุกระดับ</button>
+            <button class="chip-btn" data-rank="ระดับต้น">ระดับต้น (Elementary)</button>
+            <button class="chip-btn" data-rank="ระดับกลาง">ระดับกลาง (Intermediate)</button>
+            <button class="chip-btn" data-rank="ระดับสูง">ระดับสูง (Advanced)</button>
+            <button class="chip-btn" data-rank="ระดับศักดิ์สิทธิ์">ระดับศักดิ์สิทธิ์ (Saint)</button>
+            <button class="chip-btn" data-rank="ระดับราชา">ระดับราชา (King)</button>
+            <button class="chip-btn" data-rank="โบราณ">ระดับโบราณ (Unique)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spell Grid -->
+    <div class="spell-grid" id="spell-container">
+      <!-- Populated via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="no-results" style="display:none; text-align:center; padding: 4rem 1rem; color: var(--text-muted);">
+      <i class="fa-solid fa-book-circle-exclamation" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-gold);"></i>
+      <h3>ไม่พบบทเวทที่ค้นหา</h3>
+      <p>ลองเปลี่ยนคำค้นหาหรือตัวกรองธาตุและระดับคาถา</p>
+    </div>
+
+    <footer>
+      <p>คัมภีร์เวทมนตร์นี้สร้างขึ้นเพื่อการศึกษาและการแปลสำหรับแฟนพันธุ์แท้ <strong>เกิดชาตินี้พี่ต้องเป็นเทพ (Mushoku Tensei)</strong></p>
+      <p>GitHub Repository: <a href="https://github.com/NongZen/Mushoku-Tensei-Mahou" target="_blank">NongZen/Mushoku-Tensei-Mahou</a> • จัดทำโดย NongZen</p>
+    </footer>
+  </div>
+
+  <!-- Inspection Modal -->
+  <div class="modal-backdrop" id="spell-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close-btn">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast-msg">
+    <i class="fa-solid fa-circle-check" style="color: #34d399"></i>
+    <span id="toast-text">คัดลอกบทสวดเรียบร้อยแล้ว</span>
+  </div>
+
+  <script>
+    // Embedded Spell Data
+    const spellsData = [
+      {
+        "id": 1,
+        "name": "ฮีลลิ่ง (Healing)",
+        "jp": "神なる力は芳醇なる糧、力失いしかの者に再び立ち上がる力を与えん『ヒーリング』",
+        "romaji": "Kami naru chikara wa hōjun naru kate, chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen, \"Hīringu\"",
+        "th": "พลังแห่งทวยเทพคือโอสถอันอุดม จงมอบพลังลุกขึ้นยืนใหม่อีกคราแก่ผู้สูญสิ้นเรี่ยวแรง 'ฮีลลิ่ง'!",
+        "en": "Healing",
+        "element": "การรักษา (Healing / 神聖・治癒)",
+        "rank": "ระดับต้น (Elementary / 初級)",
+        "effect": "รักษาอาการบาดเจ็บทั่วไป แผลฟกช้ำ ห้ามเลือด แผลขนาดเล็กถึงปานกลาง และฟื้นฟูเรี่ยวแรง",
+        "condition": "ต้องแตะสัมผัสร่างกายของผู้บาดเจ็บและถ่ายทอดพลังเวทเพื่อฟื้นฟูเนื้อเยื่อ",
+        "casters": ["เซนิธ (Zenith)", "รูเดียส (Rudeus)", "ร็อกซี (Roxy)"]
+      },
+      {
+        "id": 2,
+        "name": "วอเตอร์บอล (Water Ball)",
+        "jp": "汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール",
+        "romaji": "Nanji no motomeru tokoro ni ōinaru mizu no kago aran, seiryō naru seseragi no nagare o ima koko ni, Wōtā Bōru",
+        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งวารีอันยิ่งใหญ่ กระแสน้ำอันเย็นฉ่ำจงปรากฏ ณ ที่แห่งนี้ 'วอเตอร์บอล'!",
+        "en": "Water Ball",
+        "element": "น้ำ (Water / 水)",
+        "rank": "ระดับต้น (Elementary / 初級)",
+        "effect": "สร้างก้อนมวลน้ำขนาดเท่ากำปั้นและยิงพุ่งออกไปกระแทกเป้าหมาย หรือใช้สร้างน้ำสำหรับดื่ม/ใช้งาน",
+        "condition": "ร่ายเพื่อกำหนดจุดกำเนิดและทิศทางการยิง ควบคุมปริมาณน้ำและความเร็วตามการจ่ายมานา",
+        "casters": ["รูเดียส (Rudeus)", "ร็อกซี (Roxy)"]
+      },
+      {
+        "id": 3,
+        "name": "คิวมูโลนิมบัส (Cumulonimbus)",
+        "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！我が願いを叶え、凶暴なる恵みをもたらし、矮小なる存在に力を見せつけよ！神なる金槌を金床に打ち付けて畏怖を示し、大地を水で埋め尽くせ！ああ、雨よ！全てを押し流し、あらゆるものを駆逐せよ！キュムロニンバス！",
+        "romaji": "Yūdai naru mizu no seirei ni shite, ten ni agarishi raitei no ōji yo! Waga negai o kanae, kyōbō naru megumi o motorashi, waishō naru sonzai ni chikara o misetsukeyo! Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi, daichi o mizu de umetsukuse! Aa, ame yo! Subete o oshinagashi, arayuru mono o kuchiku seyo! Kyumuroninbasu!",
+        "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร องค์ชายแห่งสายฟ้าผู้ขึ้นสู่สรวงสวรรค์! จงดลบันดาลความปรารถนาของข้า นำพามาซึ่งพรอันดุดัน และสำแดงฤทธานุภาพต่อเหล่าตัวตนอันกระจ้อยร่อย! จงเหวี่ยงค้อนแห่งทวยเทพฟาดลงบนทั่งเพื่อแสดงความน่าเกรงขาม และกลืนกินผืนพสุธาให้ท่วมท้นด้วยสายน้ำ! โอ้ สายฝนเอ๋ย! จงชะล้างทุกสิ่ง และกวาดล้างสรรพสิ่งให้สูญสิ้น! 'คิวมูโลนิมบัส'!",
+        "en": "Cumulonimbus",
+        "element": "น้ำ / ลม (Hybrid Water + Wind / 水・風混合)",
+        "rank": "ระดับศักดิ์สิทธิ์ (Saint / 水聖級)",
+        "effect": "เรียกเมฆฝนฟ้าคะนองยักษ์ปกคลุมท้องฟ้าเป็นวงกว้าง เกิดพายุฝนกระหน่ำ ฟ้าผ่ารุนแรง และลมกรรโชกในรัศมีหลายกิโลเมตร",
+        "condition": "ต้องใช้เวลาท่องบทร่ายยาวนาน (มากกว่า 1 นาที) และใช้ปริมาณพลังเวทมหาศาลมาก ต้องร่ายในพื้นที่เปิดโล่ง",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)", "รูเดียส เกรย์แรท (Rudeus)"]
+      },
+      {
+        "id": 4,
+        "name": "เอ็กซ์ฮีลลิ่ง (Ex-Healing)",
+        "jp": "母なる慈愛の女神よ、彼の者の傷を塞ぎ、健やかなる体を取り戻さん、エクスヒーリング！",
+        "romaji": "Haha naru jiai no megami yo, kano mono no kizu o fusagi, sukoyaka naru karada o torimodosan, Ekusu Hīringu!",
+        "th": "ข้าแต่องค์เทวีแห่งความเมตตาผู้เป็นมารดา จงสมานบาดแผลของผู้นี้ และคืนร่างกายอันสมบูรณ์แข็งแรงกลับมา 'เอ็กซ์ฮีลลิ่ง'!",
+        "en": "Ex-Healing",
+        "element": "การรักษา (Healing / 神聖・治癒)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "รักษาอาการบาดเจ็บสาหัส กระดูกหัก อวัยวะฉีกขาด เลือดออกภายใน หรือช่วยชีวิตผู้บาดเจ็บเจียนตายได้อย่างรวดเร็ว",
+        "condition": "ต้องถ่ายทอดพลังเวทสัมผัสแผลโดยตรง ใช้พลังเวทมากกว่าฮีลลิ่งระดับต้น",
+        "casters": ["ร็อกซี (Roxy)", "รูเดียส (Rudeus)"]
+      },
+      {
+        "id": 5,
+        "name": "เบิร์นนิงเพลส (Burning Place)",
+        "jp": "爆炎を身体に、バーニングプレイス！",
+        "romaji": "Bakuen o karada ni, Bāningu Pureisu!",
+        "th": "เปลวเพลิงผลาญจงสถิตทั่วกาย 'เบิร์นนิงเพลส'!",
+        "en": "Burning Place",
+        "element": "ไฟ (Fire / 火)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "จุดระเบิดคลื่นเปลวเพลิงแผ่ออกจากร่างกายรอบทิศทาง สร้างม่านอาคมเพลิงผลักศัตรูที่เข้าประชิดให้กระเด็นออกไป",
+        "condition": "ผู้ร่ายต้องควบคุมจุดศูนย์กลางพลังรอบตัวเองเพื่อไม่ให้ถูกไฟคลอกตัวเอง",
+        "casters": ["ร็อกซี (Roxy)", "มัวร์ (Moore)"]
+      },
+      {
+        "id": 6,
+        "name": "ไอซิเคิลเบรก (Icicle Break)",
+        "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！勇壮なる氷の剣を彼の者に叩き落せ！『氷霜撃(アイシクルブレイク)』",
+        "romaji": "Yūdai naru mizu no seirei ni shite, ten ni agarishi raitei no ōji yo! Yūsō naru kōri no tsurugi o kano mono ni tatakiotose! \"Aishikuru Bureiku\"",
+        "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร เจ้าชายแห่งจักรพรรดิอัสนีผู้สถิตบนฟากฟ้า! จงฟาดฟันดาบน้ำแข็งอันหาญกล้าลงทัณฑ์ผู้นั้น! 'ไอซิเคิลเบรก'!",
+        "en": "Icicle Break",
+        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "ควบแน่นไอน้ำในอากาศเป็นดาบ/หอกน้ำแข็งขนาดยักษ์อันแหลมคมแล้วทิ้งดิ่งกระแทกลงมาบดขยี้เป้าหมายด้วยความรุนแรงจนอาคารพังทลาย",
+        "condition": "ต้องมีระยะเพดานเหนือเป้าหมายให้ดาบน้ำแข็งตกกระทบ สร้างความเสียหายรุนแรงต่อโครงสร้างรอบข้าง",
+        "casters": ["ร็อกซี (Roxy)", "อัศวินวิหารมิลิส (Temple Knights)"]
+      },
+      {
+        "id": 7,
+        "name": "เอิร์ธฟอร์เทรส (Earth Fortress)",
+        "jp": "荘厳なる大地の鎧を纏わん。『土砦(アースフォートレス)』！",
+        "romaji": "Sōgon naru daichi no yoroi o matowan. \"Āsu Fōtoresu\"!",
+        "th": "จงสวมใส่เกราะแห่งปฐพีอันโอ่อ่าสง่างาม 'เอิร์ธฟอร์เทรส'!",
+        "en": "Earth Fortress",
+        "element": "ดิน (Earth / 土)",
+        "rank": "ระดับสูง (Advanced / 上級)",
+        "effect": "ยกผืนดินรอบตัวขึ้นมาเป็นกำแพงป้อมปราการศิลาล้อมรอบอย่างรวดเร็ว ป้องกันการโจมตีและการบุกทะลวงของศัตรู",
+        "condition": "ต้องยืนอยู่บนพื้นดิน/หิน สามารถปล่อยการควบคุมก่อนยอดโดมปิดเพื่อปรับความสูงตามต้องการ",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
+      },
+      {
+        "id": 8,
+        "name": "วอเตอร์สแปลช (Water Splash)",
+        "jp": "落ちる雫を散らしめし、世界は水で覆われん。『水蒸(ウォータースプラッシュ)』！",
+        "romaji": "Ochiru shizuku o chirashimeshi, sekai wa mizu de oowaren. \"Wōtā Supurasshu\"!",
+        "th": "จงโปรยปรายหยาดหยดที่ร่วงหล่น โลกเอ๋ยจงถูกชโลมด้วยสายน้ำ 'วอเตอร์สแปลช'!",
+        "en": "Water Splash",
+        "element": "น้ำ (Water / 水)",
+        "rank": "ระดับต้น (Elementary / 初級)",
+        "effect": "กระจายละอองน้ำและหยาดน้ำจำนวนนับไม่ถ้วนออกไปรอบทิศทาง ชะลอความเร็วศัตรูและชโลมพื้นที่ให้เปียกชุ่ม",
+        "condition": "พลังทำลายต่ำมาก มักใช้คู่กับเวทน้ำแข็งเพื่อทำคอมโบแช่แข็งเป้าหมาย (Frost Nova)",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
+      },
+      {
+        "id": 9,
+        "name": "ไอซิเคิลฟิลด์ (Icicle Field)",
+        "jp": "天より舞い降りし蒼き女神よ、その錫杖を振るいて世界を凍りつかせん！『氷結領域(アイシクルフィールド)』！",
+        "romaji": "Ten yori maioorishi aoki megami yo, sono shakujō o furuite sekai o kooritsukasen! \"Aishikuru Fīrudo\"!",
+        "th": "ข้าแต่องค์เทวีสีครามผู้ร่อนลงมาจากฟากฟ้า จงกวัดแกว่งคทาเยือกแข็งแช่พิภพให้เย็นยะเยือก! 'ไอซิเคิลฟิลด์'!",
+        "en": "Icicle Field",
+        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "ลดอุณหภูมิรอบบริเวณอย่างฉับพลัน แช่แข็งความชื้นและหยดน้ำรอบตัวเป้าหมายจนกลายเป็นรูปปั้นน้ำแข็ง หรือสร้างไอหมอกพรางตัว",
+        "condition": "หากใช้ร่วมกับ Water Splash จะกลายเป็นเวทผสมผสาน 'ฟรอสต์โนวา (Frost Nova)' แช่แข็งศัตรูทั้งกองทัพได้ทันที",
+        "casters": ["ร็อกซี (Roxy)", "มัวร์ (Moore)"]
+      },
+      {
+        "id": 10,
+        "name": "บริซซาร์ดสตอร์ม (Blizzard Storm)",
+        "jp": "霜の王。大いなる雪原の覇王。純白を纏い、一切の熱を刈り取る零の王。死を司りし冷たき王が凍てつかせん！『氷槍吹雪(ブリザードストーム)』！",
+        "romaji": "Shimo no ō. Ōinaru setsugen no haō. Junpaku o matoi, issai no netsu o karitoru zero no ō. Shi o tsukasadorishi tsumetaki ō ga itetsukasen! \"Burizādo Sutōmu\"!",
+        "th": "ราชันแห่งเกล็ดน้ำค้าง จอมราชันแห่งทุ่งหิมะอันยิ่งใหญ่ ราชาแห่งศูนย์สัมบูรณ์ผู้สวมอาภรณ์ขาวบริสุทธิ์และช่วงชิงความร้อนทั้งมวล ราชาผู้เย็นเยียบผู้กุมความตายจงแช่แข็งให้สิ้น! 'บริซซาร์ดสตอร์ม'!",
+        "en": "Blizzard Storm",
+        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
+        "rank": "ระดับสูง (Advanced / 上級)",
+        "effect": "ระดมหอกน้ำแข็งอันแหลมคมนับไม่ถ้วนพุ่งทะลวงเป้าหมายพร้อมกับพายุหิมะน้ำแข็งบดขยี้แนวหลังของศัตรูจนย่อยยับ",
+        "condition": "ต้องใช้สมาธิและพลังเวทระดับสูง ควบคุมวิถีหอกน้ำแข็งให้พุ่งข้ามแนวหน้าเข้าไปถล่มแนวหลัง",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
+      },
+      {
+        "id": 11,
+        "name": "เฟลมสไลซ์ (Flame Slice)",
+        "jp": "焦げたる剣を持ちて敵を切り裂かん、『フレイムスライス』！",
+        "romaji": "Kogetaru ken o mochite teki o kirisakan, \"Fureimu Suraisu\"!",
+        "th": "จงถือดาบที่ลุกไหม้เกรียมเข้าฟาดฟันศัตรู 'เฟลมสไลซ์'!",
+        "en": "Flame Slice",
+        "element": "ไฟ (Fire / 火)",
+        "rank": "ระดับต้น-กลาง (Elementary-Intermediate / 初・中級)",
+        "effect": "สร้างคมดาบเพลิงพุ่งแหวกลมออกไปในระยะกลาง แผดเผาเกราะกระดองของสัตว์อสูรจนร้อนแดง",
+        "condition": "ปล่อยคลื่นดาบเพลิงเป็นแนวเส้นตรงเพื่อเฉือนเกราะของเป้าหมาย",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
+      },
+      {
+        "id": 12,
+        "name": "ไอซ์สแมช (Ice Smash)",
+        "jp": "汝の求める所に大いなる氷の加護あらん、氷河の濁流を受けろ、『氷撃(アイススマッシュ)』",
+        "romaji": "Nanji no motomeru tokoro ni ōinaru kōri no kago aran, hyōga no dakuryū o ukero, \"Aisu Sumasshu\"",
+        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเหมันต์อันยิ่งใหญ่ จงรับกระแสธารอันเชี่ยวกรากแห่งธารน้ำแข็งไปเสีย 'ไอซ์สแมช'!",
+        "en": "Ice Smash",
+        "element": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "ซัดแท่งน้ำแข็งกระแทกทะลวงเข้าใส่เป้าหมายอย่างรุนแรงในระยะประชิด ทำลายเนื้อเยื่อและแช่แข็งบาดแผล",
+        "condition": "เหมาะสำหรับการร่ายอัดระยะประชิด (Zero distance) เพื่อทำลายการฟื้นฟูของศัตรู",
+        "casters": ["เอลินาลิส (Elinalise)"]
+      },
+      {
+        "id": 13,
+        "name": "เฟลมสโธรเวอร์ (Flamethrower)",
+        "jp": "小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)』！",
+        "romaji": "Chiisana kusuburi ga kyodai naru megumi o yakitsukusan, \"Fureimu Surowā\"!",
+        "th": "ประกายไฟอันริบหรี่จงแผดเผาความอุดมสมบูรณ์อันยิ่งใหญ่ให้มอดไหม้ 'เฟลมสโธรเวอร์'!",
+        "en": "Flamethrower",
+        "element": "ไฟ (Fire / 火)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "พ่นเปลวเพลิงแผดเผาอย่างต่อเนื่องเป็นลำยาวออกจากฝ่ามือ เผาไหม้เป้าหมายและยับยั้งการงอกใหม่ของชิ้นส่วนร่างกาย",
+        "condition": "ต้องรักษาการถ่ายเทพลังเวทอย่างต่อเนื่องเพื่อควบคุมระยะและทิศทางของสายเปลวเพลิง",
+        "casters": ["ร็อกซี (Roxy)", "อัศวินวิหารมิลิส (Temple Knights)"]
+      },
+      {
+        "id": 14,
+        "name": "ไชน์ฮีลลิ่ง (Shine Healing)",
+        "jp": "奇跡の天使よ、命の鼓動に天なる息吹を与え給え。天にいただきし太陽。神なる御使は赤を嫌う。光の海に舞い降りて、純白の翼を広げよ。さすれば赤は駆逐されん。『シャインヒーリング』",
+        "romaji": "Kiseki no tenshi yo, inochi no kodō ni tennaru ibuki o ataetamae. Ten ni itadakishi taiyō. Shin naru mitsukai wa aka o kirau. Hikari no umi ni maioorite, junpaku no tsubasa o hirogeyo. Sasureba aka wa kuchiku saren. \"Shain Hīringu\"",
+        "th": "ข้าแต่ทูตสวรรค์แห่งปาฏิหาริย์ โปรดประทานลมหายใจแห่งสวรรค์สู่ชีพจรแห่งชีวิต ดวงตะวันอันสถิตบนฟากฟ้า ทูตแห่งพระผู้เป็นเจ้ารังเกียจโลหิตสีชาด จงร่อนลงสู่ห้วงทะเลแห่งแสงสว่าง สยายปีกสีขาวบริสุทธิ์ เมื่อนั้นสีชาดจักถูกกวาดล้างจนหมดสิ้น 'ไชน์ฮีลลิ่ง'!",
+        "en": "Shine Healing",
+        "element": "การรักษา / ศักดิ์สิทธิ์ (Healing / Divine / 神聖・治癒)",
+        "rank": "ระดับศักดิ์สิทธิ์ (Saint / 治癒聖級)",
+        "effect": "รักษาบาดแผลฉกรรจ์ระดับวิกฤต ห้ามเลือดที่ไหลทะลักอย่างรุนแรง และเยียวยาอวัยวะภายในที่ฉีกขาดขั้นวิกฤต",
+        "condition": "ต้องร่ายบทร่ายขนาดยาวอย่างมีสมาธิ และใช้พลังเวทมหาศาลของผู้ร่าย",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)"]
+      },
+      {
+        "id": 15,
+        "name": "คำสั่งแขนเทียมปฐพี (Earth Arm)",
+        "jp": "土よ、我が腕(かいな)となれ",
+        "romaji": "Tsuchi yo, waga kaina to nare",
+        "th": "ดินเอ๋ย จงมาเป็นแขนของข้า! (คำสั่งถอด: แขนเอ๋ย จงกลับคืนสู่ดิน)",
+        "en": "Earth Prosthetic Arm Command",
+        "element": "ดิน / อุปกรณ์เวทมนตร์ (Earth / Magic Tool / 土・魔道具)",
+        "rank": "คำสั่งควบคุมอุปกรณ์เวทมนตร์ (Magic Tool Command)",
+        "effect": "อุปกรณ์แขนเทียมจะเชื่อมต่อกับปลายแขน ดูดกลืนพลังเวทของผู้ใช้เพื่อขยับนิ้วและฝ่ามือได้ดั่งแขนจริง",
+        "condition": "ต้องสวมอุปกรณ์แขนเทียมเข้ากับแขนก่อน และจ่ายพลังเวทอย่างต่อเนื่องเพื่อคงสภาพการขยับ",
+        "casters": ["ซาโนบา (Zanoba)", "รูเดียส (Rudeus)"]
+      },
+      {
+        "id": 16,
+        "name": "ไลท์นิ่ง (Lightning)",
+        "jp": "雄大なる光の精霊にして、天を支配せし雷帝よ！そびえ立つ者が見えるか！傲慢なりし帝の御敵が！我は神なる剣にてかの者を一撃の元に打倒せんとする者なり！光り輝く力を以って、帝の威を知らしめん！『ライトニング』！",
+        "romaji": "Yūdai naru hikari no seirei ni shite, ten o shihaiseshi raitei yo! Sobietatsu mono ga mieru ka! Gōman narishi tei no miteki ga! Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni datō sen to suru mono nari! Hikarikagayaku chikara o motte, tei no i o shirashimen! \"Raitoningu\"!",
+        "th": "ข้าแต่วิญญาณแห่งแสงสว่างอันเกรียงไกร จักรพรรดิอัสนีผู้ปกครองสรวงสวรรค์! ท่านแลเห็นผู้ที่ตระหง่านอยู่นั่นหรือไม่! เหล่าศัตรูผู้โอหังขององค์จักรพรรดิ! ตัวข้าคือผู้ที่จะพิฆาตมันให้สิ้นซากในดาบเดียวด้วยกระบี่แห่งทวยเทพ! ด้วยพลังอันสว่างเจิดจ้า จงสำแดงศักดานุภาพขององค์จักรพรรดิให้เป็นที่ประจักษ์! 'ไลท์นิ่ง'!",
+        "en": "Lightning",
+        "element": "น้ำ / สายฟ้า (Water / Lightning / 水・雷 / 水王級)",
+        "rank": "ระดับราชา (King / 水王級)",
+        "effect": "บีบอัดพลังงานมหาศาลของเมฆฟ้าคะนองให้รวมเป็นจุดเดียว แล้วฟาดสายฟ้าอัสนีบาตความเร็วสูงทำลายล้างเป้าหมายเดี่ยวในชั่วพริบตา",
+        "condition": "ต้องมีเมฆ Cumulonimbus รองรับอยู่ก่อน หรือต้องร่ายสองบทต่อเนื่องเพื่อบีบอัดพลังเวทโดยไม่ปล่อยให้พลังสลายตัว",
+        "casters": ["ร็อกซี มิเกอร์เดีย (Roxy)", "รูเดียส เกรย์แรท (Rudeus)"]
+      },
+      {
+        "id": 17,
+        "name": "เอิร์ธแลนเซอร์ (Earth Lancer)",
+        "jp": "不確かなる神よ！我が呼び声に答え、大地より天を突け！『土槍(アースランサー)』！",
+        "romaji": "Futashikanaru kami yo! Waga yobigoe ni kotae, daichi yori ten o tsuke! \"Āsu Ransā\"!",
+        "th": "ข้าแต่พระผู้เป็นเจ้าผู้ไร้ตัวตนแน่ชัด! จงตอบรับเสียงเพรียกของข้า และแทงทะลุผืนฟ้าจากพสุธา! 'เอิร์ธแลนเซอร์'!",
+        "en": "Earth Lancer",
+        "element": "ดิน (Earth / 土)",
+        "rank": "ระดับกลาง (Intermediate / 中級)",
+        "effect": "สร้างหอกหิน/เสาดินขนาดเท่าหนึ่งคนโอบ พุ่งแทงเสียบขึ้นมาจากใต้พื้นดินด้วยความเร็วสูงทะลวงเป้าหมาย",
+        "condition": "ต้องร่ายโดยมีพื้นดินรองรับ มักใช้เล็งเป้าหมายจากระยะไกลหรือใต้ฝ่าเท้าเพื่อยกตัวเองหนีกับดัก",
+        "casters": ["มัวร์ (Moore)", "อัศวินวิหารมิลิส (Temple Knights)"]
+      },
+      {
+        "id": 18,
+        "name": "ไฟร์บูลเล็ต (Fire Bullet)",
+        "jp": "汝の求める所に大いなる炎の加護あらん――『火弾』",
+        "romaji": "Nanji no motomeru tokoro ni ōinaru honoo no kago aran ―― \"Kadan\"",
+        "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเปลวเพลิงอันยิ่งใหญ่―― 'ไฟร์บูลเล็ต'!",
+        "en": "Fire Bullet",
+        "element": "ไฟ (Fire / 火)",
+        "rank": "ระดับต้น (Elementary / 初級)",
+        "effect": "สร้างลูกกระสุนเพลิงขนาดกะทัดรัดและยิงพุ่งเข้าใส่เป้าหมายด้วยความเร็วสูงเพื่อสังหารหรือสะกัดกั้น",
+        "condition": "ต้องการสมาธิในการเล็งเป้าหมาย หากผู้ร่ายถูกโจมตีก่อนบทร่ายจะสมบูรณ์ เวทจะถูกขัดขวาง",
+        "casters": ["นักเวทราชองครักษ์แห่งอาสึรา (Asura Royal Mage)"]
+      },
+      {
+        "id": 19,
+        "name": "การอัญเชิญประตูมังกร (Dragon Gates)",
+        "jp": "その龍はただ忠義にのみ生きる。両の爪は長く、鋭く、決して拳を握れない。かの龍が怒りしとき、拳は握られん。爪は折れ、牙は抜け、しかし思い知るだろう。忠義を握りし龍が、いかなる思いで忠義を捨てたかを！三番目に死んだ龍。最も鋭き瞳を持つ、白銀鱗の龍将。甲龍王ペルギウスの名を以って召喚する――開け『後龍門』、招け『前龍門』",
+        "romaji": "Sono ryū wa tada chūgi ni nomi ikiru. Ryō no tsume wa nagaku, surudoku, kesshite kobushi o nigirenai. Kano ryū ga ikarishi toki, kobushi wa nigiraren. Tsume wa ore, kiba wa nuke, shikashi omoishiru darō. Chūgi o nigirishi ryū ga, ikanaru omoi de chūgi o suteta ka o! Sanbanme ni shinda ryū. Mottomo surudoki hitomi o motsu, hakuginrin no ryūshō. Kōryūō Perugiusu no na o motte shōkan suru ―― Hirake \"Kōryūmon\", Maneke \"Zenryūmon\"",
+        "th": "มังกรตัวนั้นมีชีวิตอยู่เพียงเพื่อความภักดี กรงเล็บทั้งสองข้างยาวและแหลมคม ไม่อาจกำหมัดได้ตลอดกาล ยามเมื่อมังกรตัวนั้นพิโรธ หมัดจักถูกกำแน่น กรงเล็บจักหักสะบั้น เขี้ยวจักหลุดร่วง ทว่าพวกเจ้าจักได้ประจักษ์ ว่ามังกรผู้กุมความภักดีไว้ ต้องแบกรับความรู้สึกเยี่ยงไรยามละทิ้งความภักดีนั้น! มังกรผู้สิ้นชีพเป็นลำดับที่สาม ขุนพลมังกรเกล็ดเงินขาวผู้มีเนตรอันคมกริบที่สุด นามแห่งราชามังกรเกราะเพอร์กิอุส ขออัญเชิญ―― จงเปิดออก 'ประตูมังกรหลัง' จงเชื้อเชิญ 'ประตูมังกรหน้า'!",
+        "en": "Front & Rear Dragon Gates",
+        "element": "มังกรโบราณ / อัญเชิญ (Dragon Secret Art / 召喚)",
+        "rank": "ระดับโบราณ (Unique Ancient / 王〜帝級相当)",
+        "effect": "อัญเชิญบานประตูมังกรขนาดยักษ์สองบานโอบล้อมเป้าหมาย ดูดกลืนพลังเวทและมานาทั้งหมดของศัตรูในบริเวณจนหมดสิ้น ทำให้เวทมนตร์หรือความเป็นอมตะของคู่ต่อสู้ไร้ผล",
+        "condition": "ต้องเป็นผู้สืบทอดวิชาของเผ่ามังกร (ราชามังกรเกราะเพอร์กิอุส) และมีสื่อกลางในการเชื่อมต่อมิติ",
+        "casters": ["ราชามังกรเกราะเพอร์กิอุส (Armored Dragon King Perugius)"]
+      }
+    ];
+
+    // DOM Elements
+    const spellContainer = document.getElementById('spell-container');
+    const searchInput = document.getElementById('search-input');
+    const elemFilterBtns = document.querySelectorAll('#element-filters .chip-btn');
+    const rankFilterBtns = document.querySelectorAll('#rank-filters .chip-btn');
+    const noResults = document.getElementById('no-results');
+    const toast = document.getElementById('toast-msg');
+    const toastText = document.getElementById('toast-text');
+    const spellModal = document.getElementById('spell-modal');
+    const modalBody = document.getElementById('modal-body');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    let currentElem = 'all';
+    let currentRank = 'all';
+    let searchQuery = '';
+
+    // Render Function
+    function renderSpells() {
+      spellContainer.innerHTML = '';
+      
+      const filtered = spellsData.filter(spell => {
+        // Element filter
+        const matchElem = (currentElem === 'all') || spell.element.includes(currentElem);
+        
+        // Rank filter
+        const matchRank = (currentRank === 'all') || spell.rank.includes(currentRank);
+        
+        // Search filter
+        const q = searchQuery.toLowerCase().trim();
+        const matchSearch = !q || 
+          spell.name.toLowerCase().includes(q) ||
+          spell.en.toLowerCase().includes(q) ||
+          spell.jp.toLowerCase().includes(q) ||
+          spell.romaji.toLowerCase().includes(q) ||
+          spell.th.toLowerCase().includes(q) ||
+          spell.element.toLowerCase().includes(q) ||
+          spell.casters.some(c => c.toLowerCase().includes(q));
+
+        return matchElem && matchRank && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+        filtered.forEach(spell => {
+          const card = document.createElement('div');
+          card.className = 'spell-card';
+          card.setAttribute('data-element', spell.element);
+
+          let rankBadgeClass = 'badge-rank';
+          if (spell.rank.includes('ศักดิ์สิทธิ์')) rankBadgeClass += ' saint';
+          else if (spell.rank.includes('ราชา')) rankBadgeClass += ' king';
+          else if (spell.rank.includes('โบราณ') || spell.rank.includes('จักรพรรดิ')) rankBadgeClass += ' god';
+
+          card.innerHTML = `
+            <div class="card-top">
+              <div class="spell-names">
+                <h3>${spell.name}</h3>
+                <div class="spell-en">${spell.en}</div>
+              </div>
+              <div class="badges">
+                <span class="${rankBadgeClass}">${spell.rank.split('(')[0].trim()}</span>
+                <span class="badge-elem">${spell.element.split('(')[0].trim()}</span>
+              </div>
+            </div>
+
+            <div class="incantation-block">
+              <div class="incant-jp">「${spell.jp}」</div>
+              <div class="incant-romaji">${spell.romaji}</div>
+              <div class="incant-th"><strong>พากย์ไทย:</strong> "${spell.th}"</div>
+            </div>
+
+            <div class="spell-desc">
+              <strong>ผลลัพธ์:</strong> ${spell.effect}
+            </div>
+
+            <div class="spell-condition">
+              <strong>เงื่อนไข:</strong> ${spell.condition}
+            </div>
+
+            <div class="card-actions">
+              <button class="action-btn" onclick="copyChant('${spell.jp.replace(/'/g, "\\'")}', 'ภาษาญี่ปุ่น')">
+                <i class="fa-regular fa-copy"></i> คัดลอก JP
+              </button>
+              <button class="action-btn" onclick="copyChant('${spell.th.replace(/'/g, "\\'")}', 'คำแปลไทย')">
+                <i class="fa-solid fa-feather"></i> คัดลอก TH
+              </button>
+              <button class="action-btn" onclick="playVoice('${spell.jp.replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-volume-high"></i> เสียงร่าย
+              </button>
+              <button class="action-btn" onclick="openDetails(${spell.id})">
+                <i class="fa-solid fa-eye"></i> เจาะลึก
+              </button>
+            </div>
+          `;
+          spellContainer.appendChild(card);
+        });
+      }
+    }
+
+    // Filter Listeners
+    elemFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        elemFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentElem = btn.dataset.elem;
+        renderSpells();
+      });
+    });
+
+    rankFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        rankFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentRank = btn.dataset.rank;
+        renderSpells();
+      });
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderSpells();
+    });
+
+    // Copy Utility
+    window.copyChant = function(text, label) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`คัดลอกบทสวด (${label}) แล้ว!`);
+      }).catch(() => {
+        showToast(`คัดลอกไม่สำเร็จ`);
+      });
+    };
+
+    // Text to Speech
+    window.playVoice = function(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.05;
+        window.speechSynthesis.speak(utterance);
+        showToast('กำลังท่องบทร่ายเวทมนตร์...');
+      } else {
+        showToast('เบราว์เซอร์ไม่รองรับ Text-to-Speech');
+      }
+    };
+
+    // Details Modal
+    window.openDetails = function(id) {
+      const spell = spellsData.find(s => s.id === id);
+      if (!spell) return;
+
+      modalBody.innerHTML = `
+        <div style="font-family: var(--font-title); color: var(--border-gold); font-size: 0.9rem; margin-bottom: 0.25rem;">
+          ${spell.en} • ${spell.rank}
+        </div>
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.25rem; color: #fff;">${spell.name}</h2>
+
+        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-magic); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+          <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">ต้นฉบับภาษาญี่ปุ่น (Chant):</div>
+          <div style="font-family: var(--font-jp); font-size: 1.15rem; color: #f8fafc; line-height: 1.7; margin-bottom: 0.75rem;">「${spell.jp}」</div>
+          <div style="color: #cbd5e1; font-size: 0.9rem; font-style: italic; margin-bottom: 1rem;">${spell.romaji}</div>
+          <div style="color: var(--border-gold); font-size: 1.05rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.75rem;">
+            <strong>บทแปลอนิเมะไทย:</strong> "${spell.th}"
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 10px;">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">ธาตุและประเภท:</div>
+            <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;">${spell.element}</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 10px;">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">ผู้เคยร่ายในเรื่อง:</div>
+            <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem; color: #38bdf8;">${spell.casters.join(', ')}</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <h4 style="color: var(--text-gold); font-size: 0.95rem; margin-bottom: 0.4rem;">ผลลัพธ์และอานุภาพ:</h4>
+          <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">${spell.effect}</p>
+        </div>
+
+        <div>
+          <h4 style="color: var(--text-gold); font-size: 0.95rem; margin-bottom: 0.4rem;">ข้อกำหนด & เคล็ดลับการร่าย:</h4>
+          <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">${spell.condition}</p>
+        </div>
+      `;
+
+      spellModal.style.display = 'flex';
+    };
+
+    modalCloseBtn.addEventListener('click', () => {
+      spellModal.style.display = 'none';
+    });
+
+    spellModal.addEventListener('click', (e) => {
+      if (e.target === spellModal) spellModal.style.display = 'none';
+    });
+
+    // Toast
+    function showToast(msg) {
+      toastText.textContent = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2500);
+    }
+
+    // Particle Canvas Animation
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedY = -(Math.random() * 0.4 + 0.1);
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = Math.random() > 0.5 ? '197, 160, 89' : '56, 189, 248';
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.x < 0 || this.x > canvas.width) this.x = Math.random() * canvas.width;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 55; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Initial Render
+    renderSpells();
+  </script>
+</body>
+</html>
