@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mushoku Tensei — Magic Grimoire & Chanting RPG</title>
+  <title>Mushoku Tensei: Magic Chants</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -99,6 +100,37 @@
       border-color: #f3e5ab;
       font-weight: 700;
       box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+
+    
+    /* Logo & Header */
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .site-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--border-gold);
+      box-shadow: 0 0 25px rgba(197, 160, 89, 0.45);
+      object-fit: cover;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    }
+
+    .site-logo:hover {
+      transform: scale(1.08) rotate(4deg);
+      box-shadow: 0 0 35px rgba(197, 160, 89, 0.7);
+    }
+
+    .header-desc {
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0.6rem auto 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
     /* Header */
@@ -247,64 +279,82 @@
       font-weight: 600;
     }
 
-    /* Grimoire Spell Cards */
+    /* Grimoire Spell Cards - Uniform 1x1 Aspect Ratio */
     .spell-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
-      gap: 1.6rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
     }
 
     .spell-card {
+      aspect-ratio: 1 / 1;
       background: var(--bg-card);
       border: 1px solid var(--border-magic);
-      border-radius: 18px;
-      padding: 1.5rem;
+      border-radius: 20px;
+      padding: 1.4rem;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
 
     .spell-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(197, 160, 89, 0.4);
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(197, 160, 89, 0.8);
+      box-shadow: 0 12px 35px -10px rgba(197, 160, 89, 0.45), inset 0 0 25px rgba(197, 160, 89, 0.08);
+      background: var(--bg-card-hover);
     }
 
     .spell-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 3px;
-      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+      transform: skewX(-25deg);
+      transition: 0.6s;
+      pointer-events: none;
     }
 
-    .spell-card[data-element*="Water"]::before { background: linear-gradient(90deg, transparent, var(--color-water), transparent); }
-    .spell-card[data-element*="Fire"]::before { background: linear-gradient(90deg, transparent, var(--color-fire), transparent); }
-    .spell-card[data-element*="Earth"]::before { background: linear-gradient(90deg, transparent, var(--color-earth), transparent); }
-    .spell-card[data-element*="Healing"]::before { background: linear-gradient(90deg, transparent, var(--color-heal), transparent); }
-    .spell-card[data-element*="Dragon"]::before { background: linear-gradient(90deg, transparent, var(--color-dragon), transparent); }
+    .spell-card:hover::before {
+      left: 200%;
+    }
 
-    .card-top {
+    .spell-card-top {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.9rem;
+      align-items: center;
       gap: 0.5rem;
     }
 
-    .spell-names h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
+    .elem-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
     }
 
-    .spell-en {
-      font-family: var(--font-title);
-      font-size: 0.8rem;
-      color: var(--text-gold);
-      letter-spacing: 1px;
+    .elem-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
     }
+
+    .elem-dot.water { background: var(--color-water); box-shadow: 0 0 8px var(--color-water); }
+    .elem-dot.fire { background: var(--color-fire); box-shadow: 0 0 8px var(--color-fire); }
+    .elem-dot.earth { background: var(--color-earth); box-shadow: 0 0 8px var(--color-earth); }
+    .elem-dot.wind { background: var(--color-wind); box-shadow: 0 0 8px var(--color-wind); }
+    .elem-dot.healing { background: var(--color-heal); box-shadow: 0 0 8px var(--color-heal); }
+    .elem-dot.dragon { background: var(--color-dragon); box-shadow: 0 0 8px var(--color-dragon); }
 
     .badge-rank {
       font-size: 0.72rem;
@@ -319,68 +369,84 @@
     .badge-rank.king { background: rgba(234, 179, 8, 0.15); color: #fde047; border-color: rgba(234, 179, 8, 0.3); }
     .badge-rank.god { background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.3); }
 
-    .incantation-block {
-      background: rgba(7, 9, 14, 0.7);
-      border: 1px solid rgba(42, 52, 77, 0.6);
-      border-radius: 12px;
-      padding: 1rem;
-      margin: 0.9rem 0;
+    .spell-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin: auto 0;
     }
 
-    .incant-jp {
-      font-family: var(--font-jp);
-      font-size: 0.95rem;
-      color: #f8fafc;
-      line-height: 1.6;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+    .spell-card-title {
+      font-family: var(--font-title);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-gold);
+      line-height: 1.25;
+      letter-spacing: 0.5px;
+      transition: color 0.2s ease;
     }
 
-    .incant-romaji {
+    .spell-card:hover .spell-card-title {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(197, 160, 89, 0.6);
+    }
+
+    .spell-card-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .spell-card-snippet {
       font-size: 0.82rem;
-      color: #cbd5e1;
+      color: #94a3b8;
       font-style: italic;
       line-height: 1.45;
-      letter-spacing: 0.3px;
+      margin-top: 0.35rem;
+      border-left: 2px solid rgba(197, 160, 89, 0.35);
+      padding-left: 0.6rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .incant-th {
-      font-size: 0.85rem;
-      color: var(--text-gold);
-      line-height: 1.5;
-      border-top: 1px dashed rgba(197, 160, 89, 0.25);
-      padding-top: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .spell-desc {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 0.6rem;
-    }
-
-    .spell-condition {
-      background: rgba(255, 255, 255, 0.02);
-      border-left: 2px solid var(--border-gold);
-      padding: 0.45rem 0.7rem;
-      font-size: 0.76rem;
-      color: #cbd5e1;
-      margin-bottom: 1rem;
-    }
-
-    .card-actions {
+    .spell-card-bottom {
       display: flex;
-      gap: 0.4rem;
-      margin-top: auto;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.78rem;
+    }
+
+    .spell-card-cost {
+      color: var(--color-water);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .spell-card-action-hint {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .spell-card:hover .spell-card-action-hint {
+      color: var(--border-gold);
+      transform: translateX(3px);
     }
 
     .action-btn {
-      flex: 1;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-magic);
       color: var(--text-main);
-      padding: 0.5rem 0.4rem;
+      padding: 0.5rem 0.8rem;
       border-radius: 8px;
       font-size: 0.78rem;
       cursor: pointer;
@@ -900,9 +966,15 @@
 
   <div class="container">
     <header>
+      <div class="logo-wrapper">
+        <img src="logo.png" alt="Mushoku Tensei Logo" class="site-logo">
+      </div>
       <div class="badge-sub"><i class="fa-solid fa-scroll"></i> ROXY'S ACADEMY OF INCANTATIONS</div>
       <h1 class="main-title">MUSHOKU TENSEI</h1>
-      <div class="subtitle-jp">無職転生 〜魔術大全・詠唱修練・魔導戦記〜</div>
+      <div class="subtitle-jp">無職転生 〜魔術詠唱集〜</div>
+      <p class="header-desc">
+        Click any magic card to view complete incantation formulas, audio voice, and details.
+      </p>
       
       <!-- Top Navigation Tabs -->
       <div class="nav-tabs">
@@ -1973,8 +2045,14 @@
       setTimeout(() => { toast.style.display = 'none'; }, 2400);
     }
 
+    const spellModalEl = document.getElementById('spell-modal');
     document.getElementById('modal-close-btn').addEventListener('click', () => {
-      document.getElementById('spell-modal').style.display = 'none';
+      spellModalEl.style.display = 'none';
+    });
+    spellModalEl.addEventListener('click', (e) => {
+      if (e.target === spellModalEl) {
+        spellModalEl.style.display = 'none';
+      }
     });
 
     // Particles Canvas Animation
