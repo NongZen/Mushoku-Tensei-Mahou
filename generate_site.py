@@ -205,10 +205,10 @@ html = '''<!DOCTYPE html>
                 <div class="flex flex-wrap md:flex-nowrap gap-4 w-full md:w-auto">
                     <div class="flex items-center gap-3 w-full md:w-auto">
                         <label for="sort-select" class="text-gray-400 font-cinzel text-xs uppercase tracking-wider whitespace-nowrap">Sort By:</label>
-                        <select id="sort-select" onchange="applyFiltersAndSort()" class="w-full md:w-44 py-2 pl-4 pr-10 rounded-lg cursor-pointer font-prompt text-sm transition-all">
-                            <option value="default">ค่าเริ่มต้น (Default)</option>
-                            <option value="element">เรียงตามธาตุ (Element)</option>
-                            <option value="level">เรียงตามขั้น (Level)</option>
+                        <select id="sort-select" onchange="applyFiltersAndSort()" class="w-full md:w-56 py-2 pl-4 pr-10 rounded-lg cursor-pointer font-prompt text-sm transition-all">
+                            <option value="element" selected>เรียงตามธาตุและขั้น (Element & Tier)</option>
+                            <option value="level">เรียงตามลำดับขั้น (Tier / Level)</option>
+                            <option value="id">ลำดับตาม ID ดั้งเดิม (Original ID)</option>
                         </select>
                     </div>
                     
@@ -432,43 +432,47 @@ html = '''<!DOCTYPE html>
                 </svg>
             </button>
 
-            <div class="text-center mb-8 mt-2">
-                <h3 id="modal-title" class="font-cinzel text-3xl sm:text-4xl font-bold text-magic-gold mb-2 text-glow"></h3>
-                <h4 id="modal-thai-title" class="text-xl text-gray-300 font-medium mb-1"></h4>
-                <div class="inline-block px-3 py-1 bg-magic-gold/10 border border-magic-gold/30 rounded-full text-magic-gold-light text-sm mt-3 shadow-[0_0_10px_rgba(197,160,89,0.2)]">
+            <div class="text-center mb-6 mt-2">
+                <h3 id="modal-title" class="font-cinzel text-3xl sm:text-4xl font-bold text-magic-gold mb-1 text-glow"></h3>
+                <h4 id="modal-romaji-title" class="text-lg text-magic-gold-light font-medium tracking-wide"></h4>
+                <div id="modal-thai-title" class="text-sm text-gray-400 font-light mt-0.5"></div>
+                <div class="inline-block px-3 py-1 bg-magic-gold/10 border border-magic-gold/30 rounded-full text-magic-gold-light text-xs mt-3 shadow-[0_0_10px_rgba(197,160,89,0.2)]">
                     <span id="modal-type"></span>
                 </div>
             </div>
 
-            <div class="space-y-5">
-                <!-- Thai Chant -->
+            <div class="space-y-4">
+                <!-- 1. Japanese Chant -->
+                <div class="bg-black/40 rounded-xl p-5 border-l-4 border-blue-500/70 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h5 class="text-xs uppercase tracking-wider text-blue-400 font-cinzel font-semibold"><i class="fa-solid fa-torii-gate mr-1.5"></i> 1. Japanese (คำร่ายภาษาญี่ปุ่น)</h5>
+                        <div class="flex gap-3">
+                            <button id="modal-play-voice-btn" class="text-xs text-blue-400 hover:text-blue-300 font-cinzel"><i class="fa-solid fa-volume-high"></i> Voice</button>
+                            <button id="modal-copy-jp-btn" class="text-xs text-blue-400 hover:text-blue-300 font-cinzel"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </div>
+                    </div>
+                    <p id="modal-jp-chant" class="font-jp text-base sm:text-lg text-gray-100 leading-relaxed font-bold">...</p>
+                </div>
+
+                <!-- 2. Romaji Chant -->
+                <div class="bg-black/40 rounded-xl p-5 border-l-4 border-purple-500/70 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h5 class="text-xs uppercase tracking-wider text-purple-400 font-cinzel font-semibold"><i class="fa-solid fa-font mr-1.5"></i> 2. Romaji (คำอ่านโรมะจิ)</h5>
+                        <button id="modal-copy-romaji-btn" class="text-xs text-purple-400 hover:text-purple-300 font-cinzel"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <p id="modal-romaji-chant" class="text-sm sm:text-base text-magic-gold-light leading-relaxed italic">...</p>
+                </div>
+
+                <!-- 3. Thai Chant -->
                 <div class="bg-black/40 rounded-xl p-5 border-l-4 border-magic-gold relative overflow-hidden group">
                     <div class="absolute inset-0 bg-gradient-to-r from-magic-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex justify-between items-center mb-2">
-                        <h5 class="text-xs uppercase tracking-wider text-gray-500 font-cinzel">Thai Chant</h5>
-                        <button id="modal-copy-th-btn" class="text-xs text-magic-gold hover:underline"><i class="fa-regular fa-copy"></i> Copy</button>
+                        <h5 class="text-xs uppercase tracking-wider text-magic-gold font-cinzel font-semibold"><i class="fa-solid fa-book mr-1.5"></i> 3. Thai (คำแปลภาษาไทย)</h5>
+                        <button id="modal-copy-th-btn" class="text-xs text-magic-gold hover:text-yellow-300 font-cinzel"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
                     <p id="modal-thai-chant" class="text-base sm:text-lg text-gray-200 leading-relaxed font-light italic">"..."</p>
-                </div>
-
-                <!-- Japanese Chant -->
-                <div class="bg-black/40 rounded-xl p-5 border-l-4 border-blue-500/50 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="flex justify-between items-center mb-2">
-                        <h5 class="text-xs uppercase tracking-wider text-gray-500 font-cinzel">Japanese</h5>
-                        <div class="flex gap-3">
-                            <button id="modal-play-voice-btn" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-volume-high"></i> Voice</button>
-                            <button id="modal-copy-jp-btn" class="text-xs text-blue-400 hover:underline"><i class="fa-regular fa-copy"></i> Copy</button>
-                        </div>
-                    </div>
-                    <p id="modal-jp-chant" class="font-jp text-base sm:text-lg text-gray-200 leading-relaxed">...</p>
-                </div>
-
-                <!-- Romaji Chant -->
-                <div class="bg-black/40 rounded-xl p-5 border-l-4 border-purple-500/50 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <h5 class="text-xs uppercase tracking-wider text-gray-500 mb-2 font-cinzel">Romaji</h5>
-                    <p id="modal-romaji-chant" class="text-sm sm:text-base text-gray-400 leading-relaxed italic">...</p>
                 </div>
 
                 <!-- Spell Effect & Mechanics -->
@@ -566,17 +570,20 @@ html = '''<!DOCTYPE html>
                         <div class="spell-card rounded-xl p-6 relative overflow-hidden flex flex-col h-full group" onclick="openModal(${spell.id})">
                             <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/5 to-transparent rounded-bl-full pointer-events-none"></div>
                             
-                            <div class="flex items-center mb-3">
-                                <div class="w-2 h-2 rounded-full ${accentColor} mr-3 shadow-[0_0_8px_currentColor]"></div>
-                                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">${spell.rank_th || spell.rank}</span>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 rounded-full ${accentColor} mr-2.5 shadow-[0_0_8px_currentColor]"></div>
+                                    <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">${spell.rank}</span>
+                                </div>
+                                <span class="text-[10px] text-magic-gold/80 font-cinzel px-2 py-0.5 rounded bg-magic-gold/10 border border-magic-gold/20">${spell.element}</span>
                             </div>
                             
                             <h3 class="font-cinzel text-2xl font-bold text-magic-gold-light mb-0.5 group-hover:text-magic-gold transition-colors">${spell.en}</h3>
-                            <h4 class="text-gray-400 text-sm mb-4 font-light">${spell.name.split('(')[0].trim()}</h4>
+                            <h4 class="text-magic-gold-light/90 text-sm mb-4 font-medium tracking-wide">${spell.romaji_name} <span class="text-gray-500 text-xs font-jp">(${spell.jp_name})</span></h4>
                             
                             <div class="mt-auto">
                                 <p class="text-gray-300 text-xs sm:text-sm line-clamp-3 italic opacity-85 border-l-2 border-magic-gold/30 pl-3">
-                                    "${spell.th}"
+                                    "${spell.romaji}"
                                 </p>
                             </div>
                             
@@ -593,6 +600,27 @@ html = '''<!DOCTYPE html>
             }, 250);
         }
 
+        const elementOrder = {
+            'Water': 1,
+            'Fire': 2,
+            'Earth': 3,
+            'Healing': 4,
+            'Dragon': 5
+        };
+
+        function getSpellRankWeight(rankStr) {
+            const lower = (rankStr || '').toLowerCase();
+            if (lower.includes('初・中') || lower.includes('elementary-intermediate')) return 1.5;
+            if (lower.includes('初') || lower.includes('elementary')) return 1;
+            if (lower.includes('中') || lower.includes('intermediate')) return 2;
+            if (lower.includes('上') || lower.includes('advanced')) return 3;
+            if (lower.includes('聖') || lower.includes('saint')) return 4;
+            if (lower.includes('王') || lower.includes('king')) return 5;
+            if (lower.includes('帝') || lower.includes('emperor')) return 6;
+            if (lower.includes('神') || lower.includes('god') || lower.includes('ancient') || lower.includes('unique')) return 7;
+            return 3;
+        }
+
         function applyFiltersAndSort() {
             const sortVal = document.getElementById('sort-select').value;
             const filterVal = document.getElementById('filter-select').value;
@@ -602,6 +630,8 @@ html = '''<!DOCTYPE html>
                 const matchFilter = (filterVal === 'all') || (spell.element.toLowerCase() === filterVal.toLowerCase());
                 const matchSearch = !searchVal || 
                     spell.en.toLowerCase().includes(searchVal) ||
+                    (spell.romaji_name && spell.romaji_name.toLowerCase().includes(searchVal)) ||
+                    (spell.jp_name && spell.jp_name.includes(searchVal)) ||
                     spell.name.toLowerCase().includes(searchVal) ||
                     spell.jp.includes(searchVal) ||
                     spell.romaji.toLowerCase().includes(searchVal) ||
@@ -610,9 +640,27 @@ html = '''<!DOCTYPE html>
             });
 
             processed.sort((a, b) => {
-                if (sortVal === 'element') return a.element.localeCompare(b.element);
-                if (sortVal === 'level') return a.mp_cost - b.mp_cost;
-                return a.id - b.id;
+                if (sortVal === 'element') {
+                    const elemDiff = (elementOrder[a.element] || 99) - (elementOrder[b.element] || 99);
+                    if (elemDiff !== 0) return elemDiff;
+                    const rankDiff = getSpellRankWeight(a.rank) - getSpellRankWeight(b.rank);
+                    if (rankDiff !== 0) return rankDiff;
+                    return a.mp_cost - b.mp_cost;
+                }
+                if (sortVal === 'level') {
+                    const rankDiff = getSpellRankWeight(a.rank) - getSpellRankWeight(b.rank);
+                    if (rankDiff !== 0) return rankDiff;
+                    return a.mp_cost - b.mp_cost;
+                }
+                if (sortVal === 'id') {
+                    return a.id - b.id;
+                }
+                // Default: Element & Tier
+                const elemDiff = (elementOrder[a.element] || 99) - (elementOrder[b.element] || 99);
+                if (elemDiff !== 0) return elemDiff;
+                const rankDiff = getSpellRankWeight(a.rank) - getSpellRankWeight(b.rank);
+                if (rankDiff !== 0) return rankDiff;
+                return a.mp_cost - b.mp_cost;
             });
 
             renderSpells(processed);
@@ -621,11 +669,12 @@ html = '''<!DOCTYPE html>
         // MODAL FUNCTIONS
         const modal = document.getElementById('spell-modal');
         const mTitle = document.getElementById('modal-title');
+        const mRomajiTitle = document.getElementById('modal-romaji-title');
         const mThaiTitle = document.getElementById('modal-thai-title');
         const mType = document.getElementById('modal-type');
-        const mThaiChant = document.getElementById('modal-thai-chant');
         const mJpChant = document.getElementById('modal-jp-chant');
         const mRomajiChant = document.getElementById('modal-romaji-chant');
+        const mThaiChant = document.getElementById('modal-thai-chant');
         const mMpCost = document.getElementById('modal-mp-cost');
         const mRankText = document.getElementById('modal-rank-text');
         const mCastersText = document.getElementById('modal-casters-text');
@@ -636,17 +685,19 @@ html = '''<!DOCTYPE html>
             if (!spell) return;
 
             mTitle.textContent = spell.en;
+            mRomajiTitle.textContent = `${spell.romaji_name} (${spell.jp_name})`;
             mThaiTitle.textContent = spell.name.split('(')[0].trim();
-            mType.textContent = `${spell.rank_th || spell.rank} • ${spell.element_th || spell.element}`;
-            mThaiChant.textContent = `"${spell.th}"`;
+            mType.textContent = `${spell.rank} • ${spell.element_th || spell.element}`;
             mJpChant.textContent = spell.jp;
             mRomajiChant.textContent = spell.romaji;
+            mThaiChant.textContent = `"${spell.th}"`;
             mMpCost.textContent = `${spell.mp_cost} MP`;
             mRankText.textContent = spell.rank;
             mCastersText.textContent = spell.casters.join(', ');
 
-            document.getElementById('modal-copy-th-btn').onclick = () => copyText(spell.th, 'Thai Chant');
             document.getElementById('modal-copy-jp-btn').onclick = () => copyText(spell.jp, 'Japanese Chant');
+            document.getElementById('modal-copy-romaji-btn').onclick = () => copyText(spell.romaji, 'Romaji Chant');
+            document.getElementById('modal-copy-th-btn').onclick = () => copyText(spell.th, 'Thai Chant');
             document.getElementById('modal-play-voice-btn').onclick = () => playVoice(spell.jp);
 
             mPracticeBtn.onclick = () => {
@@ -794,8 +845,8 @@ html = '''<!DOCTYPE html>
 
         function evaluateTrainingChant(spoken) {
             const spell = trainingQueue[trainCurrentIndex];
-            const cleanSpoken = spoken.replace(/[「」『』、。・\s!?]/g, '').toLowerCase();
-            const cleanTarget = spell.jp.replace(/[「」『』、。・\s!?]/g, '').toLowerCase();
+            const cleanSpoken = spoken.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            const cleanTarget = spell.jp.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
 
             // Extract magic anchor keywords
             const anchors = [];
@@ -1109,7 +1160,7 @@ html = '''<!DOCTYPE html>
 
         // INIT
         window.addEventListener('DOMContentLoaded', () => {
-            renderSpells();
+            applyFiltersAndSort();
             initBattle();
         });
     </script>

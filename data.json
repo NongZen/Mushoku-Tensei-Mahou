@@ -20,7 +20,9 @@
       "Zenith",
       "Rudeus",
       "Roxy"
-    ]
+    ],
+    "jp_name": "ヒーリング",
+    "romaji_name": "Hīringu"
   },
   {
     "id": 2,
@@ -42,7 +44,9 @@
     "casters": [
       "Rudeus",
       "Roxy"
-    ]
+    ],
+    "jp_name": "ウォーターボール",
+    "romaji_name": "Wōtā Bōru"
   },
   {
     "id": 3,
@@ -64,7 +68,9 @@
     "casters": [
       "Roxy",
       "Rudeus"
-    ]
+    ],
+    "jp_name": "キュムロニンバス",
+    "romaji_name": "Kyumuroninbasu"
   },
   {
     "id": 4,
@@ -86,7 +92,9 @@
     "casters": [
       "Roxy",
       "Rudeus"
-    ]
+    ],
+    "jp_name": "エクスヒーリング",
+    "romaji_name": "Ekusu Hīringu"
   },
   {
     "id": 5,
@@ -108,7 +116,9 @@
     "casters": [
       "Roxy",
       "Moore"
-    ]
+    ],
+    "jp_name": "バーニングプレイス",
+    "romaji_name": "Bāningu Pureisu"
   },
   {
     "id": 6,
@@ -130,7 +140,9 @@
     "casters": [
       "Roxy",
       "Temple Knights"
-    ]
+    ],
+    "jp_name": "アイシクルブレイク",
+    "romaji_name": "Aishikuru Bureiku"
   },
   {
     "id": 7,
@@ -151,7 +163,9 @@
     "condition": "Caster must be standing on rock/soil ground.",
     "casters": [
       "Roxy"
-    ]
+    ],
+    "jp_name": "アースフォートレス",
+    "romaji_name": "Āsu Fōtoresu"
   },
   {
     "id": 8,
@@ -172,7 +186,9 @@
     "condition": "Low raw damage; primes targets for instant freezing Frost Nova combos.",
     "casters": [
       "Roxy"
-    ]
+    ],
+    "jp_name": "ウォータースプラッシュ",
+    "romaji_name": "Wōtā Supurasshu"
   },
   {
     "id": 9,
@@ -194,7 +210,9 @@
     "casters": [
       "Roxy",
       "Moore"
-    ]
+    ],
+    "jp_name": "アイシクルフィールド",
+    "romaji_name": "Aishikuru Fīrudo"
   },
   {
     "id": 10,
@@ -215,7 +233,9 @@
     "condition": "Demands strong mental precision to direct spear trajectories over allies.",
     "casters": [
       "Roxy"
-    ]
+    ],
+    "jp_name": "ブリザードストーム",
+    "romaji_name": "Burizādo Sutōmu"
   },
   {
     "id": 11,
@@ -236,7 +256,9 @@
     "condition": "Discharged in a straight cleaving vector to slice armored shells.",
     "casters": [
       "Roxy"
-    ]
+    ],
+    "jp_name": "フレイムスライス",
+    "romaji_name": "Fureimu Suraisu"
   },
   {
     "id": 12,
@@ -257,7 +279,9 @@
     "condition": "Extremely lethal when unleashed point-blank against regenerating beasts.",
     "casters": [
       "Elinalise"
-    ]
+    ],
+    "jp_name": "アイススマッシュ",
+    "romaji_name": "Aisu Sumasshu"
   },
   {
     "id": 13,
@@ -279,7 +303,9 @@
     "casters": [
       "Roxy",
       "Temple Knights"
-    ]
+    ],
+    "jp_name": "フレイムスロワー",
+    "romaji_name": "Fureimu Surowā"
   },
   {
     "id": 14,
@@ -300,7 +326,9 @@
     "condition": "Requires lengthy incantation and serene concentration; cannot regenerate severed limbs.",
     "casters": [
       "Roxy"
-    ]
+    ],
+    "jp_name": "シャインヒーリング",
+    "romaji_name": "Shain Hīringu"
   },
   {
     "id": 15,
@@ -322,7 +350,9 @@
     "casters": [
       "Zanoba",
       "Rudeus"
-    ]
+    ],
+    "jp_name": "アースプロステティックアーム",
+    "romaji_name": "Āsu Purosetekku Āmu"
   },
   {
     "id": 16,
@@ -344,7 +374,9 @@
     "casters": [
       "Roxy",
       "Rudeus"
-    ]
+    ],
+    "jp_name": "ライトニング",
+    "romaji_name": "Raitoningu"
   },
   {
     "id": 17,
@@ -366,7 +398,9 @@
     "casters": [
       "Moore",
       "Temple Knights"
-    ]
+    ],
+    "jp_name": "アースランサー",
+    "romaji_name": "Āsu Ransā"
   },
   {
     "id": 18,
@@ -387,7 +421,9 @@
     "condition": "High accuracy projectile; interrupts enemy channeling.",
     "casters": [
       "Asura Royal Mage"
-    ]
+    ],
+    "jp_name": "ファイアバレット",
+    "romaji_name": "Faia Baretto"
   },
   {
     "id": 19,
@@ -408,6 +444,8 @@
     "condition": "Ancient dragon heritage secret technique; absolute nullification of enemy spells.",
     "casters": [
       "Armored Dragon King Perugius"
-    ]
+    ],
+    "jp_name": "前龍門・後龍門",
+    "romaji_name": "Zenryūmon & Kōryūmon"
   }
 ]
