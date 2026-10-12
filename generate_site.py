@@ -10,6 +10,9 @@ html = '''<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mushoku Tensei: Magic Chants & Combat Grimoire</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="shortcut icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,6 +170,10 @@ html = '''<!DOCTYPE html>
         
         <!-- Header -->
         <header class="text-center mb-10">
+            <div class="inline-block relative mb-4 group">
+                <div class="absolute -inset-1.5 bg-gradient-to-r from-magic-gold via-yellow-300 to-magic-gold rounded-full blur-md opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                <img src="icon.png" alt="Mushoku Tensei Emblem" class="relative w-28 h-28 md:w-32 md:h-32 mx-auto rounded-full border-2 border-magic-gold shadow-[0_0_20px_rgba(197,160,89,0.4)] object-cover transform group-hover:scale-105 transition-all duration-300 cursor-pointer">
+            </div>
             <h2 class="font-cinzel text-magic-gold text-sm md:text-base tracking-widest uppercase mb-2 opacity-80">Grimoire of Six-Faced World</h2>
             <h1 class="font-cinzel text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-magic-gold via-yellow-200 to-magic-gold mb-4 text-glow">
                 Mushoku Tensei<br/><span class="text-2xl md:text-4xl mt-1 block text-white/90 font-normal">Magic Chants Archive</span>
@@ -857,6 +864,8 @@ html = '''<!DOCTYPE html>
             if (spell.jp.includes('ウォーター')) anchors.push('ウォーター', 'water');
             if (spell.jp.includes('ライトニング')) anchors.push('ライトニング', 'lightning');
             if (spell.jp.includes('ヒーリング')) anchors.push('ヒーリング', 'healing');
+            if (spell.jp.includes('ファイアボール') || spell.jp.includes('炎')) anchors.push('ファイアボール', '炎', 'fireball');
+            if (spell.jp.includes('スプラッシュフロー')) anchors.push('スプラッシュフロー', 'splash flow');
 
             let matchCount = 0;
             anchors.forEach(a => { if (cleanSpoken.includes(a.toLowerCase())) matchCount++; });

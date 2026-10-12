@@ -447,5 +447,53 @@
     ],
     "jp_name": "前龍門・後龍門",
     "romaji_name": "Zenryūmon & Kōryūmon"
+  },
+  {
+    "id": 20,
+    "name": "ไฟร์บอล (Fireball)",
+    "en": "Fireball",
+    "jp": "汝の求める所に大いなる炎の加護あらん、勇猛なる灯火の熱さを今ここに、ファイアボール！",
+    "romaji": "Nanji no motomeru tokoro ni ooinaru honoo no kago aran. Yuumou naru tomoshibi no atsusa o ima koko ni, FireBall",
+    "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเพลิงกาฬอันยิ่งใหญ่ ความร้อนแรงแห่งดวงประทีปอันเกรียงไกรจงปรากฏ ณ ที่แห่งนี้ 'ไฟร์บอล'!",
+    "element": "Fire",
+    "element_th": "ไฟ (Fire / 火)",
+    "tier": "tier1",
+    "rank": "Elementary (初級)",
+    "rank_th": "ระดับต้น (Elementary / 初級)",
+    "mp_cost": 12,
+    "power": 35,
+    "type": "damage",
+    "effect": "ควบแน่นเปลวเพลิงเป็นลูกบอลความร้อนสูงแล้วยิงพุ่งเข้าเผาผลาญเป้าหมาย",
+    "condition": "รวบรวมมานาธาตุไฟที่ฝ่ามือ ควบคุมการลุกไหม้และวิถีการยิง",
+    "casters": [
+      "Rudeus",
+      "Roxy"
+    ],
+    "jp_name": "ファイアボール",
+    "romaji_name": "Faia Bōru"
+  },
+  {
+    "id": 21,
+    "name": "สแปลชโฟลว์ (Splash Flow)",
+    "en": "Splash Flow",
+    "jp": "優柔たる水の精霊にして、地を流れしせせらぎの王女よ。内に秘めたる剛力にて、あらゆるものを押し流せ。スプラッシュフロー！",
+    "romaji": "Yuujuu taru mizu no seirei ni shite, chi o nagareshi seseragi no oujo yo. Uchi ni himetaru gouriki nite, arayuru mono oshinagase. Splash Flow",
+    "th": "ข้าแต่วิญญาณแห่งวารีผู้อ่อนโยน เจ้าหญิงแห่งสายธารผู้รินไหลผ่านผืนพสุธา! ด้วยพละกำลังอันมหาศาลที่ซ่อนเร้นอยู่ภายใน จงซัดพัดพาสรรพสิ่งให้สูญสิ้น! 'สแปลชโฟลว์'!",
+    "element": "Water",
+    "element_th": "น้ำ (Water / 水)",
+    "tier": "tier1",
+    "rank": "Intermediate (中級)",
+    "rank_th": "ระดับกลาง (Intermediate / 中級)",
+    "mp_cost": 32,
+    "power": 70,
+    "type": "damage",
+    "effect": "ปลดปล่อยคลื่นกระแสน้ำเชี่ยวกรากขนาดใหญ่พัดถล่มและกวาดล้างศัตรูเป็นวงกว้าง",
+    "condition": "ควบคุมกระแสธารรอบตัวและรวมศูนย์พลังก่อนปล่อยเป็นคลื่นกระแทก",
+    "casters": [
+      "Roxy",
+      "Rudeus"
+    ],
+    "jp_name": "スプラッシュフロー",
+    "romaji_name": "Supurasshu Furō"
   }
 ]
