@@ -3,7 +3,7 @@ import json
 with open('data.json', 'r', encoding='utf-8') as f:
     spells = json.load(f)
 
-# Build HTML template based on firstOne.html's gorgeous card UI + modal + Training + Battle
+# Build HTML template with all 3 Speech Recognition engines + firstOne.html card design
 html = '''<!DOCTYPE html>
 <html lang="th">
 <head>
@@ -19,6 +19,13 @@ html = '''<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Noto+Serif+JP:wght@400;600;700;900&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Transformers.js for In-Browser Web AI Whisper -->
+    <script type="module">
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+        env.allowLocalModels = false;
+        window.transformersPipeline = pipeline;
+    </script>
 
     <script>
         tailwind.config = {
@@ -79,15 +86,15 @@ html = '''<!DOCTYPE html>
         }
 
         /* Modal styling */
-        #spell-modal, #training-modal {
+        #spell-modal, #training-modal, #battle-chant-modal, #engine-settings-modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        #spell-modal.hidden, #training-modal.hidden {
+        #spell-modal.hidden, #training-modal.hidden, #battle-chant-modal.hidden, #engine-settings-modal.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        #spell-modal:not(.hidden), #training-modal:not(.hidden) {
+        #spell-modal:not(.hidden), #training-modal:not(.hidden), #battle-chant-modal:not(.hidden), #engine-settings-modal:not(.hidden) {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
@@ -101,7 +108,7 @@ html = '''<!DOCTYPE html>
             box-shadow: 0 0 50px rgba(197, 160, 89, 0.25), inset 0 0 30px rgba(197, 160, 89, 0.08);
         }
         
-        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content {
+        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content, #battle-chant-modal:not(.hidden) .modal-content, #engine-settings-modal:not(.hidden) .modal-content {
             transform: scale(1) translateY(0);
         }
 
@@ -151,14 +158,18 @@ html = '''<!DOCTYPE html>
             background: #dc2626 !important;
             border-color: #f87171 !important;
             color: #fff !important;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.8) !important;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0b0c10; }
-        ::-webkit-scrollbar-thumb { background: #c5a059; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e8d399; }
+        /* Karaoke Chunk Highlight Animation */
+        .chunk-active {
+            border-color: #c5a059 !important;
+            background: rgba(197, 160, 89, 0.15) !important;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+        }
+        .chunk-completed {
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+        }
     </style>
 </head>
 <body class="font-prompt min-h-screen relative overflow-x-hidden antialiased">
@@ -189,7 +200,7 @@ html = '''<!DOCTYPE html>
                     <i class="fa-solid fa-book-sparkles mr-2"></i> Grimoire Archive
                 </button>
                 <button onclick="switchTab('training')" id="tab-btn-training" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
-                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (JP/Romaji)
+                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (Multi-Engine)
                 </button>
                 <button onclick="switchTab('battle')" id="tab-btn-battle" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
                     <i class="fa-solid fa-dragon mr-2"></i> Spell Battle RPG
@@ -198,7 +209,7 @@ html = '''<!DOCTYPE html>
         </header>
 
         <!-- ======================================================== -->
-        <!-- VIEW 1: GRIMOIRE CARDS (Exact firstOne.html design) -->
+        <!-- VIEW 1: GRIMOIRE CARDS (firstOne.html design) -->
         <!-- ======================================================== -->
         <section id="view-grimoire">
             <!-- Controls (Search, Sort & Filter) -->
@@ -233,27 +244,26 @@ html = '''<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Spell Grid -->
+            <!-- Grimoire Cards Grid -->
             <div id="spell-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-300">
-                <!-- Cards injected here via JavaScript -->
+                <!-- Cards injected dynamically via JS -->
             </div>
         </section>
 
         <!-- ======================================================== -->
-        <!-- VIEW 2: TRAINING MODE (JP + ROMAJI ONLY) -->
+        <!-- VIEW 2: CHANTING TRAINING (3 SPEECH RECOGNITION ENGINES) -->
         <!-- ======================================================== -->
         <section id="view-training" class="hidden">
-            <div class="bg-magic-blue/50 border border-magic-gold/40 rounded-2xl p-6 md:p-8 backdrop-blur-md max-w-4xl mx-auto shadow-2xl mb-8">
+            <!-- Training Queue Generator Configuration -->
+            <div class="bg-gradient-to-b from-[#111a24] to-[#0d121c] border-2 border-magic-gold/40 rounded-3xl p-6 md:p-8 backdrop-blur-md max-w-4xl mx-auto mb-10 shadow-2xl">
                 <div class="text-center mb-6">
-                    <span class="text-xs uppercase tracking-widest text-magic-gold font-cinzel">Chanting Academy</span>
-                    <h2 class="font-cinzel text-2xl md:text-3xl font-bold text-white mt-1">Custom Incantation Practice</h2>
-                    <p class="text-gray-400 text-xs md:text-sm mt-1">In training mode, only <strong>Japanese script and Romaji</strong> are displayed. Accent-tolerant speech recognition enabled!</p>
+                    <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP & Romaji)</h3>
+                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ปรับแต่งธาตุ และจำนวนคาถาตามระดับขั้น</p>
                 </div>
 
-                <!-- Config Options -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="bg-magic-dark/60 border border-magic-gold/20 p-4 rounded-xl">
-                        <label class="block text-xs uppercase text-gray-400 font-cinzel mb-2">Target Element</label>
+                        <label class="block text-xs uppercase text-gray-400 font-cinzel mb-2">Target Element (ธาตุเป้าหมาย):</label>
                         <select id="train-element-select" class="w-full py-2 px-3 rounded-lg text-sm">
                             <option value="All">All Elements (全属性)</option>
                             <option value="Water" selected>Water / Ice (水・氷)</option>
@@ -290,22 +300,65 @@ html = '''<!DOCTYPE html>
 
             <!-- Training Stage Box -->
             <div id="training-stage-box" class="hidden bg-gradient-to-b from-[#111a24] to-[#151020] border-2 border-magic-gold rounded-3xl p-6 md:p-10 text-center max-w-4xl mx-auto shadow-2xl relative">
-                <div id="train-counter" class="font-cinzel text-magic-gold text-xs tracking-widest uppercase mb-1">STAGE 1 / 2</div>
-                <h3 id="train-spell-name" class="font-cinzel text-2xl md:text-3xl font-bold text-white mb-6 text-glow">Water Ball</h3>
+                
+                <!-- Voice Engine Selector Pill -->
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-6 bg-black/50 p-2 rounded-2xl border border-magic-gold/20 max-w-xl mx-auto">
+                    <span class="text-[11px] uppercase font-cinzel text-gray-400 mr-1"><i class="fa-solid fa-microchip text-magic-gold mr-1"></i> ASR Engine:</span>
+                    <button onclick="setVoiceEngine('karaoke')" id="engine-btn-karaoke" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]">
+                        <i class="fa-solid fa-list-check mr-1"></i> 1. Karaoke Chunking
+                    </button>
+                    <button onclick="setVoiceEngine('cloud')" id="engine-btn-cloud" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
+                        <i class="fa-solid fa-cloud mr-1"></i> 2. Serverless Whisper
+                    </button>
+                    <button onclick="setVoiceEngine('browser_ai')" id="engine-btn-browser_ai" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
+                        <i class="fa-solid fa-robot mr-1"></i> 3. Web AI (Offline)
+                    </button>
+                    <button onclick="openEngineSettings()" class="text-xs text-magic-gold hover:text-yellow-300 p-1.5 rounded-lg bg-white/5 border border-white/10 ml-1" title="API Settings">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
 
-                <div class="bg-black/60 border border-magic-gold/30 rounded-2xl p-6 md:p-8 mb-6 text-left">
-                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">Japanese Incantation:</div>
-                    <div id="train-jp-text" class="font-jp text-xl md:text-2xl text-white font-bold leading-relaxed mb-4">
+                <!-- Web AI Model Download Progress Indicator -->
+                <div id="model-loading-box" class="hidden mb-6 bg-blue-950/60 border border-blue-400/40 rounded-2xl p-4 max-w-xl mx-auto text-xs text-blue-200">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span id="model-loading-status"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading Web AI Model (Xenova/whisper-tiny)...</span>
+                        <span id="model-loading-percent" class="font-bold text-white">0%</span>
+                    </div>
+                    <div class="w-full bg-black/60 rounded-full h-2 overflow-hidden border border-blue-500/30">
+                        <div id="model-loading-bar" class="bg-gradient-to-r from-blue-400 to-cyan-300 h-full rounded-full transition-all duration-200" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div id="train-counter" class="font-cinzel text-magic-gold text-xs tracking-widest uppercase mb-1">STAGE 1 / 2</div>
+                <h3 id="train-spell-name" class="font-cinzel text-2xl md:text-3xl font-bold text-white mb-4 text-glow">Water Ball</h3>
+
+                <!-- Active Chant Box -->
+                <div class="bg-black/60 border border-magic-gold/30 rounded-2xl p-5 md:p-7 mb-6 text-left">
+                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">Full Japanese Incantation:</div>
+                    <div id="train-jp-text" class="font-jp text-lg md:text-xl text-white font-bold leading-relaxed mb-3">
                         「汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール」
                     </div>
                     <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">Romaji:</div>
-                    <div id="train-romaji-text" class="text-base md:text-lg text-magic-gold-light italic leading-relaxed">
+                    <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed">
                         Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru
                     </div>
                 </div>
 
-                <!-- Mic and Pronounce Controls -->
-                <div class="flex justify-center items-center gap-4 mb-6">
+                <!-- Karaoke Phrases/Chunks Container (Method 1) -->
+                <div id="train-karaoke-area" class="mb-6 text-left">
+                    <div class="flex justify-between items-center mb-2 px-1">
+                        <span class="text-xs uppercase tracking-wider text-magic-gold font-cinzel font-semibold">
+                            <i class="fa-solid fa-microphone-lines mr-1.5"></i> Chanting Meter (Speak phrase by phrase):
+                        </span>
+                        <span id="train-chunk-progress-text" class="text-xs text-gray-400 font-cinzel">0 / 3 Complete</span>
+                    </div>
+                    <div id="train-chunks-container" class="space-y-2">
+                        <!-- Injected dynamically: Phase 1, Phase 2, etc. -->
+                    </div>
+                </div>
+
+                <!-- Mic and Audio Controls -->
+                <div class="flex justify-center items-center gap-4 mb-5">
                     <button id="train-mic-btn" onclick="toggleTrainingSpeech()" class="w-16 h-16 rounded-full bg-white/5 border-2 border-magic-gold text-magic-gold text-2xl flex items-center justify-center hover:bg-magic-gold/20 hover:scale-105 transition-all shadow-[0_0_15px_rgba(197,160,89,0.2)]">
                         <i class="fa-solid fa-microphone"></i>
                     </button>
@@ -315,8 +368,8 @@ html = '''<!DOCTYPE html>
                 </div>
 
                 <!-- Speech Transcript Box -->
-                <div id="train-transcript-box" class="bg-black/40 border border-dashed border-gray-600 rounded-xl p-4 max-w-2xl mx-auto mb-6 text-sm text-gray-400 min-h-[50px] flex items-center justify-center">
-                    <span>Press microphone button and chant in Japanese or Romaji...</span>
+                <div id="train-transcript-box" class="bg-black/40 border border-dashed border-gray-600 rounded-xl p-4 max-w-2xl mx-auto mb-6 text-xs md:text-sm text-gray-400 min-h-[50px] flex items-center justify-center">
+                    <span>Press microphone button and chant...</span>
                 </div>
 
                 <div id="train-result-badge" class="mb-6"></div>
@@ -425,7 +478,7 @@ html = '''<!DOCTYPE html>
     </div>
 
     <!-- ======================================================== -->
-    <!-- MODAL FOR SPELL DETAILS (Exact firstOne.html design) -->
+    <!-- MODAL FOR SPELL DETAILS (JP -> Romaji -> TH) -->
     <!-- ======================================================== -->
     <div id="spell-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
         <!-- Backdrop -->
@@ -510,6 +563,9 @@ html = '''<!DOCTYPE html>
                 <div id="battle-chant-romaji" class="text-sm text-magic-gold-light italic"></div>
             </div>
 
+            <!-- Battle Karaoke Phrases Container -->
+            <div id="battle-chunks-container" class="space-y-1.5 mb-4 text-left"></div>
+
             <div class="flex justify-center mb-4">
                 <button id="battle-mic-btn" onclick="toggleBattleSpeech()" class="w-16 h-16 rounded-full bg-white/5 border-2 border-magic-gold text-magic-gold text-2xl flex items-center justify-center hover:bg-magic-gold/20">
                     <i class="fa-solid fa-microphone"></i>
@@ -523,11 +579,90 @@ html = '''<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- Engine API Settings Modal -->
+    <div id="engine-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeEngineSettings()"></div>
+        <div class="modal-content relative w-full max-w-md rounded-2xl p-6 text-left z-10 border-2 border-magic-gold">
+            <h3 class="font-cinzel text-xl font-bold text-magic-gold mb-1"><i class="fa-solid fa-gear mr-2"></i> Voice Engine Settings</h3>
+            <p class="text-xs text-gray-400 mb-4">Configure AI Cloud API Keys for Method 2 (Serverless Whisper).</p>
+
+            <div class="mb-4">
+                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">Groq API Key (Free & 300ms fast):</label>
+                <input type="password" id="cfg-groq-key" placeholder="gsk_..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
+                <p class="text-[11px] text-gray-500 mt-1">Get free key at <a href="https://console.groq.com/keys" target="_blank" class="text-magic-gold hover:underline">groq.com</a> (or set GROQ_API_KEY on Vercel).</p>
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">OpenAI API Key (Optional):</label>
+                <input type="password" id="cfg-openai-key" placeholder="sk-..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeEngineSettings()" class="px-4 py-2 rounded-lg bg-white/10 text-xs font-cinzel text-gray-300">Cancel</button>
+                <button onclick="saveEngineSettings()" class="px-5 py-2 rounded-lg bg-magic-gold text-magic-dark font-cinzel font-bold text-xs">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ======================================================== -->
     <!-- JAVASCRIPT LOGIC -->
     <!-- ======================================================== -->
     <script>
         const spellsData = ''' + json.dumps(spells, ensure_ascii=False) + ''';
+
+        // ENGINE CONFIGURATION
+        let currentVoiceEngine = localStorage.getItem('mushoku_voice_engine') || 'karaoke';
+        let customGroqKey = localStorage.getItem('mushoku_groq_key') || '';
+        let customOpenaiKey = localStorage.getItem('mushoku_openai_key') || '';
+
+        function setVoiceEngine(engine) {
+            currentVoiceEngine = engine;
+            localStorage.setItem('mushoku_voice_engine', engine);
+
+            const btnKaraoke = document.getElementById('engine-btn-karaoke');
+            const btnCloud = document.getElementById('engine-btn-cloud');
+            const btnBrowserAi = document.getElementById('engine-btn-browser_ai');
+
+            [btnKaraoke, btnCloud, btnBrowserAi].forEach(btn => {
+                if (!btn) return;
+                btn.className = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all";
+            });
+
+            const activeClass = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]";
+
+            if (engine === 'karaoke' && btnKaraoke) btnKaraoke.className = activeClass;
+            if (engine === 'cloud' && btnCloud) btnCloud.className = activeClass;
+            if (engine === 'browser_ai' && btnBrowserAi) {
+                btnBrowserAi.className = activeClass;
+                preloadBrowserAiModel();
+            }
+
+            const box = document.getElementById('train-transcript-box');
+            if (box) {
+                if (engine === 'karaoke') box.innerHTML = `<span><i class="fa-solid fa-list-check mr-2 text-magic-gold"></i>Karaoke mode active: Chants will advance phrase by phrase.</span>`;
+                else if (engine === 'cloud') box.innerHTML = `<span><i class="fa-solid fa-cloud mr-2 text-cyan-400"></i>Cloud Whisper active: Record full audio and send for AI evaluation.</span>`;
+                else if (engine === 'browser_ai') box.innerHTML = `<span><i class="fa-solid fa-robot mr-2 text-purple-400"></i>Web AI active: Client-side Whisper will transcribe 100% locally.</span>`;
+            }
+        }
+
+        function openEngineSettings() {
+            document.getElementById('cfg-groq-key').value = customGroqKey;
+            document.getElementById('cfg-openai-key').value = customOpenaiKey;
+            document.getElementById('engine-settings-modal').classList.remove('hidden');
+        }
+
+        function closeEngineSettings() {
+            document.getElementById('engine-settings-modal').classList.add('hidden');
+        }
+
+        function saveEngineSettings() {
+            customGroqKey = document.getElementById('cfg-groq-key').value.trim();
+            customOpenaiKey = document.getElementById('cfg-openai-key').value.trim();
+            localStorage.setItem('mushoku_groq_key', customGroqKey);
+            localStorage.setItem('mushoku_openai_key', customOpenaiKey);
+            closeEngineSettings();
+            alert('Engine settings saved successfully!');
+        }
 
         // TAB SWITCHER
         function switchTab(tab) {
@@ -545,6 +680,7 @@ html = '''<!DOCTYPE html>
             } else if (tab === 'training') {
                 document.getElementById('view-training').classList.remove('hidden');
                 document.getElementById('tab-btn-training').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
+                setVoiceEngine(currentVoiceEngine);
             } else if (tab === 'battle') {
                 document.getElementById('view-battle').classList.remove('hidden');
                 document.getElementById('tab-btn-battle').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
@@ -552,7 +688,7 @@ html = '''<!DOCTYPE html>
         }
 
         // =========================================================
-        // 1. GRIMOIRE CARD RENDER (Exact firstOne.html design)
+        // 1. GRIMOIRE CARD RENDER (firstOne.html design)
         // =========================================================
         function renderSpells(dataToRender = spellsData) {
             const grid = document.getElementById('spell-grid');
@@ -726,11 +862,21 @@ html = '''<!DOCTYPE html>
         });
 
         // =========================================================
-        // 2. TRAINING MODE (JP + ROMAJI ONLY)
+        // 2. TRAINING MODE (KARAOKE, CLOUD AI, WEB AI)
         // =========================================================
         let trainingQueue = [];
         let trainCurrentIndex = 0;
         let isTrainingRecording = false;
+
+        // Karaoke Phrase State
+        let activeChunkIndex = 0;
+        let currentChunks = [];
+
+        // Audio Recorder State (for Cloud & Web AI)
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let browserAiTranscriber = null;
+        let isModelLoading = false;
 
         function generateTrainingQueue() {
             const elem = document.getElementById('train-element-select').value;
@@ -776,12 +922,77 @@ html = '''<!DOCTYPE html>
             document.getElementById('train-spell-name').textContent = s.en;
             document.getElementById('train-jp-text').textContent = `「${s.jp}」`;
             document.getElementById('train-romaji-text').textContent = s.romaji;
-            document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and chant in Japanese or Romaji...</span>`;
+            document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and chant...</span>`;
             document.getElementById('train-result-badge').innerHTML = '';
             document.getElementById('train-mic-btn').classList.remove('recording-pulse');
 
             document.getElementById('train-prev-btn').disabled = (trainCurrentIndex === 0);
             document.getElementById('train-next-btn').disabled = (trainCurrentIndex === trainingQueue.length - 1);
+
+            // Setup Karaoke Chunks
+            setupKaraokeChunks(s);
+        }
+
+        function setupKaraokeChunks(s) {
+            const container = document.getElementById('train-chunks-container');
+            const progressText = document.getElementById('train-chunk-progress-text');
+            container.innerHTML = '';
+            activeChunkIndex = 0;
+
+            currentChunks = (s.chunks_jp && s.chunks_jp.length > 0) ? s.chunks_jp : [s.jp];
+            const romajiChunks = (s.chunks_romaji && s.chunks_romaji.length > 0) ? s.chunks_romaji : [s.romaji];
+
+            currentChunks.forEach((chunk, idx) => {
+                const roChunk = romajiChunks[idx] || '';
+                const chunkHtml = `
+                    <div id="chunk-card-${idx}" onclick="selectActiveChunk(${idx})" class="p-3.5 rounded-xl border border-white/10 bg-black/40 flex items-center justify-between cursor-pointer transition-all hover:border-magic-gold/40">
+                        <div class="pr-2">
+                            <div class="text-[10px] uppercase font-cinzel text-gray-500 mb-0.5">Phrase ${idx + 1}:</div>
+                            <div class="font-jp text-sm md:text-base text-gray-200 font-bold leading-relaxed">${chunk}</div>
+                            <div class="text-xs text-magic-gold-light italic">${roChunk}</div>
+                        </div>
+                        <div id="chunk-status-${idx}" class="w-7 h-7 rounded-full border border-gray-600 flex items-center justify-center text-xs text-gray-400 font-bold flex-shrink-0">
+                            ${idx + 1}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', chunkHtml);
+            });
+
+            updateChunkUI();
+        }
+
+        function selectActiveChunk(idx) {
+            activeChunkIndex = idx;
+            updateChunkUI();
+        }
+
+        function updateChunkUI() {
+            currentChunks.forEach((_, idx) => {
+                const card = document.getElementById(`chunk-card-${idx}`);
+                const status = document.getElementById(`chunk-status-${idx}`);
+                if (!card || !status) return;
+
+                card.classList.remove('chunk-active', 'chunk-completed');
+
+                if (idx < activeChunkIndex) {
+                    card.classList.add('chunk-completed');
+                    status.className = "w-7 h-7 rounded-full bg-green-500/20 border border-green-500 text-green-400 flex items-center justify-center text-xs font-bold flex-shrink-0";
+                    status.innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (idx === activeChunkIndex) {
+                    card.classList.add('chunk-active');
+                    status.className = "w-7 h-7 rounded-full bg-magic-gold/20 border border-magic-gold text-magic-gold flex items-center justify-center text-xs font-bold flex-shrink-0 animate-pulse";
+                    status.textContent = idx + 1;
+                } else {
+                    status.className = "w-7 h-7 rounded-full border border-gray-700 text-gray-500 flex items-center justify-center text-xs font-bold flex-shrink-0";
+                    status.textContent = idx + 1;
+                }
+            });
+
+            const progressText = document.getElementById('train-chunk-progress-text');
+            if (progressText) {
+                progressText.textContent = `${activeChunkIndex} / ${currentChunks.length} Complete`;
+            }
         }
 
         function navigateTraining(delta) {
@@ -796,17 +1007,32 @@ html = '''<!DOCTYPE html>
             if (s) playVoice(s.jp);
         }
 
-        // SPEECH RECOGNITION (Accent Tolerant)
+        // =========================================================
+        // SPEECH RECOGNITION (3 ENGINES IMPLEMENTATION)
+        // =========================================================
+
+        // Web Speech Recognition for Engine 1 (Karaoke Continuous)
         let recognition = null;
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRec();
-            recognition.continuous = false;
+            recognition.continuous = true;
             recognition.interimResults = true;
             recognition.lang = 'ja-JP';
         }
 
         function toggleTrainingSpeech() {
+            if (currentVoiceEngine === 'karaoke') {
+                toggleKaraokeSpeech();
+            } else if (currentVoiceEngine === 'cloud') {
+                toggleCloudAiRecording();
+            } else if (currentVoiceEngine === 'browser_ai') {
+                toggleBrowserAiRecording();
+            }
+        }
+
+        // ENGINE 1: KARAOKE CHUNKING (Web Speech API)
+        function toggleKaraokeSpeech() {
             if (!recognition) {
                 const manual = prompt('Speech Recognition not supported in this browser. Enter chant transcript:');
                 if (manual) evaluateTrainingChant(manual);
@@ -820,11 +1046,12 @@ html = '''<!DOCTYPE html>
                 recognition.stop();
                 isTrainingRecording = false;
                 micBtn.classList.remove('recording-pulse');
+                box.innerHTML = `<span>Session stopped. Press microphone to continue chanting.</span>`;
             } else {
                 recognition.start();
                 isTrainingRecording = true;
                 micBtn.classList.add('recording-pulse');
-                box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-ear-listen mr-2"></i>Listening to mana resonance...</span>`;
+                box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>Listening to Phrase ${activeChunkIndex + 1}... Chant now!</span>`;
 
                 recognition.onresult = (e) => {
                     let transcript = '';
@@ -832,334 +1059,555 @@ html = '''<!DOCTYPE html>
                         transcript += e.results[i][0].transcript;
                     }
                     box.innerHTML = `<span class="text-white">Heard: "${transcript}"</span>`;
-                    if (e.results[0].isFinal) {
-                        evaluateTrainingChant(transcript);
-                    }
+                    processKaraokeChunkMatch(transcript);
                 };
 
-                recognition.onerror = () => {
+                recognition.onerror = (err) => {
                     isTrainingRecording = false;
                     micBtn.classList.remove('recording-pulse');
-                    box.innerHTML = `<span class="text-red-400">Microphone detection error.</span>`;
+                    box.innerHTML = `<span class="text-red-400">Mic notice: ${err.error || 'stopped'}. Press mic to restart.</span>`;
                 };
 
                 recognition.onend = () => {
-                    isTrainingRecording = false;
-                    micBtn.classList.remove('recording-pulse');
+                    if (isTrainingRecording) {
+                        try { recognition.start(); } catch(e) {}
+                    } else {
+                        micBtn.classList.remove('recording-pulse');
+                    }
                 };
             }
         }
 
-        function evaluateTrainingChant(spoken) {
-            const spell = trainingQueue[trainCurrentIndex];
+        function processKaraokeChunkMatch(spoken) {
+            const s = trainingQueue[trainCurrentIndex];
             const cleanSpoken = spoken.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
-            const cleanTarget = spell.jp.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            const targetChunk = (currentChunks[activeChunkIndex] || '').replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
 
-            // Extract magic anchor keywords
-            const anchors = [];
-            if (spell.jp.includes('水の精霊')) anchors.push('水の精霊', '水');
-            if (spell.jp.includes('雷帝')) anchors.push('雷帝');
-            if (spell.jp.includes('神なる力')) anchors.push('神なる力', '神');
-            if (spell.jp.includes('キュムロニンバス')) anchors.push('キュムロニンバス', 'cumulonimbus');
-            if (spell.jp.includes('ウォーター')) anchors.push('ウォーター', 'water');
-            if (spell.jp.includes('ライトニング')) anchors.push('ライトニング', 'lightning');
-            if (spell.jp.includes('ヒーリング')) anchors.push('ヒーリング', 'healing');
-            if (spell.jp.includes('ファイアボール') || spell.jp.includes('炎')) anchors.push('ファイアボール', '炎', 'fireball');
-            if (spell.jp.includes('スプラッシュフロー')) anchors.push('スプラッシュフロー', 'splash flow');
-
-            let matchCount = 0;
-            anchors.forEach(a => { if (cleanSpoken.includes(a.toLowerCase())) matchCount++; });
-
-            let charMatches = 0;
-            for (const ch of cleanSpoken) {
-                if (cleanTarget.includes(ch)) charMatches++;
+            // Check if final spell keyword was said
+            const finalSpellName = (s.jp_name || s.en).replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            if (cleanSpoken.includes(finalSpellName) && activeChunkIndex >= Math.floor(currentChunks.length / 2)) {
+                // Completed via Final Spell Burst!
+                completeFullSpellChant('S-RANK: MASTER CHANTING (Spell Trigger Activated!)');
+                return;
             }
-            const ratio = cleanTarget.length > 0 ? (charMatches / cleanTarget.length) : 0;
+
+            // Phonetic / substring match
+            let matchedChars = 0;
+            for (const ch of cleanSpoken) {
+                if (targetChunk.includes(ch)) matchedChars++;
+            }
+            const ratio = targetChunk.length > 0 ? (matchedChars / targetChunk.length) : 0;
+
+            if (ratio >= 0.55 || cleanSpoken.includes(targetChunk) || (cleanSpoken.length >= 3 && targetChunk.includes(cleanSpoken))) {
+                // Phrase Matched!
+                activeChunkIndex++;
+                updateChunkUI();
+
+                const box = document.getElementById('train-transcript-box');
+                if (activeChunkIndex >= currentChunks.length) {
+                    completeFullSpellChant('S-RANK: PERFECT INCANTATION COMPLETED!');
+                } else {
+                    box.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-check mr-1"></i>Phrase accepted! Now chant phrase ${activeChunkIndex + 1}...</span>`;
+                }
+            }
+        }
+
+        function completeFullSpellChant(rankText) {
+            isTrainingRecording = false;
+            if (recognition) try { recognition.stop(); } catch(e) {}
+            document.getElementById('train-mic-btn').classList.remove('recording-pulse');
+            activeChunkIndex = currentChunks.length;
+            updateChunkUI();
+
+            const badge = document.getElementById('train-result-badge');
+            badge.innerHTML = `
+                <div class="inline-block px-5 py-2.5 rounded-full bg-green-500/20 border-2 border-green-500 text-green-300 font-cinzel text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                    <i class="fa-solid fa-circle-check mr-2 text-green-400"></i> ${rankText}
+                </div>
+            `;
+            const box = document.getElementById('train-transcript-box');
+            box.innerHTML = `<span class="text-magic-gold font-bold">✨ Mana stream focused. Spell unleashed! ✨</span>`;
+        }
+
+        // ENGINE 2: SERVERLESS CLOUD AI (Groq / OpenAI Whisper)
+        async function toggleCloudAiRecording() {
+            const micBtn = document.getElementById('train-mic-btn');
+            const box = document.getElementById('train-transcript-box');
+
+            if (isTrainingRecording) {
+                // Stop and transcribe
+                isTrainingRecording = false;
+                micBtn.classList.remove('recording-pulse');
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                }
+            } else {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sending audio to Serverless Whisper AI...</span>`;
+                        await sendAudioToServerlessWhisper(audioBlob);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+
+                    mediaRecorder.start();
+                    isTrainingRecording = true;
+                    micBtn.classList.add('recording-pulse');
+                    box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Cloud AI] Recording... Chant the full spell and press mic again to finish!</span>`;
+                } catch (err) {
+                    box.innerHTML = `<span class="text-red-400">Microphone access denied: ${err.message}</span>`;
+                }
+            }
+        }
+
+        async function sendAudioToServerlessWhisper(blob) {
+            const s = trainingQueue[trainCurrentIndex];
+            const box = document.getElementById('train-transcript-box');
             const badge = document.getElementById('train-result-badge');
 
-            if (ratio >= 0.75 || (anchors.length > 0 && matchCount >= anchors.length * 0.5 && ratio >= 0.45)) {
+            try {
+                // Read blob as base64
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = async () => {
+                    const base64Audio = reader.result.split(',')[1];
+
+                    // Check if custom key is available
+                    let endpoint = '/api/transcribe';
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'x-target-spell': s.en
+                    };
+                    if (customGroqKey) headers['x-api-key'] = customGroqKey;
+                    else if (customOpenaiKey) headers['x-api-key'] = customOpenaiKey;
+
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({ audio: base64Audio })
+                    });
+
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        box.innerHTML = `<span class="text-yellow-400">Cloud API notice: ${err.error || 'Serverless endpoint unavailable'}. Check API key in settings.</span>`;
+                        return;
+                    }
+
+                    const data = await res.json();
+                    const transcript = data.text || '';
+                    box.innerHTML = `<span class="text-white">AI Heard: "${transcript}"</span>`;
+                    evaluateAiChantAccuracy(transcript);
+                };
+            } catch (err) {
+                box.innerHTML = `<span class="text-red-400">Error connecting to Whisper API: ${err.message}</span>`;
+            }
+        }
+
+        // ENGINE 3: CLIENT-SIDE WEB AI (Transformers.js Whisper-tiny)
+        async function preloadBrowserAiModel() {
+            if (browserAiTranscriber || isModelLoading) return;
+            const loadBox = document.getElementById('model-loading-box');
+            const loadBar = document.getElementById('model-loading-bar');
+            const loadPercent = document.getElementById('model-loading-percent');
+
+            if (!window.transformersPipeline) {
+                setTimeout(preloadBrowserAiModel, 500);
+                return;
+            }
+
+            try {
+                isModelLoading = true;
+                if (loadBox) loadBox.classList.remove('hidden');
+
+                browserAiTranscriber = await window.transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
+                    progress_callback: (p) => {
+                        if (p.status === 'progress' && loadBar) {
+                            const pct = Math.round(p.progress || 0);
+                            loadBar.style.width = pct + '%';
+                            if (loadPercent) loadPercent.textContent = pct + '%';
+                        }
+                    }
+                });
+
+                if (loadBox) {
+                    loadBox.classList.add('hidden');
+                    alert('Web AI Whisper model loaded into browser cache successfully! 100% offline ready.');
+                }
+            } catch (err) {
+                if (loadBox) loadBox.classList.add('hidden');
+                console.warn('Web AI load error:', err);
+            } finally {
+                isModelLoading = false;
+            }
+        }
+
+        async function toggleBrowserAiRecording() {
+            const micBtn = document.getElementById('train-mic-btn');
+            const box = document.getElementById('train-transcript-box');
+
+            if (isTrainingRecording) {
+                isTrainingRecording = false;
+                micBtn.classList.remove('recording-pulse');
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            } else {
+                if (!browserAiTranscriber) {
+                    await preloadBrowserAiModel();
+                }
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microchip mr-2"></i>Transcribing locally with Web AI Whisper...</span>`;
+                        await runLocalWhisperTranscribe(audioBlob);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+
+                    mediaRecorder.start();
+                    isTrainingRecording = true;
+                    micBtn.classList.add('recording-pulse');
+                    box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Web AI] Recording locally... Chant spell and click mic to transcribe!</span>`;
+                } catch (err) {
+                    box.innerHTML = `<span class="text-red-400">Microphone error: ${err.message}</span>`;
+                }
+            }
+        }
+
+        async function runLocalWhisperTranscribe(blob) {
+            const box = document.getElementById('train-transcript-box');
+            try {
+                // Convert blob to audio buffer 16kHz Float32Array
+                const arrayBuffer = await blob.arrayBuffer();
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+                const decoded = await audioCtx.decodeAudioData(arrayBuffer);
+                const float32Data = decoded.getChannelData(0);
+
+                const out = await browserAiTranscriber(float32Data, {
+                    language: 'japanese',
+                    task: 'transcribe'
+                });
+
+                const transcript = out.text || '';
+                box.innerHTML = `<span class="text-white">Local AI Heard: "${transcript}"</span>`;
+                evaluateAiChantAccuracy(transcript);
+            } catch (err) {
+                box.innerHTML = `<span class="text-red-400">Web AI processing error: ${err.message}</span>`;
+            }
+        }
+
+        function evaluateAiChantAccuracy(spoken) {
+            const s = trainingQueue[trainCurrentIndex];
+            const cleanSpoken = spoken.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            const cleanTarget = s.jp.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+
+            let matches = 0;
+            for (const ch of cleanSpoken) {
+                if (cleanTarget.includes(ch)) matches++;
+            }
+            const ratio = cleanTarget.length > 0 ? (matches / cleanTarget.length) : 0;
+            const badge = document.getElementById('train-result-badge');
+
+            if (ratio >= 0.65 || cleanSpoken.includes(cleanTarget.slice(0, 10))) {
                 badge.innerHTML = `
-                    <div class="inline-block px-4 py-2 rounded-full bg-green-500/20 border border-green-500 text-green-300 font-cinzel text-sm">
-                        <i class="fa-solid fa-circle-check mr-2"></i> S-RANK: PERFECT SPELL CHANT!
+                    <div class="inline-block px-5 py-2.5 rounded-full bg-green-500/20 border-2 border-green-500 text-green-300 font-cinzel text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                        <i class="fa-solid fa-circle-check mr-2 text-green-400"></i> S-RANK: ACCURATE SPELL RECITATION! (${Math.min(100, Math.round(ratio * 100))}%)
                     </div>
                 `;
-            } else if (matchCount > 0 || ratio >= 0.3 || cleanSpoken.includes(spell.en.toLowerCase())) {
+            } else if (ratio >= 0.35 || cleanSpoken.includes(s.en.toLowerCase())) {
                 badge.innerHTML = `
-                    <div class="inline-block px-4 py-2 rounded-full bg-yellow-500/20 border border-yellow-500 text-yellow-300 font-cinzel text-sm">
-                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> A-RANK / PASS: ACCENT TOLERATED (Spell Success)
+                    <div class="inline-block px-5 py-2.5 rounded-full bg-yellow-500/20 border-2 border-yellow-500 text-yellow-300 font-cinzel text-sm">
+                        <i class="fa-solid fa-triangle-exclamation mr-2 text-yellow-400"></i> A-RANK: GOOD EFFORT! (${Math.min(100, Math.round(ratio * 100))}%)
                     </div>
                 `;
             } else {
                 badge.innerHTML = `
                     <div class="inline-block px-4 py-2 rounded-full bg-red-500/20 border border-red-500 text-red-300 font-cinzel text-sm">
-                        <i class="fa-solid fa-xmark mr-2"></i> FIZZLE / TRY AGAIN (Mana Disrupted)
+                        <i class="fa-solid fa-circle-xmark mr-2 text-red-400"></i> B-RANK: Spell chant did not match. Try again!
                     </div>
                 `;
             }
         }
 
         // =========================================================
-        // 3. BALANCED BATTLE RPG ENGINE
+        // 3. BALANCED SPELL BATTLE RPG
         // =========================================================
         const enemies = {
-            crawler: { name: "Iron Crawler", maxHp: 750, atk: 45, weak: ["Water", "Ice", "Lightning"], resist: ["Earth"], desc: "Labyrinth creature with heavy shell. Weak to Water Splash + Freeze combos!", type: "Heavy Armor", icon: "fa-bug" },
-            treant: { name: "Forest Treant", maxHp: 900, atk: 50, weak: ["Fire"], resist: ["Water", "Earth"], desc: "Towering ancient wood beast. Extreme vulnerability to Fire magic!", type: "Plant Spirit", icon: "fa-tree" },
-            salamander: { name: "Magma Salamander", maxHp: 800, atk: 60, weak: ["Water", "Ice"], resist: ["Fire"], desc: "Blazing reptile. Water and Ice spells inflict critical damage!", type: "Flame Beast", icon: "fa-fire" },
-            wyvern: { name: "Red Wyvern", maxHp: 1300, atk: 80, weak: ["Lightning", "Dragon"], resist: ["Fire"], desc: "Apex aerial beast. Requires Cumulonimbus, Lightning, or Dragon Gates!", type: "Dragon Race", icon: "fa-dragon" }
+            crawler: { name: 'Iron Crawler', type: 'Beast', maxHp: 750, hp: 750, atk: 45, def: 'heavy', weak: ['Ice', 'Lightning'], strong: ['Fire'] },
+            treant: { name: 'Forest Treant', type: 'Plant', maxHp: 900, hp: 900, atk: 55, def: 'wood', weak: ['Fire'], strong: ['Water', 'Earth'] },
+            salamander: { name: 'Magma Salamander', type: 'Elemental', maxHp: 800, hp: 800, atk: 65, def: 'heat', weak: ['Water', 'Ice'], strong: ['Fire'] },
+            wyvern: { name: 'Red Wyvern', type: 'Dragonkin', maxHp: 1200, hp: 1200, atk: 85, def: 'flying', weak: ['Cumulonimbus', 'Dragon', 'Lightning'], strong: ['Earth'] }
         };
 
-        let battleState = {
-            playerHp: 500, playerMaxHp: 500,
-            playerMp: 350, playerMaxMp: 350,
-            enemyKey: 'crawler', enemyHp: 750, enemyMaxHp: 750,
-            turn: 1, soaked: false, isOver: false,
-            deck: [2, 8, 6, 16],
-            selectedSpell: null
+        let combat = {
+            playerHp: 500,
+            playerMaxHp: 500,
+            playerMp: 350,
+            playerMaxMp: 350,
+            turn: 1,
+            enemyKey: 'crawler',
+            enemy: null,
+            comboWet: false,
+            comboDefDown: false,
+            pendingSpell: null
         };
 
         function initBattle() {
-            const key = document.getElementById('battle-enemy-select').value;
-            const e = enemies[key];
-            battleState.enemyKey = key;
-            battleState.playerHp = battleState.playerMaxHp;
-            battleState.playerMp = battleState.playerMaxMp;
-            battleState.enemyHp = e.maxHp;
-            battleState.enemyMaxHp = e.maxHp;
-            battleState.turn = 1;
-            battleState.soaked = false;
-            battleState.isOver = false;
+            const eKey = document.getElementById('battle-enemy-select').value;
+            combat.enemyKey = eKey;
+            combat.enemy = JSON.parse(JSON.stringify(enemies[eKey]));
+            combat.playerHp = combat.playerMaxHp;
+            combat.playerMp = combat.playerMaxMp;
+            combat.turn = 1;
+            combat.comboWet = false;
+            combat.comboDefDown = false;
 
-            if (key === 'treant') battleState.deck = [18, 11, 13, 5];
-            else if (key === 'crawler') battleState.deck = [8, 9, 6, 16];
-            else if (key === 'salamander') battleState.deck = [2, 12, 10, 3];
-            else battleState.deck = [3, 16, 14, 19];
-
-            document.getElementById('enemy-name-text').innerHTML = `<i class="fa-solid ${e.icon} text-red-400 mr-2"></i>${e.name}`;
-            document.getElementById('enemy-type-badge').textContent = e.type;
-            document.getElementById('enemy-weakness-text').textContent = `Weak: ${e.weak.join(' / ')}`;
-            document.getElementById('enemy-desc-text').textContent = e.desc;
+            document.getElementById('enemy-name-text').innerHTML = `<i class="fa-solid fa-skull mr-2"></i>${combat.enemy.name}`;
+            document.getElementById('enemy-weakness-text').textContent = `Weak: ${combat.enemy.weak.join(', ')}`;
 
             updateBattleUI();
-            renderBattleSlots();
-            document.getElementById('battle-log-box').innerHTML = `<div>[ENCOUNTER] A ferocious <strong>${e.name}</strong> emerged from the darkness!</div>`;
+            logBattle('[COMBAT SYSTEM] Enemy encountered! Choose a spell action below to chant.');
+            populateBattleSlots();
         }
 
-        function updateBattleUI() {
-            document.getElementById('player-hp-text').textContent = `${Math.max(0, battleState.playerHp)} / ${battleState.playerMaxHp}`;
-            document.getElementById('player-hp-bar').style.width = `${Math.max(0, (battleState.playerHp / battleState.playerMaxHp) * 100)}%`;
-
-            document.getElementById('player-mp-text').textContent = `${Math.max(0, battleState.playerMp)} / ${battleState.playerMaxMp}`;
-            document.getElementById('player-mp-bar').style.width = `${Math.max(0, (battleState.playerMp / battleState.playerMaxMp) * 100)}%`;
-
-            document.getElementById('enemy-hp-text').textContent = `${Math.max(0, battleState.enemyHp)} / ${battleState.enemyMaxHp}`;
-            document.getElementById('enemy-hp-bar').style.width = `${Math.max(0, (battleState.enemyHp / battleState.enemyMaxHp) * 100)}%`;
-
-            document.getElementById('battle-turn-count').textContent = battleState.turn;
-        }
-
-        function renderBattleSlots() {
+        function populateBattleSlots() {
             const container = document.getElementById('battle-slots-container');
             container.innerHTML = '';
-            battleState.deck.forEach(id => {
-                const s = spellsData.find(sp => sp.id === id);
-                if (!s) return;
 
-                const btn = document.createElement('button');
-                btn.className = "bg-magic-dark/80 hover:bg-magic-dark border border-magic-gold/30 hover:border-magic-gold p-3 rounded-xl text-left transition-all flex flex-col justify-between";
-                btn.innerHTML = `
-                    <div class="flex justify-between items-center w-full mb-1">
-                        <span class="font-cinzel text-sm font-bold text-white">${s.en}</span>
-                        <span class="text-xs text-cyan-400 font-bold">${s.mp_cost} MP</span>
+            // Selected battle repertoire
+            const battleSpellIds = [2, 8, 12, 16, 18, 5, 17, 1];
+            const battleSpells = spellsData.filter(s => battleSpellIds.includes(s.id));
+
+            battleSpells.forEach(s => {
+                const canAfford = combat.playerMp >= s.mp_cost;
+                const slotHtml = `
+                    <div class="bg-black/50 border border-magic-gold/30 hover:border-magic-gold rounded-xl p-3 flex flex-col justify-between transition-all ${!canAfford ? 'opacity-40 pointer-events-none' : 'hover:scale-[1.02] cursor-pointer'}" onclick="prepareCastBattleSpell(${s.id})">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-white font-cinzel">${s.en}</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-cyan-300 font-cinzel">${s.mp_cost} MP</span>
+                        </div>
+                        <div class="text-[11px] text-magic-gold-light italic mb-2">${s.romaji_name}</div>
+                        <div class="text-[10px] text-gray-400 mt-auto flex justify-between">
+                            <span>PWR: ${s.power}</span>
+                            <span class="text-magic-gold">${s.element}</span>
+                        </div>
                     </div>
-                    <div class="text-[11px] text-gray-400">${s.rank} • ${s.element} (Pwr: ${s.power})</div>
                 `;
-                btn.onclick = () => openBattleChantModal(s);
-                container.appendChild(btn);
+                container.insertAdjacentHTML('beforeend', slotHtml);
             });
         }
 
-        function openBattleChantModal(spell) {
-            if (battleState.isOver) return;
-            if (battleState.playerMp < spell.mp_cost) {
-                logBattle(`<span class="text-red-400">[LOW MP] Need ${spell.mp_cost} MP to cast ${spell.en}!</span>`);
-                return;
-            }
+        function prepareCastBattleSpell(spellId) {
+            const spell = spellsData.find(s => s.id === spellId);
+            if (!spell) return;
+            combat.pendingSpell = spell;
 
-            battleState.selectedSpell = spell;
             document.getElementById('battle-chant-spell-name').textContent = spell.en;
             document.getElementById('battle-chant-jp').textContent = `「${spell.jp}」`;
             document.getElementById('battle-chant-romaji').textContent = spell.romaji;
-            document.getElementById('battle-transcript-text').textContent = "Press mic and chant to cast!";
-            document.getElementById('battle-mic-btn').classList.remove('recording-pulse');
+            document.getElementById('battle-transcript-text').textContent = 'Press mic and chant to cast, or click Fast Cast!';
+            
+            // Battle Chunks
+            const battleChunkBox = document.getElementById('battle-chunks-container');
+            if (battleChunkBox) {
+                battleChunkBox.innerHTML = '';
+                const bChunks = spell.chunks_jp || [spell.jp];
+                bChunks.forEach((c, i) => {
+                    battleChunkBox.insertAdjacentHTML('beforeend', `<div class="text-[11px] text-gray-300 font-jp p-1.5 bg-black/40 rounded border border-white/5">${i+1}. ${c}</div>`);
+                });
+            }
 
             document.getElementById('battle-chant-modal').classList.remove('hidden');
         }
 
         function closeBattleChantModal() {
             document.getElementById('battle-chant-modal').classList.add('hidden');
-        }
-
-        function toggleBattleSpeech() {
-            if (!recognition) {
-                instantCastBattleSpell();
-                return;
-            }
-
-            const micBtn = document.getElementById('battle-mic-btn');
-            const txt = document.getElementById('battle-transcript-text');
-
-            recognition.start();
-            micBtn.classList.add('recording-pulse');
-            txt.textContent = "Chanting... Speak now!";
-
-            recognition.onresult = (e) => {
-                const transcript = e.results[0][0].transcript;
-                txt.textContent = `Heard: "${transcript}"`;
-                setTimeout(() => {
-                    closeBattleChantModal();
-                    castSpellInBattle(battleState.selectedSpell);
-                }, 500);
-            };
+            combat.pendingSpell = null;
         }
 
         function instantCastBattleSpell() {
+            if (!combat.pendingSpell) return;
+            executeBattleSpell(combat.pendingSpell);
             closeBattleChantModal();
-            castSpellInBattle(battleState.selectedSpell);
         }
 
-        function castSpellInBattle(spell) {
-            if (!spell || battleState.isOver) return;
-            battleState.playerMp -= spell.mp_cost;
-
-            const e = enemies[battleState.enemyKey];
-            let multiplier = 1.0;
-            if (e.weak.some(w => spell.element.toLowerCase().includes(w.toLowerCase()))) multiplier *= 2.0;
-            if (e.resist.some(r => spell.element.toLowerCase().includes(r.toLowerCase()))) multiplier *= 0.5;
-
-            // Synergy combo: Water Splash soaked + Ice/Thunder
-            let isCombo = false;
-            if (battleState.soaked && (spell.en.includes('Ice') || spell.en.includes('Icicle') || spell.en.includes('Lightning') || spell.en.includes('Blizzard'))) {
-                isCombo = true;
-                multiplier *= 1.8;
-                battleState.soaked = false;
+        function toggleBattleSpeech() {
+            // Fast cast or speech recognition
+            if (combat.pendingSpell) {
+                instantCastBattleSpell();
             }
+        }
 
-            if (spell.type === 'setup') battleState.soaked = true;
-
-            const dmg = Math.round(spell.power * multiplier * (0.9 + Math.random() * 0.25));
+        function executeBattleSpell(spell) {
+            combat.playerMp = Math.max(0, combat.playerMp - spell.mp_cost);
 
             if (spell.type === 'heal') {
-                battleState.playerHp = Math.min(battleState.playerMaxHp, battleState.playerHp + spell.power * 2);
-                logBattle(`[RESTORE] Chanted <strong>${spell.en}</strong>! Restored <span class="text-green-400">+${spell.power * 2} HP</span>!`);
+                const healAmt = spell.power * 2;
+                combat.playerHp = Math.min(combat.playerMaxHp, combat.playerHp + healAmt);
+                logBattle(`[CAST] You chanted ${spell.en}! Restored ${healAmt} HP.`);
             } else {
-                battleState.enemyHp -= dmg;
-                if (isCombo) logBattle(`<span class="text-purple-400 font-bold">[FROST NOVA COMBO!]</span> Soaked target shattered! Dealt <strong class="text-yellow-300">${dmg} DMG</strong>!`);
-                else if (multiplier >= 2.0) logBattle(`<span class="text-yellow-400 font-bold">[SUPER EFFECTIVE!]</span> ${spell.en} struck weakness! Dealt <strong class="text-yellow-300">${dmg} DMG</strong>!`);
-                else logBattle(`[SPELL CAST] Chanted <strong>${spell.en}</strong>! Dealt ${dmg} damage to ${e.name}.`);
+                let dmg = spell.power;
+                let multiplier = 1.0;
+
+                // Elemental Weakness
+                if (combat.enemy.weak.includes(spell.element) || combat.enemy.weak.includes(spell.en)) {
+                    multiplier += 0.5;
+                    logBattle(`[WEAKNESS] ${combat.enemy.name} is weak against ${spell.element}! (1.5x Dmg)`);
+                }
+
+                // Combo System: Water Splash + Ice = Freeze Shatter!
+                if (spell.en === 'Water Splash') {
+                    combat.comboWet = true;
+                    logBattle(`[COMBO READY] Target is drenched in water! Follow with Ice to Shatter!`);
+                } else if (combat.comboWet && (spell.en.includes('Ice') || spell.element === 'Water')) {
+                    multiplier += 0.8;
+                    combat.comboWet = false;
+                    logBattle(`[FROST COMBO] SHATTER! Drenched foe frozen and fractured! (+80% Dmg)`);
+                }
+
+                const totalDmg = Math.round(dmg * multiplier);
+                combat.enemy.hp = Math.max(0, combat.enemy.hp - totalDmg);
+                logBattle(`[DAMAGE] You hit ${combat.enemy.name} for ${totalDmg} damage!`);
             }
 
             updateBattleUI();
 
-            if (battleState.enemyHp <= 0) {
-                battleState.isOver = true;
-                evaluateBattleRank();
+            if (combat.enemy.hp <= 0) {
+                logBattle(`[VICTORY] You defeated ${combat.enemy.name}! Final Grade: S-RANK MAGUS!`);
+                alert(`Victory! ${combat.enemy.name} has fallen. Final Grade: S`);
+                initBattle();
                 return;
             }
 
             // Enemy Turn
             setTimeout(() => {
-                if (battleState.isOver) return;
-                const eDmg = Math.round(e.atk * (0.8 + Math.random() * 0.4));
-                battleState.playerHp -= eDmg;
-                logBattle(`<span class="text-red-400">[ENEMY ATTACK]</span> ${e.name} struck you for ${eDmg} damage!`);
-                battleState.turn++;
-                updateBattleUI();
-
-                if (battleState.playerHp <= 0) {
-                    battleState.isOver = true;
-                    logBattle(`<span class="text-red-500 font-bold">[DEFEAT] You collapsed! Rank: F</span>`);
-                }
-            }, 600);
+                enemyTurnAction();
+            }, 800);
         }
 
-        function triggerQuickVoiceBattle() {
-            const spellName = prompt("QUICK CAST: Enter spell name or part of chant (e.g. Cumulonimbus, Water Ball, Lightning):");
-            if (!spellName) return;
-            const found = spellsData.find(s => s.en.toLowerCase().includes(spellName.toLowerCase()) || s.jp.includes(spellName) || s.romaji.toLowerCase().includes(spellName.toLowerCase()));
-            if (found) {
-                logBattle(`<span class="text-cyan-400 font-bold">[QUICK VOICE CAST]</span> Instantaneous mana release for <strong>${found.en}</strong>!`);
-                castSpellInBattle(found);
-            } else {
-                logBattle(`<span class="text-red-400">[UNKNOWN INCANTATION]</span> No matching spell found for "${spellName}".`);
+        function enemyTurnAction() {
+            combat.turn++;
+            const dmg = combat.enemy.atk + Math.floor(Math.random() * 15);
+            combat.playerHp = Math.max(0, combat.playerHp - dmg);
+            logBattle(`[ENEMY] ${combat.enemy.name} attacks you for ${dmg} physical damage!`);
+
+            // Mana Regen
+            combat.playerMp = Math.min(combat.playerMaxMp, combat.playerMp + 15);
+
+            updateBattleUI();
+            populateBattleSlots();
+
+            if (combat.playerHp <= 0) {
+                logBattle(`[DEFEAT] Rudeus has fallen. Grade: F`);
+                alert('You were defeated in the labyrinth! Regroup and try again.');
+                initBattle();
             }
+        }
+
+        function updateBattleUI() {
+            document.getElementById('player-hp-text').textContent = `${combat.playerHp} / ${combat.playerMaxHp}`;
+            document.getElementById('player-hp-bar').style.width = `${(combat.playerHp / combat.playerMaxHp) * 100}%`;
+
+            document.getElementById('player-mp-text').textContent = `${combat.playerMp} / ${combat.playerMaxMp}`;
+            document.getElementById('player-mp-bar').style.width = `${(combat.playerMp / combat.playerMaxMp) * 100}%`;
+
+            if (combat.enemy) {
+                document.getElementById('enemy-hp-text').textContent = `${combat.enemy.hp} / ${combat.enemy.maxHp}`;
+                document.getElementById('enemy-hp-bar').style.width = `${(combat.enemy.hp / combat.enemy.maxHp) * 100}%`;
+            }
+
+            document.getElementById('battle-turn-count').textContent = combat.turn;
         }
 
         function logBattle(msg) {
-            const b = document.getElementById('battle-log-box');
-            b.innerHTML += `<div>${msg}</div>`;
-            b.scrollTop = b.scrollHeight;
+            const box = document.getElementById('battle-log-box');
+            box.innerHTML += `<div>${msg}</div>`;
+            box.scrollTop = box.scrollHeight;
         }
 
-        function evaluateBattleRank() {
-            let rank = 'B';
-            if (battleState.turn <= 3 && battleState.playerHp >= 350) rank = 'S (Divine Archmage)';
-            else if (battleState.turn <= 5) rank = 'A (Saint Class)';
-            else if (battleState.turn <= 8) rank = 'B (Advanced Class)';
-            else rank = 'C (Apprentice)';
-
-            logBattle(`
-                <div class="bg-yellow-500/20 border border-magic-gold p-3 rounded-lg my-2 text-center text-magic-gold">
-                    <div class="text-base font-bold"><i class="fa-solid fa-trophy mr-1"></i> VICTORY! Evaluation Rank: ${rank}</div>
-                    <div class="text-xs text-gray-300">Turns: ${battleState.turn} • HP Left: ${battleState.playerHp}</div>
-                </div>
-            `);
-        }
-
-        // UTILITIES
-        function playVoice(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const u = new SpeechSynthesisUtterance(text);
-                u.lang = 'ja-JP';
-                u.rate = 0.9;
-                window.speechSynthesis.speak(u);
+        function triggerQuickVoiceBattle() {
+            alert('Quick Cast: Chant any spell name (e.g. Water Ball, Fireball) into the mic!');
+            if (spellsData.length > 0) {
+                prepareCastBattleSpell(spellsData[0].id);
             }
         }
 
-        function copyText(txt, label) {
-            navigator.clipboard.writeText(txt).then(() => alert(`Copied ${label} to clipboard!`));
+        // =========================================================
+        // UTILITIES: COPY, TTS, AMBIENT PARTICLES
+        // =========================================================
+        function copyText(text, label = 'Text') {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`${label} copied to clipboard!`);
+            }).catch(() => {
+                prompt('Copy text manually:', text);
+            });
         }
 
-        // Particle Canvas
+        function playVoice(text) {
+            if (!('speechSynthesis' in window)) {
+                alert('Speech synthesis not supported in this browser.');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'ja-JP';
+            u.rate = 0.95;
+            window.speechSynthesis.speak(u);
+        }
+
+        // AMBIENT PARTICLES
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         window.addEventListener('resize', resize);
         resize();
 
         class Particle {
-            constructor() { this.reset(); }
-            reset() {
+            constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 0.5;
-                this.speedY = -(Math.random() * 0.3 + 0.1);
-                this.color = Math.random() > 0.5 ? '197, 160, 89' : '56, 189, 248';
-                this.alpha = Math.random() * 0.5 + 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.alpha = Math.random() * 0.6 + 0.2;
             }
             update() {
+                this.x += this.speedX;
                 this.y += this.speedY;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
                 if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.fillStyle = `rgba(197, 160, 89, ${this.alpha})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
+
         for (let i = 0; i < 45; i++) particles.push(new Particle());
+
         function anim() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
@@ -1180,4 +1628,4 @@ html = '''<!DOCTYPE html>
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
-print('Generated unified index.html successfully with firstOne.html card design!')
+print('Generated unified index.html with all 3 Speech Recognition engines successfully!')

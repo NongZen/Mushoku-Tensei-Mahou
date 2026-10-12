@@ -22,7 +22,16 @@
       "Roxy"
     ],
     "jp_name": "ヒーリング",
-    "romaji_name": "Hīringu"
+    "romaji_name": "Hīringu",
+    "chunks_jp": [
+      "神なる力は芳醇なる糧",
+      "力失いしかの者に再び立ち上がる力を与えん『ヒーリング"
+    ],
+    "chunks_romaji": [
+      "Kami naru chikara wa hojun naru kate",
+      "chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen",
+      "Hīringu"
+    ]
   },
   {
     "id": 2,
@@ -46,7 +55,17 @@
       "Roxy"
     ],
     "jp_name": "ウォーターボール",
-    "romaji_name": "Wōtā Bōru"
+    "romaji_name": "Wōtā Bōru",
+    "chunks_jp": [
+      "汝の求める所に大いなる水の加護あらん",
+      "清涼なるせせらぎの流れを今ここに",
+      "ウォーターボール"
+    ],
+    "chunks_romaji": [
+      "Nanji no motomeru tokoro ni oinaru mizu no kago aran",
+      "seiryo naru seseragi no nagare o ima koko ni",
+      "Wota Boru"
+    ]
   },
   {
     "id": 3,
@@ -70,7 +89,35 @@
       "Rudeus"
     ],
     "jp_name": "キュムロニンバス",
-    "romaji_name": "Kyumuroninbasu"
+    "romaji_name": "Kyumuroninbasu",
+    "chunks_jp": [
+      "雄大なる水の精霊にして",
+      "天に上がりし雷帝の王子よ",
+      "我が願いを叶え",
+      "凶暴なる恵みをもたらし",
+      "矮小なる存在に力を見せつけよ",
+      "神なる金槌を金床に打ち付けて畏怖を示し",
+      "大地を水で埋め尽くせ",
+      "ああ",
+      "雨よ",
+      "全てを押し流し",
+      "あらゆるものを駆逐せよ",
+      "キュムロニンバス"
+    ],
+    "chunks_romaji": [
+      "Yudai naru mizu no seirei ni shite",
+      "ten ni agarishi raitei no oji yo",
+      "Waga negai o kanae",
+      "kyobo naru megumi o motorashi",
+      "waisho naru sonzai ni chikara o misetsukeyo",
+      "Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi",
+      "daichi o mizu de umetsukuse",
+      "Aa",
+      "ame yo",
+      "Subete o oshinagashi",
+      "arayuru mono o kuchiku seyo",
+      "Kyumuroninbasu"
+    ]
   },
   {
     "id": 4,
@@ -94,7 +141,19 @@
       "Rudeus"
     ],
     "jp_name": "エクスヒーリング",
-    "romaji_name": "Ekusu Hīringu"
+    "romaji_name": "Ekusu Hīringu",
+    "chunks_jp": [
+      "母なる慈愛の女神よ",
+      "彼の者の傷を塞ぎ",
+      "健やかなる体を取り戻さん",
+      "エクスヒーリング"
+    ],
+    "chunks_romaji": [
+      "Haha naru jiai no megami yo",
+      "kano mono no kizu o fusagi",
+      "sukoyaka naru karada o torimodosan",
+      "Ekusu Hīringu"
+    ]
   },
   {
     "id": 5,
@@ -118,7 +177,15 @@
       "Moore"
     ],
     "jp_name": "バーニングプレイス",
-    "romaji_name": "Bāningu Pureisu"
+    "romaji_name": "Bāningu Pureisu",
+    "chunks_jp": [
+      "爆炎を身体に",
+      "バーニングプレイス"
+    ],
+    "chunks_romaji": [
+      "Bakuen o karada ni",
+      "Bāninku Pureisu"
+    ]
   },
   {
     "id": 6,
@@ -142,7 +209,19 @@
       "Temple Knights"
     ],
     "jp_name": "アイシクルブレイク",
-    "romaji_name": "Aishikuru Bureiku"
+    "romaji_name": "Aishikuru Bureiku",
+    "chunks_jp": [
+      "雄大なる水の精霊にして",
+      "天に上がりし雷帝の王子よ",
+      "勇壮なる氷の剣を彼の者に叩き落せ",
+      "氷霜撃(アイシクルブレイク)"
+    ],
+    "chunks_romaji": [
+      "Yudai naru mizu no seirei ni shite",
+      "ten ni agarishi raitei no oji yo",
+      "Yuso naru kori no tsurugi o kano mono ni tatakiotose",
+      "Aishikuru Bureiku"
+    ]
   },
   {
     "id": 7,
@@ -165,7 +244,15 @@
       "Roxy"
     ],
     "jp_name": "アースフォートレス",
-    "romaji_name": "Āsu Fōtoresu"
+    "romaji_name": "Āsu Fōtoresu",
+    "chunks_jp": [
+      "荘厳なる大地の鎧を纏わん",
+      "土砦(アースフォートレス)"
+    ],
+    "chunks_romaji": [
+      "Sogon naru daichi no yoroi o matowan",
+      "Asu Fotoresu"
+    ]
   },
   {
     "id": 8,
@@ -188,7 +275,17 @@
       "Roxy"
     ],
     "jp_name": "ウォータースプラッシュ",
-    "romaji_name": "Wōtā Supurasshu"
+    "romaji_name": "Wōtā Supurasshu",
+    "chunks_jp": [
+      "落ちる雫を散らしめし",
+      "世界は水で覆われん",
+      "水蒸(ウォータースプラッシュ)"
+    ],
+    "chunks_romaji": [
+      "Ochiru shizuku o chirashimeshi",
+      "sekai wa mizu de oowaren",
+      "Wota Supurasshu"
+    ]
   },
   {
     "id": 9,
@@ -212,7 +309,17 @@
       "Moore"
     ],
     "jp_name": "アイシクルフィールド",
-    "romaji_name": "Aishikuru Fīrudo"
+    "romaji_name": "Aishikuru Fīrudo",
+    "chunks_jp": [
+      "天より舞い降りし蒼き女神よ",
+      "その錫杖を振るいて世界を凍りつかせん",
+      "氷結領域(アイシクルフィールド)"
+    ],
+    "chunks_romaji": [
+      "Ten yori maioorishi aoki megami yo",
+      "sono shakujo o furuite sekai o kooritsukasen",
+      "Aishikuru Firudo"
+    ]
   },
   {
     "id": 10,
@@ -235,7 +342,23 @@
       "Roxy"
     ],
     "jp_name": "ブリザードストーム",
-    "romaji_name": "Burizādo Sutōmu"
+    "romaji_name": "Burizādo Sutōmu",
+    "chunks_jp": [
+      "霜の王",
+      "大いなる雪原の覇王",
+      "純白を纏い",
+      "一切の熱を刈り取る零の王",
+      "死を司りし冷たき王が凍てつかせん",
+      "氷槍吹雪(ブリザードストーム)"
+    ],
+    "chunks_romaji": [
+      "Shimo no o",
+      "Oinaru setsugen no hao",
+      "Junpaku o matoi",
+      "issai no netsu o karitoru zero no o",
+      "Shi o tsukasadorishi tsumetaki o ga itetsukasen",
+      "Burizado Sutomu"
+    ]
   },
   {
     "id": 11,
@@ -258,7 +381,15 @@
       "Roxy"
     ],
     "jp_name": "フレイムスライス",
-    "romaji_name": "Fureimu Suraisu"
+    "romaji_name": "Fureimu Suraisu",
+    "chunks_jp": [
+      "焦げたる剣を持ちて敵を切り裂かん",
+      "フレイムスライス"
+    ],
+    "chunks_romaji": [
+      "Kogetaru ken o mochite teki o kirisakan",
+      "Fureimu Suraisu"
+    ]
   },
   {
     "id": 12,
@@ -281,7 +412,17 @@
       "Elinalise"
     ],
     "jp_name": "アイススマッシュ",
-    "romaji_name": "Aisu Sumasshu"
+    "romaji_name": "Aisu Sumasshu",
+    "chunks_jp": [
+      "汝の求める所に大いなる氷の加護あらん",
+      "氷河の濁流を受けろ",
+      "氷撃(アイススマッシュ)"
+    ],
+    "chunks_romaji": [
+      "Nanji no motomeru tokoro ni oinaru kori no kago aran",
+      "hyoga no dakuryu o ukero",
+      "Aisu Sumasshu"
+    ]
   },
   {
     "id": 13,
@@ -305,7 +446,14 @@
       "Temple Knights"
     ],
     "jp_name": "フレイムスロワー",
-    "romaji_name": "Fureimu Surowā"
+    "romaji_name": "Fureimu Surowā",
+    "chunks_jp": [
+      "小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)"
+    ],
+    "chunks_romaji": [
+      "Chiisana kusuburi ga kyodai naru megumi o yakitsukusan",
+      "Fureimu Surowa"
+    ]
   },
   {
     "id": 14,
@@ -328,7 +476,27 @@
       "Roxy"
     ],
     "jp_name": "シャインヒーリング",
-    "romaji_name": "Shain Hīringu"
+    "romaji_name": "Shain Hīringu",
+    "chunks_jp": [
+      "奇跡の天使よ",
+      "命の鼓動に天なる息吹を与え給え",
+      "天にいただきし太陽",
+      "神なる御使は赤を嫌う",
+      "光の海に舞い降りて",
+      "純白の翼を広げよ",
+      "さすれば赤は駆逐されん",
+      "シャインヒーリング"
+    ],
+    "chunks_romaji": [
+      "Kiseki no tenshi yo",
+      "inochi no kodo ni tennaru ibuki o ataetamae",
+      "Ten ni itadakishi taiyo",
+      "Shin naru mitsukai wa aka o kirau",
+      "Hikari no umi ni maioorite",
+      "junpaku no tsubasa o hirogeyo",
+      "Sasureba aka wa kuchiku saren",
+      "Shain Hīringu"
+    ]
   },
   {
     "id": 15,
@@ -352,7 +520,15 @@
       "Rudeus"
     ],
     "jp_name": "アースプロステティックアーム",
-    "romaji_name": "Āsu Purosetekku Āmu"
+    "romaji_name": "Āsu Purosetekku Āmu",
+    "chunks_jp": [
+      "土よ",
+      "我が腕(かいな)となれ"
+    ],
+    "chunks_romaji": [
+      "Tsuchi yo",
+      "waga kaina to nare"
+    ]
   },
   {
     "id": 16,
@@ -376,7 +552,27 @@
       "Rudeus"
     ],
     "jp_name": "ライトニング",
-    "romaji_name": "Raitoningu"
+    "romaji_name": "Raitoningu",
+    "chunks_jp": [
+      "雄大なる光の精霊にして",
+      "天を支配せし雷帝よ",
+      "そびえ立つ者が見えるか",
+      "傲慢なりし帝の御敵が",
+      "我は神なる剣にてかの者を一撃の元に打倒せんとする者なり",
+      "光り輝く力を以って",
+      "帝の威を知らしめん",
+      "ライトニング"
+    ],
+    "chunks_romaji": [
+      "Yudai naru hikari no seirei ni shite",
+      "ten o shihaiseshi raitei yo",
+      "Sobietatsu mono ga mieru ka",
+      "Goman narishi tei no miteki ga",
+      "Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni dato sen to suru mono nari",
+      "Hikarikagayaku chikara o motte",
+      "tei no i o shirashimen",
+      "Raitoningu"
+    ]
   },
   {
     "id": 17,
@@ -400,7 +596,19 @@
       "Temple Knights"
     ],
     "jp_name": "アースランサー",
-    "romaji_name": "Āsu Ransā"
+    "romaji_name": "Āsu Ransā",
+    "chunks_jp": [
+      "不確かなる神よ",
+      "我が呼び声に答え",
+      "大地より天を突け",
+      "土槍(アースランサー)"
+    ],
+    "chunks_romaji": [
+      "Futashikanaru kami yo",
+      "Waga yobigoe ni kotae",
+      "daichi yori ten o tsuke",
+      "Asu Ransa"
+    ]
   },
   {
     "id": 18,
@@ -423,7 +631,13 @@
       "Asura Royal Mage"
     ],
     "jp_name": "ファイアバレット",
-    "romaji_name": "Faia Baretto"
+    "romaji_name": "Faia Baretto",
+    "chunks_jp": [
+      "汝の求める所に大いなる炎の加護あらん――『火弾"
+    ],
+    "chunks_romaji": [
+      "Nanji no motomeru tokoro ni oinaru honoo no kago aran ―― \"Kadan"
+    ]
   },
   {
     "id": 19,
@@ -446,7 +660,43 @@
       "Armored Dragon King Perugius"
     ],
     "jp_name": "前龍門・後龍門",
-    "romaji_name": "Zenryūmon & Kōryūmon"
+    "romaji_name": "Zenryūmon & Kōryūmon",
+    "chunks_jp": [
+      "その龍はただ忠義にのみ生きる",
+      "両の爪は長く",
+      "鋭く",
+      "決して拳を握れない",
+      "かの龍が怒りしとき",
+      "拳は握られん",
+      "爪は折れ",
+      "牙は抜け",
+      "しかし思い知るだろう",
+      "忠義を握りし龍が",
+      "いかなる思いで忠義を捨てたかを",
+      "三番目に死んだ龍",
+      "最も鋭き瞳を持つ",
+      "白銀鱗の龍将",
+      "甲龍王ペルギウスの名を以って召喚する――開け『後龍門",
+      "招け『前龍門"
+    ],
+    "chunks_romaji": [
+      "Sono ryu wa tada chugi ni nomi ikiru",
+      "Ryo no tsume wa nagaku",
+      "surudoku",
+      "kesshite kobushi o nigirenai",
+      "Kano ryu ga ikarishi toki",
+      "kobushi wa nigiraren",
+      "Tsume wa ore",
+      "kiba wa nuke",
+      "shikashi omoishiru daro",
+      "Chugi o nigirishi ryu ga",
+      "ikanaru omoi de chugi o suteta ka o",
+      "Sanbanme ni shinda ryu",
+      "Mottomo surudoki hitomi o motsu",
+      "hakuginrin no ryusho",
+      "Koryuo Perugiusu no na o motte shokan suru ―― Hirake \"Koryumon",
+      "Maneke \"Zenryumon"
+    ]
   },
   {
     "id": 20,
@@ -470,7 +720,17 @@
       "Roxy"
     ],
     "jp_name": "ファイアボール",
-    "romaji_name": "Faia Bōru"
+    "romaji_name": "Faia Bōru",
+    "chunks_jp": [
+      "汝の求める所に大いなる炎の加護あらん",
+      "勇猛なる灯火の熱さを今ここに",
+      "ファイアボール"
+    ],
+    "chunks_romaji": [
+      "Nanji no motomeru tokoro ni ooinaru honoo no kago aran",
+      "Yuumou naru tomoshibi no atsusa o ima koko ni",
+      "FireBall"
+    ]
   },
   {
     "id": 21,
@@ -494,6 +754,20 @@
       "Rudeus"
     ],
     "jp_name": "スプラッシュフロー",
-    "romaji_name": "Supurasshu Furō"
+    "romaji_name": "Supurasshu Furō",
+    "chunks_jp": [
+      "優柔たる水の精霊にして",
+      "地を流れしせせらぎの王女よ",
+      "内に秘めたる剛力にて",
+      "あらゆるものを押し流せ",
+      "スプラッシュフロー"
+    ],
+    "chunks_romaji": [
+      "Yuujuu taru mizu no seirei ni shite",
+      "chi o nagareshi seseragi no oujo yo",
+      "Uchi ni himetaru gouriki nite",
+      "arayuru mono oshinagase",
+      "Splash Flow"
+    ]
   }
 ]
