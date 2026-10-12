@@ -3,15 +3,18 @@ import json
 with open('data.json', 'r', encoding='utf-8') as f:
     spells = json.load(f)
 
-# Build HTML template with all 3 Speech Recognition engines + firstOne.html card design
+# Build HTML template with transparent circular favicon + full chant voice detection (no syllable dividing)
 html = '''<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mushoku Tensei: Magic Chants & Combat Grimoire</title>
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="shortcut icon" type="image/png" href="icon.png">
+    
+    <!-- Circular transparent favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
     <link rel="apple-touch-icon" href="icon.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -159,17 +162,6 @@ html = '''<!DOCTYPE html>
             border-color: #f87171 !important;
             color: #fff !important;
         }
-
-        /* Karaoke Chunk Highlight Animation */
-        .chunk-active {
-            border-color: #c5a059 !important;
-            background: rgba(197, 160, 89, 0.15) !important;
-            box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
-        }
-        .chunk-completed {
-            border-color: #10b981 !important;
-            background: rgba(16, 185, 129, 0.15) !important;
-        }
     </style>
 </head>
 <body class="font-prompt min-h-screen relative overflow-x-hidden antialiased">
@@ -200,7 +192,7 @@ html = '''<!DOCTYPE html>
                     <i class="fa-solid fa-book-sparkles mr-2"></i> Grimoire Archive
                 </button>
                 <button onclick="switchTab('training')" id="tab-btn-training" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
-                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (Multi-Engine)
+                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (JP/Romaji)
                 </button>
                 <button onclick="switchTab('battle')" id="tab-btn-battle" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
                     <i class="fa-solid fa-dragon mr-2"></i> Spell Battle RPG
@@ -251,14 +243,14 @@ html = '''<!DOCTYPE html>
         </section>
 
         <!-- ======================================================== -->
-        <!-- VIEW 2: CHANTING TRAINING (3 SPEECH RECOGNITION ENGINES) -->
+        <!-- VIEW 2: CHANTING TRAINING (FULL CHANT RECITATION) -->
         <!-- ======================================================== -->
         <section id="view-training" class="hidden">
             <!-- Training Queue Generator Configuration -->
             <div class="bg-gradient-to-b from-[#111a24] to-[#0d121c] border-2 border-magic-gold/40 rounded-3xl p-6 md:p-8 backdrop-blur-md max-w-4xl mx-auto mb-10 shadow-2xl">
                 <div class="text-center mb-6">
                     <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP & Romaji)</h3>
-                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ปรับแต่งธาตุ และจำนวนคาถาตามระดับขั้น</p>
+                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ร่ายทั้งบทสวดเต็มบทเพื่อความสมจริง</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -304,8 +296,8 @@ html = '''<!DOCTYPE html>
                 <!-- Voice Engine Selector Pill -->
                 <div class="flex flex-wrap items-center justify-center gap-2 mb-6 bg-black/50 p-2 rounded-2xl border border-magic-gold/20 max-w-xl mx-auto">
                     <span class="text-[11px] uppercase font-cinzel text-gray-400 mr-1"><i class="fa-solid fa-microchip text-magic-gold mr-1"></i> ASR Engine:</span>
-                    <button onclick="setVoiceEngine('karaoke')" id="engine-btn-karaoke" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]">
-                        <i class="fa-solid fa-list-check mr-1"></i> 1. Karaoke Chunking
+                    <button onclick="setVoiceEngine('stream')" id="engine-btn-stream" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]">
+                        <i class="fa-solid fa-bolt mr-1"></i> 1. Live Web Speech
                     </button>
                     <button onclick="setVoiceEngine('cloud')" id="engine-btn-cloud" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
                         <i class="fa-solid fa-cloud mr-1"></i> 2. Serverless Whisper
@@ -332,7 +324,7 @@ html = '''<!DOCTYPE html>
                 <div id="train-counter" class="font-cinzel text-magic-gold text-xs tracking-widest uppercase mb-1">STAGE 1 / 2</div>
                 <h3 id="train-spell-name" class="font-cinzel text-2xl md:text-3xl font-bold text-white mb-4 text-glow">Water Ball</h3>
 
-                <!-- Active Chant Box -->
+                <!-- Active Chant Box (Full Chant) -->
                 <div class="bg-black/60 border border-magic-gold/30 rounded-2xl p-5 md:p-7 mb-6 text-left">
                     <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">Full Japanese Incantation:</div>
                     <div id="train-jp-text" class="font-jp text-lg md:text-xl text-white font-bold leading-relaxed mb-3">
@@ -341,19 +333,6 @@ html = '''<!DOCTYPE html>
                     <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">Romaji:</div>
                     <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed">
                         Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru
-                    </div>
-                </div>
-
-                <!-- Karaoke Phrases/Chunks Container (Method 1) -->
-                <div id="train-karaoke-area" class="mb-6 text-left">
-                    <div class="flex justify-between items-center mb-2 px-1">
-                        <span class="text-xs uppercase tracking-wider text-magic-gold font-cinzel font-semibold">
-                            <i class="fa-solid fa-microphone-lines mr-1.5"></i> Chanting Meter (Speak phrase by phrase):
-                        </span>
-                        <span id="train-chunk-progress-text" class="text-xs text-gray-400 font-cinzel">0 / 3 Complete</span>
-                    </div>
-                    <div id="train-chunks-container" class="space-y-2">
-                        <!-- Injected dynamically: Phase 1, Phase 2, etc. -->
                     </div>
                 </div>
 
@@ -369,7 +348,7 @@ html = '''<!DOCTYPE html>
 
                 <!-- Speech Transcript Box -->
                 <div id="train-transcript-box" class="bg-black/40 border border-dashed border-gray-600 rounded-xl p-4 max-w-2xl mx-auto mb-6 text-xs md:text-sm text-gray-400 min-h-[50px] flex items-center justify-center">
-                    <span>Press microphone button and chant...</span>
+                    <span>Press microphone button and recite the full incantation...</span>
                 </div>
 
                 <div id="train-result-badge" class="mb-6"></div>
@@ -563,9 +542,6 @@ html = '''<!DOCTYPE html>
                 <div id="battle-chant-romaji" class="text-sm text-magic-gold-light italic"></div>
             </div>
 
-            <!-- Battle Karaoke Phrases Container -->
-            <div id="battle-chunks-container" class="space-y-1.5 mb-4 text-left"></div>
-
             <div class="flex justify-center mb-4">
                 <button id="battle-mic-btn" onclick="toggleBattleSpeech()" class="w-16 h-16 rounded-full bg-white/5 border-2 border-magic-gold text-magic-gold text-2xl flex items-center justify-center hover:bg-magic-gold/20">
                     <i class="fa-solid fa-microphone"></i>
@@ -611,7 +587,7 @@ html = '''<!DOCTYPE html>
         const spellsData = ''' + json.dumps(spells, ensure_ascii=False) + ''';
 
         // ENGINE CONFIGURATION
-        let currentVoiceEngine = localStorage.getItem('mushoku_voice_engine') || 'karaoke';
+        let currentVoiceEngine = localStorage.getItem('mushoku_voice_engine') || 'stream';
         let customGroqKey = localStorage.getItem('mushoku_groq_key') || '';
         let customOpenaiKey = localStorage.getItem('mushoku_openai_key') || '';
 
@@ -619,18 +595,18 @@ html = '''<!DOCTYPE html>
             currentVoiceEngine = engine;
             localStorage.setItem('mushoku_voice_engine', engine);
 
-            const btnKaraoke = document.getElementById('engine-btn-karaoke');
+            const btnStream = document.getElementById('engine-btn-stream');
             const btnCloud = document.getElementById('engine-btn-cloud');
             const btnBrowserAi = document.getElementById('engine-btn-browser_ai');
 
-            [btnKaraoke, btnCloud, btnBrowserAi].forEach(btn => {
+            [btnStream, btnCloud, btnBrowserAi].forEach(btn => {
                 if (!btn) return;
                 btn.className = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all";
             });
 
             const activeClass = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]";
 
-            if (engine === 'karaoke' && btnKaraoke) btnKaraoke.className = activeClass;
+            if (engine === 'stream' && btnStream) btnStream.className = activeClass;
             if (engine === 'cloud' && btnCloud) btnCloud.className = activeClass;
             if (engine === 'browser_ai' && btnBrowserAi) {
                 btnBrowserAi.className = activeClass;
@@ -639,9 +615,9 @@ html = '''<!DOCTYPE html>
 
             const box = document.getElementById('train-transcript-box');
             if (box) {
-                if (engine === 'karaoke') box.innerHTML = `<span><i class="fa-solid fa-list-check mr-2 text-magic-gold"></i>Karaoke mode active: Chants will advance phrase by phrase.</span>`;
-                else if (engine === 'cloud') box.innerHTML = `<span><i class="fa-solid fa-cloud mr-2 text-cyan-400"></i>Cloud Whisper active: Record full audio and send for AI evaluation.</span>`;
-                else if (engine === 'browser_ai') box.innerHTML = `<span><i class="fa-solid fa-robot mr-2 text-purple-400"></i>Web AI active: Client-side Whisper will transcribe 100% locally.</span>`;
+                if (engine === 'stream') box.innerHTML = `<span><i class="fa-solid fa-bolt mr-2 text-magic-gold"></i>Live Web Speech: Recite the full incantation into the microphone.</span>`;
+                else if (engine === 'cloud') box.innerHTML = `<span><i class="fa-solid fa-cloud mr-2 text-cyan-400"></i>Cloud Whisper: Record the full audio and send for AI evaluation.</span>`;
+                else if (engine === 'browser_ai') box.innerHTML = `<span><i class="fa-solid fa-robot mr-2 text-purple-400"></i>Web AI: Client-side Whisper will transcribe 100% locally.</span>`;
             }
         }
 
@@ -862,15 +838,12 @@ html = '''<!DOCTYPE html>
         });
 
         // =========================================================
-        // 2. TRAINING MODE (KARAOKE, CLOUD AI, WEB AI)
+        // 2. TRAINING MODE (FULL CHANT RECITATION - NO CHUNKING)
         // =========================================================
         let trainingQueue = [];
         let trainCurrentIndex = 0;
         let isTrainingRecording = false;
-
-        // Karaoke Phrase State
-        let activeChunkIndex = 0;
-        let currentChunks = [];
+        let accumulatedLiveTranscript = '';
 
         // Audio Recorder State (for Cloud & Web AI)
         let mediaRecorder = null;
@@ -922,77 +895,12 @@ html = '''<!DOCTYPE html>
             document.getElementById('train-spell-name').textContent = s.en;
             document.getElementById('train-jp-text').textContent = `「${s.jp}」`;
             document.getElementById('train-romaji-text').textContent = s.romaji;
-            document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and chant...</span>`;
+            document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and recite the full incantation...</span>`;
             document.getElementById('train-result-badge').innerHTML = '';
             document.getElementById('train-mic-btn').classList.remove('recording-pulse');
 
             document.getElementById('train-prev-btn').disabled = (trainCurrentIndex === 0);
             document.getElementById('train-next-btn').disabled = (trainCurrentIndex === trainingQueue.length - 1);
-
-            // Setup Karaoke Chunks
-            setupKaraokeChunks(s);
-        }
-
-        function setupKaraokeChunks(s) {
-            const container = document.getElementById('train-chunks-container');
-            const progressText = document.getElementById('train-chunk-progress-text');
-            container.innerHTML = '';
-            activeChunkIndex = 0;
-
-            currentChunks = (s.chunks_jp && s.chunks_jp.length > 0) ? s.chunks_jp : [s.jp];
-            const romajiChunks = (s.chunks_romaji && s.chunks_romaji.length > 0) ? s.chunks_romaji : [s.romaji];
-
-            currentChunks.forEach((chunk, idx) => {
-                const roChunk = romajiChunks[idx] || '';
-                const chunkHtml = `
-                    <div id="chunk-card-${idx}" onclick="selectActiveChunk(${idx})" class="p-3.5 rounded-xl border border-white/10 bg-black/40 flex items-center justify-between cursor-pointer transition-all hover:border-magic-gold/40">
-                        <div class="pr-2">
-                            <div class="text-[10px] uppercase font-cinzel text-gray-500 mb-0.5">Phrase ${idx + 1}:</div>
-                            <div class="font-jp text-sm md:text-base text-gray-200 font-bold leading-relaxed">${chunk}</div>
-                            <div class="text-xs text-magic-gold-light italic">${roChunk}</div>
-                        </div>
-                        <div id="chunk-status-${idx}" class="w-7 h-7 rounded-full border border-gray-600 flex items-center justify-center text-xs text-gray-400 font-bold flex-shrink-0">
-                            ${idx + 1}
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', chunkHtml);
-            });
-
-            updateChunkUI();
-        }
-
-        function selectActiveChunk(idx) {
-            activeChunkIndex = idx;
-            updateChunkUI();
-        }
-
-        function updateChunkUI() {
-            currentChunks.forEach((_, idx) => {
-                const card = document.getElementById(`chunk-card-${idx}`);
-                const status = document.getElementById(`chunk-status-${idx}`);
-                if (!card || !status) return;
-
-                card.classList.remove('chunk-active', 'chunk-completed');
-
-                if (idx < activeChunkIndex) {
-                    card.classList.add('chunk-completed');
-                    status.className = "w-7 h-7 rounded-full bg-green-500/20 border border-green-500 text-green-400 flex items-center justify-center text-xs font-bold flex-shrink-0";
-                    status.innerHTML = '<i class="fa-solid fa-check"></i>';
-                } else if (idx === activeChunkIndex) {
-                    card.classList.add('chunk-active');
-                    status.className = "w-7 h-7 rounded-full bg-magic-gold/20 border border-magic-gold text-magic-gold flex items-center justify-center text-xs font-bold flex-shrink-0 animate-pulse";
-                    status.textContent = idx + 1;
-                } else {
-                    status.className = "w-7 h-7 rounded-full border border-gray-700 text-gray-500 flex items-center justify-center text-xs font-bold flex-shrink-0";
-                    status.textContent = idx + 1;
-                }
-            });
-
-            const progressText = document.getElementById('train-chunk-progress-text');
-            if (progressText) {
-                progressText.textContent = `${activeChunkIndex} / ${currentChunks.length} Complete`;
-            }
         }
 
         function navigateTraining(delta) {
@@ -1008,10 +916,9 @@ html = '''<!DOCTYPE html>
         }
 
         // =========================================================
-        // SPEECH RECOGNITION (3 ENGINES IMPLEMENTATION)
+        // SPEECH RECOGNITION (FULL CHANT EVALUATION)
         // =========================================================
 
-        // Web Speech Recognition for Engine 1 (Karaoke Continuous)
         let recognition = null;
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1022,8 +929,8 @@ html = '''<!DOCTYPE html>
         }
 
         function toggleTrainingSpeech() {
-            if (currentVoiceEngine === 'karaoke') {
-                toggleKaraokeSpeech();
+            if (currentVoiceEngine === 'stream') {
+                toggleLiveStreamSpeech();
             } else if (currentVoiceEngine === 'cloud') {
                 toggleCloudAiRecording();
             } else if (currentVoiceEngine === 'browser_ai') {
@@ -1031,11 +938,11 @@ html = '''<!DOCTYPE html>
             }
         }
 
-        // ENGINE 1: KARAOKE CHUNKING (Web Speech API)
-        function toggleKaraokeSpeech() {
+        // ENGINE 1: LIVE WEB SPEECH (Full Chant Continuous Stream)
+        function toggleLiveStreamSpeech() {
             if (!recognition) {
                 const manual = prompt('Speech Recognition not supported in this browser. Enter chant transcript:');
-                if (manual) evaluateTrainingChant(manual);
+                if (manual) evaluateFullChant(manual);
                 return;
             }
 
@@ -1043,29 +950,56 @@ html = '''<!DOCTYPE html>
             const box = document.getElementById('train-transcript-box');
 
             if (isTrainingRecording) {
-                recognition.stop();
+                // User clicked to finish chanting
                 isTrainingRecording = false;
+                recognition.stop();
                 micBtn.classList.remove('recording-pulse');
-                box.innerHTML = `<span>Session stopped. Press microphone to continue chanting.</span>`;
+                if (accumulatedLiveTranscript.trim()) {
+                    evaluateFullChant(accumulatedLiveTranscript);
+                } else {
+                    box.innerHTML = `<span>Session ended. No speech detected.</span>`;
+                }
             } else {
+                accumulatedLiveTranscript = '';
                 recognition.start();
                 isTrainingRecording = true;
                 micBtn.classList.add('recording-pulse');
-                box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>Listening to Phrase ${activeChunkIndex + 1}... Chant now!</span>`;
+                box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-ear-listen mr-2"></i>Listening to full chant... Recite now, and click mic when finished!</span>`;
 
                 recognition.onresult = (e) => {
-                    let transcript = '';
+                    let interim = '';
                     for (let i = e.resultIndex; i < e.results.length; ++i) {
-                        transcript += e.results[i][0].transcript;
+                        interim += e.results[i][0].transcript;
+                        if (e.results[i].isFinal) {
+                            accumulatedLiveTranscript += ' ' + e.results[i][0].transcript;
+                        }
                     }
-                    box.innerHTML = `<span class="text-white">Heard: "${transcript}"</span>`;
-                    processKaraokeChunkMatch(transcript);
+                    const liveHeard = accumulatedLiveTranscript + ' ' + interim;
+                    box.innerHTML = `<span class="text-white">Heard: "${liveHeard.trim()}"</span>`;
+
+                    // Check if final spell trigger was spoken (auto-complete)
+                    const s = trainingQueue[trainCurrentIndex];
+                    if (s) {
+                        const finalTrigger = (s.jp_name || s.en).replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+                        const cleanLive = liveHeard.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+                        if (cleanLive.includes(finalTrigger) && cleanLive.length >= 8) {
+                            // Automatically evaluate when spell trigger is spoken
+                            setTimeout(() => {
+                                if (isTrainingRecording) {
+                                    isTrainingRecording = false;
+                                    recognition.stop();
+                                    micBtn.classList.remove('recording-pulse');
+                                    evaluateFullChant(liveHeard);
+                                }
+                            }, 500);
+                        }
+                    }
                 };
 
                 recognition.onerror = (err) => {
                     isTrainingRecording = false;
                     micBtn.classList.remove('recording-pulse');
-                    box.innerHTML = `<span class="text-red-400">Mic notice: ${err.error || 'stopped'}. Press mic to restart.</span>`;
+                    box.innerHTML = `<span class="text-red-400">Mic notice: ${err.error || 'stopped'}. Click mic to restart.</span>`;
                 };
 
                 recognition.onend = () => {
@@ -1078,64 +1012,12 @@ html = '''<!DOCTYPE html>
             }
         }
 
-        function processKaraokeChunkMatch(spoken) {
-            const s = trainingQueue[trainCurrentIndex];
-            const cleanSpoken = spoken.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
-            const targetChunk = (currentChunks[activeChunkIndex] || '').replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
-
-            // Check if final spell keyword was said
-            const finalSpellName = (s.jp_name || s.en).replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
-            if (cleanSpoken.includes(finalSpellName) && activeChunkIndex >= Math.floor(currentChunks.length / 2)) {
-                // Completed via Final Spell Burst!
-                completeFullSpellChant('S-RANK: MASTER CHANTING (Spell Trigger Activated!)');
-                return;
-            }
-
-            // Phonetic / substring match
-            let matchedChars = 0;
-            for (const ch of cleanSpoken) {
-                if (targetChunk.includes(ch)) matchedChars++;
-            }
-            const ratio = targetChunk.length > 0 ? (matchedChars / targetChunk.length) : 0;
-
-            if (ratio >= 0.55 || cleanSpoken.includes(targetChunk) || (cleanSpoken.length >= 3 && targetChunk.includes(cleanSpoken))) {
-                // Phrase Matched!
-                activeChunkIndex++;
-                updateChunkUI();
-
-                const box = document.getElementById('train-transcript-box');
-                if (activeChunkIndex >= currentChunks.length) {
-                    completeFullSpellChant('S-RANK: PERFECT INCANTATION COMPLETED!');
-                } else {
-                    box.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-check mr-1"></i>Phrase accepted! Now chant phrase ${activeChunkIndex + 1}...</span>`;
-                }
-            }
-        }
-
-        function completeFullSpellChant(rankText) {
-            isTrainingRecording = false;
-            if (recognition) try { recognition.stop(); } catch(e) {}
-            document.getElementById('train-mic-btn').classList.remove('recording-pulse');
-            activeChunkIndex = currentChunks.length;
-            updateChunkUI();
-
-            const badge = document.getElementById('train-result-badge');
-            badge.innerHTML = `
-                <div class="inline-block px-5 py-2.5 rounded-full bg-green-500/20 border-2 border-green-500 text-green-300 font-cinzel text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-                    <i class="fa-solid fa-circle-check mr-2 text-green-400"></i> ${rankText}
-                </div>
-            `;
-            const box = document.getElementById('train-transcript-box');
-            box.innerHTML = `<span class="text-magic-gold font-bold">✨ Mana stream focused. Spell unleashed! ✨</span>`;
-        }
-
         // ENGINE 2: SERVERLESS CLOUD AI (Groq / OpenAI Whisper)
         async function toggleCloudAiRecording() {
             const micBtn = document.getElementById('train-mic-btn');
             const box = document.getElementById('train-transcript-box');
 
             if (isTrainingRecording) {
-                // Stop and transcribe
                 isTrainingRecording = false;
                 micBtn.classList.remove('recording-pulse');
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
@@ -1153,7 +1035,7 @@ html = '''<!DOCTYPE html>
 
                     mediaRecorder.onstop = async () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sending audio to Serverless Whisper AI...</span>`;
+                        box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sending full chant to Serverless Whisper AI...</span>`;
                         await sendAudioToServerlessWhisper(audioBlob);
                         stream.getTracks().forEach(t => t.stop());
                     };
@@ -1161,7 +1043,7 @@ html = '''<!DOCTYPE html>
                     mediaRecorder.start();
                     isTrainingRecording = true;
                     micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Cloud AI] Recording... Chant the full spell and press mic again to finish!</span>`;
+                    box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Cloud AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
                 } catch (err) {
                     box.innerHTML = `<span class="text-red-400">Microphone access denied: ${err.message}</span>`;
                 }
@@ -1171,16 +1053,12 @@ html = '''<!DOCTYPE html>
         async function sendAudioToServerlessWhisper(blob) {
             const s = trainingQueue[trainCurrentIndex];
             const box = document.getElementById('train-transcript-box');
-            const badge = document.getElementById('train-result-badge');
 
             try {
-                // Read blob as base64
                 const reader = new FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = async () => {
                     const base64Audio = reader.result.split(',')[1];
-
-                    // Check if custom key is available
                     let endpoint = '/api/transcribe';
                     let headers = {
                         'Content-Type': 'application/json',
@@ -1204,7 +1082,7 @@ html = '''<!DOCTYPE html>
                     const data = await res.json();
                     const transcript = data.text || '';
                     box.innerHTML = `<span class="text-white">AI Heard: "${transcript}"</span>`;
-                    evaluateAiChantAccuracy(transcript);
+                    evaluateFullChant(transcript);
                 };
             } catch (err) {
                 box.innerHTML = `<span class="text-red-400">Error connecting to Whisper API: ${err.message}</span>`;
@@ -1273,7 +1151,7 @@ html = '''<!DOCTYPE html>
 
                     mediaRecorder.onstop = async () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microchip mr-2"></i>Transcribing locally with Web AI Whisper...</span>`;
+                        box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microchip mr-2"></i>Transcribing full chant locally with Web AI Whisper...</span>`;
                         await runLocalWhisperTranscribe(audioBlob);
                         stream.getTracks().forEach(t => t.stop());
                     };
@@ -1281,7 +1159,7 @@ html = '''<!DOCTYPE html>
                     mediaRecorder.start();
                     isTrainingRecording = true;
                     micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Web AI] Recording locally... Chant spell and click mic to transcribe!</span>`;
+                    box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Web AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
                 } catch (err) {
                     box.innerHTML = `<span class="text-red-400">Microphone error: ${err.message}</span>`;
                 }
@@ -1291,7 +1169,6 @@ html = '''<!DOCTYPE html>
         async function runLocalWhisperTranscribe(blob) {
             const box = document.getElementById('train-transcript-box');
             try {
-                // Convert blob to audio buffer 16kHz Float32Array
                 const arrayBuffer = await blob.arrayBuffer();
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
                 const decoded = await audioCtx.decodeAudioData(arrayBuffer);
@@ -1304,40 +1181,61 @@ html = '''<!DOCTYPE html>
 
                 const transcript = out.text || '';
                 box.innerHTML = `<span class="text-white">Local AI Heard: "${transcript}"</span>`;
-                evaluateAiChantAccuracy(transcript);
+                evaluateFullChant(transcript);
             } catch (err) {
                 box.innerHTML = `<span class="text-red-400">Web AI processing error: ${err.message}</span>`;
             }
         }
 
-        function evaluateAiChantAccuracy(spoken) {
-            const s = trainingQueue[trainCurrentIndex];
+        // UNIFIED FULL-CHANT ACCURACY EVALUATION (NO SYLLABLE BREAKDOWN)
+        function evaluateFullChant(spoken) {
+            const spell = trainingQueue[trainCurrentIndex];
             const cleanSpoken = spoken.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
-            const cleanTarget = s.jp.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            const cleanTargetJp = spell.jp.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
+            const cleanTargetRomaji = spell.romaji.replace(/[,.!?\\s"'–—]/g, '').toLowerCase();
+            const spellTrigger = (spell.jp_name || spell.en).replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
 
-            let matches = 0;
+            // Check anchor keywords across the incantation
+            const anchors = [
+                '水の精霊', '水', '雷帝', '神なる力', '神', '灯火', '炎', '大地', '王女', 'せせらぎ',
+                '加護', '求める所', '慈愛', '女神', '氷霜', '鎧', '鎧を纏わん', '押し流せ', '熱さ',
+                spell.en.toLowerCase(),
+                spellTrigger
+            ];
+
+            let anchorMatches = 0;
+            anchors.forEach(a => {
+                if (cleanTargetJp.includes(a.toLowerCase()) && cleanSpoken.includes(a.toLowerCase())) {
+                    anchorMatches++;
+                }
+            });
+
+            // Character overlap ratio
+            let charMatches = 0;
             for (const ch of cleanSpoken) {
-                if (cleanTarget.includes(ch)) matches++;
+                if (cleanTargetJp.includes(ch)) charMatches++;
             }
-            const ratio = cleanTarget.length > 0 ? (matches / cleanTarget.length) : 0;
+            const ratio = cleanTargetJp.length > 0 ? (charMatches / cleanTargetJp.length) : 0;
+            const hasTrigger = cleanSpoken.includes(spellTrigger) || cleanSpoken.includes(spell.en.toLowerCase());
+
             const badge = document.getElementById('train-result-badge');
 
-            if (ratio >= 0.65 || cleanSpoken.includes(cleanTarget.slice(0, 10))) {
+            if (ratio >= 0.55 || (anchorMatches >= 2 && hasTrigger) || ratio >= 0.40 && hasTrigger) {
                 badge.innerHTML = `
                     <div class="inline-block px-5 py-2.5 rounded-full bg-green-500/20 border-2 border-green-500 text-green-300 font-cinzel text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-                        <i class="fa-solid fa-circle-check mr-2 text-green-400"></i> S-RANK: ACCURATE SPELL RECITATION! (${Math.min(100, Math.round(ratio * 100))}%)
+                        <i class="fa-solid fa-circle-check mr-2 text-green-400"></i> S-RANK: PERFECT INCANTATION COMPLETED! (${Math.min(100, Math.round(ratio * 100) + 20)}%)
                     </div>
                 `;
-            } else if (ratio >= 0.35 || cleanSpoken.includes(s.en.toLowerCase())) {
+            } else if (hasTrigger || anchorMatches >= 1 || ratio >= 0.25) {
                 badge.innerHTML = `
-                    <div class="inline-block px-5 py-2.5 rounded-full bg-yellow-500/20 border-2 border-yellow-500 text-yellow-300 font-cinzel text-sm">
-                        <i class="fa-solid fa-triangle-exclamation mr-2 text-yellow-400"></i> A-RANK: GOOD EFFORT! (${Math.min(100, Math.round(ratio * 100))}%)
+                    <div class="inline-block px-5 py-2.5 rounded-full bg-yellow-500/20 border border-yellow-500 text-yellow-300 font-cinzel text-sm">
+                        <i class="fa-solid fa-triangle-exclamation mr-2 text-yellow-400"></i> A-RANK / PASS: ACCENT TOLERATED (Spell Success)
                     </div>
                 `;
             } else {
                 badge.innerHTML = `
                     <div class="inline-block px-4 py-2 rounded-full bg-red-500/20 border border-red-500 text-red-300 font-cinzel text-sm">
-                        <i class="fa-solid fa-circle-xmark mr-2 text-red-400"></i> B-RANK: Spell chant did not match. Try again!
+                        <i class="fa-solid fa-circle-xmark mr-2 text-red-400"></i> B-RANK: Incantation incomplete. Please chant the full words and spell trigger!
                     </div>
                 `;
             }
@@ -1388,8 +1286,7 @@ html = '''<!DOCTYPE html>
             const container = document.getElementById('battle-slots-container');
             container.innerHTML = '';
 
-            // Selected battle repertoire
-            const battleSpellIds = [2, 8, 12, 16, 18, 5, 17, 1];
+            const battleSpellIds = [2, 8, 12, 16, 20, 21, 5, 1];
             const battleSpells = spellsData.filter(s => battleSpellIds.includes(s.id));
 
             battleSpells.forEach(s => {
@@ -1420,16 +1317,6 @@ html = '''<!DOCTYPE html>
             document.getElementById('battle-chant-jp').textContent = `「${spell.jp}」`;
             document.getElementById('battle-chant-romaji').textContent = spell.romaji;
             document.getElementById('battle-transcript-text').textContent = 'Press mic and chant to cast, or click Fast Cast!';
-            
-            // Battle Chunks
-            const battleChunkBox = document.getElementById('battle-chunks-container');
-            if (battleChunkBox) {
-                battleChunkBox.innerHTML = '';
-                const bChunks = spell.chunks_jp || [spell.jp];
-                bChunks.forEach((c, i) => {
-                    battleChunkBox.insertAdjacentHTML('beforeend', `<div class="text-[11px] text-gray-300 font-jp p-1.5 bg-black/40 rounded border border-white/5">${i+1}. ${c}</div>`);
-                });
-            }
 
             document.getElementById('battle-chant-modal').classList.remove('hidden');
         }
@@ -1446,7 +1333,6 @@ html = '''<!DOCTYPE html>
         }
 
         function toggleBattleSpeech() {
-            // Fast cast or speech recognition
             if (combat.pendingSpell) {
                 instantCastBattleSpell();
             }
@@ -1505,7 +1391,6 @@ html = '''<!DOCTYPE html>
             combat.playerHp = Math.max(0, combat.playerHp - dmg);
             logBattle(`[ENEMY] ${combat.enemy.name} attacks you for ${dmg} physical damage!`);
 
-            // Mana Regen
             combat.playerMp = Math.min(combat.playerMaxMp, combat.playerMp + 15);
 
             updateBattleUI();
@@ -1540,7 +1425,7 @@ html = '''<!DOCTYPE html>
         }
 
         function triggerQuickVoiceBattle() {
-            alert('Quick Cast: Chant any spell name (e.g. Water Ball, Fireball) into the mic!');
+            alert('Quick Cast: Chant any spell name into the mic!');
             if (spellsData.length > 0) {
                 prepareCastBattleSpell(spellsData[0].id);
             }
@@ -1628,4 +1513,4 @@ html = '''<!DOCTYPE html>
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
-print('Generated unified index.html with all 3 Speech Recognition engines successfully!')
+print('Generated index.html with transparent circular favicon and full-chant voice recognition!')
