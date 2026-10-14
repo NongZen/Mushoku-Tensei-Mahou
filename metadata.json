@@ -1,0 +1,8 @@
+{
+  "name": "Mushoku Tensei: Magic Chants & Combat Grimoire",
+  "description": "Comprehensive grimoire archive, chanting training academy, and turn-based spell battle RPG from Mushoku Tensei (Jobless Reincarnation).",
+  "version": "1.0.0",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
