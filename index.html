@@ -17,12 +17,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Transformers.js for In-Browser Web AI Whisper -->
-    <script type="module">
-        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
-        env.allowLocalModels = false;
-        window.transformersPipeline = pipeline;
-    </script>
 
     <script>
         tailwind.config = {
@@ -83,15 +77,15 @@
         }
 
         /* Modal styling */
-        #spell-modal, #training-modal, #battle-chant-modal, #engine-settings-modal {
+        #spell-modal, #training-modal, #battle-chant-modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        #spell-modal.hidden, #training-modal.hidden, #battle-chant-modal.hidden, #engine-settings-modal.hidden {
+        #spell-modal.hidden, #training-modal.hidden, #battle-chant-modal.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        #spell-modal:not(.hidden), #training-modal:not(.hidden), #battle-chant-modal:not(.hidden), #engine-settings-modal:not(.hidden) {
+        #spell-modal:not(.hidden), #training-modal:not(.hidden), #battle-chant-modal:not(.hidden) {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
@@ -105,7 +99,7 @@
             box-shadow: 0 0 50px rgba(197, 160, 89, 0.25), inset 0 0 30px rgba(197, 160, 89, 0.08);
         }
         
-        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content, #battle-chant-modal:not(.hidden) .modal-content, #engine-settings-modal:not(.hidden) .modal-content {
+        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content, #battle-chant-modal:not(.hidden) .modal-content {
             transform: scale(1) translateY(0);
         }
 
@@ -183,10 +177,10 @@
             <!-- Navigation Mode Switcher -->
             <div class="flex justify-center items-center gap-3 mt-8 flex-wrap">
                 <button onclick="switchTab('grimoire')" id="tab-btn-grimoire" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]">
-                    <i class="fa-solid fa-book-sparkles mr-2"></i> Grimoire Archive
+                    <i class="fa-solid fa-book-bookmark mr-2"></i> Grimoire Archive
                 </button>
                 <button onclick="switchTab('training')" id="tab-btn-training" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
-                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (JP/Romaji)
+                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training
                 </button>
                 <button onclick="switchTab('battle')" id="tab-btn-battle" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
                     <i class="fa-solid fa-dragon mr-2"></i> Spell Battle RPG
@@ -243,8 +237,8 @@
             <!-- Training Queue Generator Configuration -->
             <div class="bg-gradient-to-b from-[#111a24] to-[#0d121c] border-2 border-magic-gold/40 rounded-3xl p-6 md:p-8 backdrop-blur-md max-w-4xl mx-auto mb-10 shadow-2xl">
                 <div class="text-center mb-6">
-                    <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP & Romaji)</h3>
-                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ร่ายทั้งบทสวดเต็มบทเพื่อความสมจริง</p>
+                    <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP / Romaji / TH)</h3>
+                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ร่ายทั้งบทสวดเต็มบท พร้อมคำอ่านโรมาจิและคำแปลภาษาไทย</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -287,46 +281,28 @@
             <!-- Training Stage Box -->
             <div id="training-stage-box" class="hidden bg-gradient-to-b from-[#111a24] to-[#151020] border-2 border-magic-gold rounded-3xl p-6 md:p-10 text-center max-w-4xl mx-auto shadow-2xl relative">
                 
-                <!-- Voice Engine Selector Pill -->
-                <div class="flex flex-wrap items-center justify-center gap-2 mb-6 bg-black/50 p-2 rounded-2xl border border-magic-gold/20 max-w-xl mx-auto">
-                    <span class="text-[11px] uppercase font-cinzel text-gray-400 mr-1"><i class="fa-solid fa-microchip text-magic-gold mr-1"></i> ASR Engine:</span>
-                    <button onclick="setVoiceEngine('stream')" id="engine-btn-stream" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]">
-                        <i class="fa-solid fa-bolt mr-1"></i> 1. Live Web Speech
-                    </button>
-                    <button onclick="setVoiceEngine('cloud')" id="engine-btn-cloud" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
-                        <i class="fa-solid fa-cloud mr-1"></i> 2. Serverless Whisper
-                    </button>
-                    <button onclick="setVoiceEngine('browser_ai')" id="engine-btn-browser_ai" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
-                        <i class="fa-solid fa-robot mr-1"></i> 3. Web AI (Offline)
-                    </button>
-                    <button onclick="openEngineSettings()" class="text-xs text-magic-gold hover:text-yellow-300 p-1.5 rounded-lg bg-white/5 border border-white/10 ml-1" title="API Settings">
-                        <i class="fa-solid fa-gear"></i>
-                    </button>
-                </div>
-
-                <!-- Web AI Model Download Progress Indicator -->
-                <div id="model-loading-box" class="hidden mb-6 bg-blue-950/60 border border-blue-400/40 rounded-2xl p-4 max-w-xl mx-auto text-xs text-blue-200">
-                    <div class="flex justify-between items-center mb-1.5">
-                        <span id="model-loading-status"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading Web AI Model (Xenova/whisper-tiny)...</span>
-                        <span id="model-loading-percent" class="font-bold text-white">0%</span>
-                    </div>
-                    <div class="w-full bg-black/60 rounded-full h-2 overflow-hidden border border-blue-500/30">
-                        <div id="model-loading-bar" class="bg-gradient-to-r from-blue-400 to-cyan-300 h-full rounded-full transition-all duration-200" style="width: 0%;"></div>
-                    </div>
+                <!-- Live Web Speech Engine Badge -->
+                <div class="inline-flex items-center gap-2 mb-6 bg-black/50 px-5 py-2 rounded-full border border-magic-gold/30 text-xs text-gray-300 font-cinzel shadow-[0_0_15px_rgba(197,160,89,0.15)]">
+                    <i class="fa-solid fa-bolt text-magic-gold"></i> Engine: <span class="text-magic-gold font-semibold">Live Web Speech Recognition (Full Chant)</span>
                 </div>
 
                 <div id="train-counter" class="font-cinzel text-magic-gold text-xs tracking-widest uppercase mb-1">STAGE 1 / 2</div>
                 <h3 id="train-spell-name" class="font-cinzel text-2xl md:text-3xl font-bold text-white mb-4 text-glow">Water Ball</h3>
 
-                <!-- Active Chant Box (Full Chant) -->
+                <!-- Active Chant Box (Full Chant: JP -> Romaji -> TH) -->
                 <div class="bg-black/60 border border-magic-gold/30 rounded-2xl p-5 md:p-7 mb-6 text-left">
-                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">Full Japanese Incantation:</div>
+                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">1. Full Japanese Incantation (คำร่ายภาษาญี่ปุ่น):</div>
                     <div id="train-jp-text" class="font-jp text-lg md:text-xl text-white font-bold leading-relaxed mb-3">
                         「汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール」
                     </div>
-                    <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">Romaji:</div>
-                    <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed">
+                    <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">2. Romaji (คำอ่านโรมาจิ):</div>
+                    <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed mb-3">
                         Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru
+                    </div>
+                    <div class="h-px bg-white/10 my-3"></div>
+                    <div class="text-xs uppercase text-amber-400 font-cinzel mb-1"><i class="fa-solid fa-book-bookmark mr-1.5"></i> 3. Thai Translation (ความหมายภาษาไทย):</div>
+                    <div id="train-thai-text" class="text-sm md:text-base text-gray-200 font-light leading-relaxed whitespace-pre-line italic">
+                        ...
                     </div>
                 </div>
 
@@ -549,90 +525,11 @@
         </div>
     </div>
 
-    <!-- Engine API Settings Modal -->
-    <div id="engine-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeEngineSettings()"></div>
-        <div class="modal-content relative w-full max-w-md rounded-2xl p-6 text-left z-10 border-2 border-magic-gold">
-            <h3 class="font-cinzel text-xl font-bold text-magic-gold mb-1"><i class="fa-solid fa-gear mr-2"></i> Voice Engine Settings</h3>
-            <p class="text-xs text-gray-400 mb-4">Configure AI Cloud API Keys for Method 2 (Serverless Whisper).</p>
-
-            <div class="mb-4">
-                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">Groq API Key (Free & 300ms fast):</label>
-                <input type="password" id="cfg-groq-key" placeholder="gsk_..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
-                <p class="text-[11px] text-gray-500 mt-1">Get free key at <a href="https://console.groq.com/keys" target="_blank" class="text-magic-gold hover:underline">groq.com</a> (or set GROQ_API_KEY on Vercel).</p>
-            </div>
-
-            <div class="mb-5">
-                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">OpenAI API Key (Optional):</label>
-                <input type="password" id="cfg-openai-key" placeholder="sk-..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <button onclick="closeEngineSettings()" class="px-4 py-2 rounded-lg bg-white/10 text-xs font-cinzel text-gray-300">Cancel</button>
-                <button onclick="saveEngineSettings()" class="px-5 py-2 rounded-lg bg-magic-gold text-magic-dark font-cinzel font-bold text-xs">Save Settings</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ======================================================== -->
     <!-- JAVASCRIPT LOGIC -->
     <!-- ======================================================== -->
     <script>
         const spellsData = [{"id": 1, "name": "ฮีลลิ่ง (Healing)", "en": "Healing", "jp": "神なる力は芳醇なる糧、力失いしかの者に再び立ち上がる力を与えん『ヒーリング』", "romaji": "Kami naru chikara wa hojun naru kate, chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen, \"Hīringu\"", "th": "พลังแห่งทวยเทพคือโอสถอันอุดม จงมอบพลังลุกขึ้นยืนใหม่อีกคราแก่ผู้สูญสิ้นเรี่ยวแรง 'ฮีลลิ่ง'!", "element": "Healing", "element_th": "การรักษา (Healing / 神聖・治癒)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 15, "power": 35, "type": "heal", "effect": "Heals minor wounds, restores vitality, and cleanses cuts.", "condition": "Touch the wounded subject and infuse healing mana into tissues.", "casters": ["Zenith", "Rudeus", "Roxy"], "jp_name": "ヒーリング", "romaji_name": "Hīringu", "chunks_jp": ["神なる力は芳醇なる糧", "力失いしかの者に再び立ち上がる力を与えん『ヒーリング"], "chunks_romaji": ["Kami naru chikara wa hojun naru kate", "chikara ushinaishi kano mono ni futatabi tachiagaru chikara o ataen", "Hīringu"]}, {"id": 2, "name": "วอเตอร์บอล (Water Ball)", "en": "Water Ball", "jp": "汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール", "romaji": "Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru", "th": "ขอการคุ้มครองแห่งน้ำอันยิ่งใหญ่ในที่ซึ่งเจ้าปรารถนา กระแสธารที่สดใสจงมาที่นี่ ณ บัดนี้ ‘วอเทอร์บอล’", "element": "Water", "element_th": "น้ำ (Water / 水)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 10, "power": 30, "type": "damage", "effect": "Manifests a fist-sized sphere of pressurized water and launches it.", "condition": "Focus mana at fingertip, designate trajectory and impact point.", "casters": ["Rudeus", "Roxy"], "jp_name": "ウォーターボール", "romaji_name": "Wōtā Bōru", "chunks_jp": ["汝の求める所に大いなる水の加護あらん", "清涼なるせせらぎの流れを今ここに", "ウォーターボール"], "chunks_romaji": ["Nanji no motomeru tokoro ni oinaru mizu no kago aran", "seiryo naru seseragi no nagare o ima koko ni", "Wota Boru"]}, {"id": 3, "name": "คิวมูโลนิมบัส (Cumulonimbus)", "en": "Cumulonimbus", "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！我が願いを叶え、凶暴なる恵みをもたらし、矮小なる存在に力を見せつけよ！神なる金槌を金床に打ち付けて畏怖を示し、大地を水で埋め尽くせ！ああ、雨よ！全てを押し流し、あらゆるものを駆逐せよ！キュムロニンバス！", "romaji": "Yudai naru mizu no seirei ni shite, ten ni agarishi raitei no oji yo! Waga negai o kanae, kyobo naru megumi o motorashi, waisho naru sonzai ni chikara o misetsukeyo! Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi, daichi o mizu de umetsukuse! Aa, ame yo! Subete o oshinagashi, arayuru mono o kuchiku seyo! Kyumuroninbasu!", "th": "เจ้าชายแห่งจักรพรรดิสายฟ้า ภูตแห่งน้ำผู้ยิ่งใหญ่ซึ่งขึ้นสู่สรวงสวรรค์เอ๋ย!! จงทำให้ข้าสมปรารถนา นำพาความกรุณาที่ยิ่งใหญ่ แสดงพลังให้สิ่งที่กะจ้อยร่อยได้เห็น!! ตอกค้อนแห่งเทพลงบนทั่ง สำแดงความหวาดกลัว ถมผืนพิภพให้สิ้นด้วยน้ำ!! อา ฝนเอ๋ย!! จงพัดพาทุกสิ่ง และขับไล่สรรพสิ่ง 'คิวมูโลนิมบัส'", "element": "Water", "element_th": "น้ำ / ลม (Hybrid Water + Wind / 水・風混合)", "tier": "tier2", "rank": "Saint (水聖級)", "rank_th": "ระดับศักดิ์สิทธิ์ (Saint / 水聖級)", "mp_cost": 100, "power": 160, "type": "damage", "effect": "Summons a massive supercell thundercloud covering kilometers with storm and lightning.", "condition": "Must chant outdoors for over 1 minute. Consumes immense mana reservoir.", "casters": ["Roxy", "Rudeus"], "jp_name": "キュムロニンバス", "romaji_name": "Kyumuroninbasu", "chunks_jp": ["雄大なる水の精霊にして", "天に上がりし雷帝の王子よ", "我が願いを叶え", "凶暴なる恵みをもたらし", "矮小なる存在に力を見せつけよ", "神なる金槌を金床に打ち付けて畏怖を示し", "大地を水で埋め尽くせ", "ああ", "雨よ", "全てを押し流し", "あらゆるものを駆逐せよ", "キュムロニンバス"], "chunks_romaji": ["Yudai naru mizu no seirei ni shite", "ten ni agarishi raitei no oji yo", "Waga negai o kanae", "kyobo naru megumi o motorashi", "waisho naru sonzai ni chikara o misetsukeyo", "Shin naru kanadzuchi o kanatoko ni uchitsukete ifu o shimeshi", "daichi o mizu de umetsukuse", "Aa", "ame yo", "Subete o oshinagashi", "arayuru mono o kuchiku seyo", "Kyumuroninbasu"]}, {"id": 4, "name": "เอ็กซ์ฮีลลิ่ง (Ex-Healing)", "en": "Ex-Healing", "jp": "母なる慈愛の女神よ、彼の者の傷を塞ぎ、健やかなる体を取り戻さん、エクスヒーリング！", "romaji": "Haha naru jiai no megami yo, kano mono no kizu o fusagi, sukoyaka naru karada o torimodosan, Ekusu Hīringu!", "th": "ข้าแต่องค์เทวีแห่งความเมตตาผู้เป็นมารดา จงสมานบาดแผลของผู้นี้ และคืนร่างกายอันสมบูรณ์แข็งแรงกลับมา 'เอ็กซ์ฮีลลิ่ง'!", "element": "Healing", "element_th": "การรักษา (Healing / 神聖・治癒)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 85, "type": "heal", "effect": "Rapidly mends severe fractures, deep gashes, internal bleeding and critical shock.", "condition": "Direct physical contact with the severe injury is required.", "casters": ["Roxy", "Rudeus"], "jp_name": "エクスヒーリング", "romaji_name": "Ekusu Hīringu", "chunks_jp": ["母なる慈愛の女神よ", "彼の者の傷を塞ぎ", "健やかなる体を取り戻さん", "エクスヒーリング"], "chunks_romaji": ["Haha naru jiai no megami yo", "kano mono no kizu o fusagi", "sukoyaka naru karada o torimodosan", "Ekusu Hīringu"]}, {"id": 5, "name": "เบิร์นนิงเพลส (Burning Place)", "en": "Burning Place", "jp": "爆炎を身体に、バーニングプレイス！", "romaji": "Bakuen o karada ni, Bāninku Pureisu!", "th": "เปลวเพลิงผลาญจงสถิตทั่วกาย 'เบิร์นนิงเพลส'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 65, "type": "damage", "effect": "Unleashes an outward burst of protective flames, repelling close-range attackers.", "condition": "Caster must control the thermal radius around oneself to avoid burns.", "casters": ["Roxy", "Moore"], "jp_name": "バーニングプレイス", "romaji_name": "Bāningu Pureisu", "chunks_jp": ["爆炎を身体に", "バーニングプレイス"], "chunks_romaji": ["Bakuen o karada ni", "Bāninku Pureisu"]}, {"id": 6, "name": "ไอซิเคิลเบรก (Icicle Break)", "en": "Icicle Break", "jp": "雄大なる水の精霊にして、天に上がりし雷帝の王子よ！勇壮なる氷の剣を彼の者に叩き落せ！『氷霜撃(アイシクルブレイク)』", "romaji": "Yudai naru mizu no seirei ni shite, ten ni agarishi raitei no oji yo! Yuso naru kori no tsurugi o kano mono ni tatakiotose! \"Aishikuru Bureiku\"", "th": "ข้าแต่วิญญาณแห่งวารีอันเกรียงไกร เจ้าชายแห่งจักรพรรดิอัสนีผู้สถิตบนฟากฟ้า! จงฟาดฟันดาบน้ำแข็งอันหาญกล้าลงทัณฑ์ผู้นั้น! 'ไอซิเคิลเบรก'!", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 75, "type": "damage", "effect": "Condenses atmospheric vapor into gigantic razor ice blades that crash downwards.", "condition": "Requires vertical ceiling clearance above the target zone.", "casters": ["Roxy", "Temple Knights"], "jp_name": "アイシクルブレイク", "romaji_name": "Aishikuru Bureiku", "chunks_jp": ["雄大なる水の精霊にして", "天に上がりし雷帝の王子よ", "勇壮なる氷の剣を彼の者に叩き落せ", "氷霜撃(アイシクルブレイク)"], "chunks_romaji": ["Yudai naru mizu no seirei ni shite", "ten ni agarishi raitei no oji yo", "Yuso naru kori no tsurugi o kano mono ni tatakiotose", "Aishikuru Bureiku"]}, {"id": 7, "name": "เอิร์ธฟอร์เทรส (Earth Fortress)", "en": "Earth Fortress", "jp": "荘厳なる大地の鎧を纏わん。『土砦(アースフォートレス)』！", "romaji": "Sogon naru daichi no yoroi o matowan. \"Asu Fotoresu\"!", "th": "จงสวมใส่เกราะพสุธาอันน่าเกรงขามเสีย 'เอิร์ธฟอร์เทรส'", "element": "Earth", "element_th": "ดิน (Earth / 土)", "tier": "tier2", "rank": "Advanced (上級)", "rank_th": "ระดับสูง (Advanced / 上級)", "mp_cost": 50, "power": 90, "type": "defense", "effect": "Erects a towering circular fortress barrier of dense stone surrounding the caster.", "condition": "Caster must be standing on rock/soil ground.", "casters": ["Roxy"], "jp_name": "アースフォートレス", "romaji_name": "Āsu Fōtoresu", "chunks_jp": ["荘厳なる大地の鎧を纏わん", "土砦(アースフォートレス)"], "chunks_romaji": ["Sogon naru daichi no yoroi o matowan", "Asu Fotoresu"]}, {"id": 8, "name": "วอเตอร์สแปลช (Water Splash)", "en": "Water Splash", "jp": "落ちる雫を散らしめし、世界は水で覆われん。『水蒸(ウォータースプラッシュ)』！", "romaji": "Ochiru shizuku o chirashimeshi, sekai wa mizu de oowaren. \"Wota Supurasshu\"!", "th": "หยาดน้ำจงสาดซัด เติมเต็มผืนปฐพีไปด้วยวารี 'วอเตอร์สแปลช'", "element": "Water", "element_th": "น้ำ (Water / 水)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 12, "power": 25, "type": "setup", "effect": "Sprays an omnidirectional shower of fine water, drenching all targets for combo setups.", "condition": "Low raw damage; primes targets for instant freezing Frost Nova combos.", "casters": ["Roxy"], "jp_name": "ウォータースプラッシュ", "romaji_name": "Wōtā Supurasshu", "chunks_jp": ["落ちる雫を散らしめし", "世界は水で覆われん", "水蒸(ウォータースプラッシュ)"], "chunks_romaji": ["Ochiru shizuku o chirashimeshi", "sekai wa mizu de oowaren", "Wota Supurasshu"]}, {"id": 9, "name": "ไอซิคัลฟิลด์ (Icicle Field)", "en": "Icicle Field", "jp": "天より舞い降りし蒼き女神よ、その錫杖を振るいて世界を凍りつかせん！『氷結領域(アイシクルフィールド)』！", "romaji": "Ten yori maioorishi aoki megami yo, sono shakujo o furuite sekai o kooritsukasen! \"Aishikuru Firudo\"!", "th": "เทพธิดาสีครามผู้ลงมาจากสรวงสวรรค์เอ๋ย จงสะบัดไม้เท้าสีเงินทำให้โลกนี้ปกคลุมไปด้วยน้ำแข็ง 'ไอซิคัลฟิลด์'", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 70, "type": "damage", "effect": "Instantly plunges ambient temperature to freeze moisture, locking foes into solid ice.", "condition": "Combo synergy with Water Splash executes instant Frost Nova freeze.", "casters": ["Roxy", "Moore"], "jp_name": "アイシクルフィールド", "romaji_name": "Aishikuru Fīrudo", "chunks_jp": ["天より舞い降りし蒼き女神よ", "その錫杖を振るいて世界を凍りつかせん", "氷結領域(アイシクルフィールド)"], "chunks_romaji": ["Ten yori maioorishi aoki megami yo", "sono shakujo o furuite sekai o kooritsukasen", "Aishikuru Firudo"]}, {"id": 10, "name": "บลิซซาร์ดสตอร์ม (Blizzard Storm)", "en": "Blizzard Storm", "jp": "霜の王。大いなる雪原の覇王。純白を纏い、一切の熱を刈り取る零の王。死を司りし冷たき王が凍てつかせん！『氷槍吹雪(ブリザードストーム)』！", "romaji": "Shimo no o. Oinaru setsugen no hao. Junpaku o matoi, issai no netsu o karitoru zero no o. Shi o tsukasadorishi tsumetaki o ga itetsukasen! \"Burizado Sutomu\"!", "th": "ราชาน้ำค้าง ผู้พิชิตทุ่งน้ำแข็งผู้ยิ่งใหญ่ ราชาแห่งศูนย์ ผู้สวมใส่สีขาวบริสุทธิ์ช่วงชิงความร้อนหมดสิ้น ราชาผู้เยือกเย็นที่ปกครองความตาย ทำให้ทุกอย่างแข็งไปด้วยเถิด 'บลิซซาร์ดสตอร์ม'", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier2", "rank": "Advanced (上級)", "rank_th": "ระดับสูง (Advanced / 上級)", "mp_cost": 65, "power": 125, "type": "damage", "effect": "Summons a raging blizzard storm of thousands of piercing ice spears to crush backline foes.", "condition": "Demands strong mental precision to direct spear trajectories over allies.", "casters": ["Roxy"], "jp_name": "ブリザードストーム", "romaji_name": "Burizādo Sutōmu", "chunks_jp": ["霜の王", "大いなる雪原の覇王", "純白を纏い", "一切の熱を刈り取る零の王", "死を司りし冷たき王が凍てつかせん", "氷槍吹雪(ブリザードストーム)"], "chunks_romaji": ["Shimo no o", "Oinaru setsugen no hao", "Junpaku o matoi", "issai no netsu o karitoru zero no o", "Shi o tsukasadorishi tsumetaki o ga itetsukasen", "Burizado Sutomu"]}, {"id": 11, "name": "เฟลมสไลซ์ (Flame Slice)", "en": "Flame Slice", "jp": "焦げたる剣を持ちて敵を切り裂かん、『フレイムスライス』！", "romaji": "Kogetaru ken o mochite teki o kirisakan, \"Fureimu Suraisu\"!", "th": "จงถือดาบที่ลุกไหม้เกรียมเข้าฟาดฟันศัตรู 'เฟลมสไลซ์'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Elementary-Intermediate (初・中級)", "rank_th": "ระดับต้น-กลาง (Elementary-Intermediate / 初・中級)", "mp_cost": 22, "power": 55, "type": "damage", "effect": "Flings a razor-sharp crescent arc of blazing fire across medium distance.", "condition": "Discharged in a straight cleaving vector to slice armored shells.", "casters": ["Roxy"], "jp_name": "フレイムスライス", "romaji_name": "Fureimu Suraisu", "chunks_jp": ["焦げたる剣を持ちて敵を切り裂かん", "フレイムスライス"], "chunks_romaji": ["Kogetaru ken o mochite teki o kirisakan", "Fureimu Suraisu"]}, {"id": 12, "name": "ไอซ์สแมช (Ice Smash)", "en": "Ice Smash", "jp": "汝の求める所に大いなる氷の加護あらん、氷河の濁流を受けろ、『氷撃(アイススマッシュ)』", "romaji": "Nanji no motomeru tokoro ni oinaru kori no kago aran, hyoga no dakuryu o ukero, \"Aisu Sumasshu\"", "th": "พรแห่งน้ำแข็งอันยิ่งใหญ่จงสถิตอยู่ ณ ที่ที่เจ้าใฝ่หา กระแสแห่งธารน้ำแข็งจงสาดซัดใส่ 'ไอซ์สแมช'", "element": "Water", "element_th": "น้ำ / น้ำแข็ง (Water / Ice / 水・氷)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 70, "type": "damage", "effect": "Impales targets at zero-range with high-velocity glacial pillars.", "condition": "Extremely lethal when unleashed point-blank against regenerating beasts.", "casters": ["Elinalise"], "jp_name": "アイススマッシュ", "romaji_name": "Aisu Sumasshu", "chunks_jp": ["汝の求める所に大いなる氷の加護あらん", "氷河の濁流を受けろ", "氷撃(アイススマッシュ)"], "chunks_romaji": ["Nanji no motomeru tokoro ni oinaru kori no kago aran", "hyoga no dakuryu o ukero", "Aisu Sumasshu"]}, {"id": 13, "name": "เฟลมโทรเวอร์ (Flamethrower)", "en": "Flamethrower", "jp": "小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)』！", "romaji": "Chiisana kusuburi ga kyodai naru megumi o yakitsukusan, \"Fureimu Surowa\"!", "th": "เพลิงอันน้อยนี้จะเผาไหม้ พรอันยิ่งใหญ่จนหมดสิ้น 'เฟลมโทรเวอร์'", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 35, "power": 80, "type": "damage", "effect": "Channels an uninterrupted torrent of searing flame to burn targets and prevent regeneration.", "condition": "Continuous stream requiring sustained mana discharge.", "casters": ["Roxy", "Temple Knights"], "jp_name": "フレイムスロワー", "romaji_name": "Fureimu Surowā", "chunks_jp": ["小さな燻りが巨大なる恵みを焼きつくさん『火炎放射(フレイムスロワー)"], "chunks_romaji": ["Chiisana kusuburi ga kyodai naru megumi o yakitsukusan", "Fureimu Surowa"]}, {"id": 14, "name": "ไชน์ฮีลลิ่ง (Shine Healing)", "en": "Shine Healing", "jp": "奇跡の天使よ、命の鼓動に天なる息吹を与え給え。天にいただきし太陽。神なる御使は赤を嫌う。光の海に舞い降りて、純白の翼を広げよ。さすれば赤は駆逐されん。『シャインヒーリング』", "romaji": "Kiseki no tenshi yo, inochi no kodo ni tennaru ibuki o ataetamae. Ten ni itadakishi taiyo. Shin naru mitsukai wa aka o kirau. Hikari no umi ni maioorite, junpaku no tsubasa o hirogeyo. Sasureba aka wa kuchiku saren. \"Shain Hīringu\"", "th": "เทพธิดาแห่งปาฏิหาริย์เอ๋ย โปรดมอบลมหายใจแห่งสวรรค์ให้แก่ท่วงทำนองของชีวิตด้วยเถิด สุริยันที่อยู่บนสรวงสวรรค์เอ๋ย ผู้รับใช้ของพระผู้เป็นเจ้าทรงชังสีชาด โปรดจุติลงมายังทะเลแห่งแสงสว่าง เพื่อกางปีกสีขาวบริสุทธิ์ด้วยเถิด เมื่อทำดังนั้น สีชาดจักหายไปอย่างไร้ร่องรอย 'ไชน์ฮีลลิ่ง'", "element": "Healing", "element_th": "การรักษา / ศักดิ์สิทธิ์ (Healing / Divine / 神聖・治癒)", "tier": "tier2", "rank": "Saint (治癒聖級)", "rank_th": "ระดับศักดิ์สิทธิ์ (Saint / 治癒聖級)", "mp_cost": 95, "power": 170, "type": "heal", "effect": "Saint-tier restoration that seals life-threatening hemorrhages and restores vital organs.", "condition": "Requires lengthy incantation and serene concentration; cannot regenerate severed limbs.", "casters": ["Roxy"], "jp_name": "シャインヒーリング", "romaji_name": "Shain Hīringu", "chunks_jp": ["奇跡の天使よ", "命の鼓動に天なる息吹を与え給え", "天にいただきし太陽", "神なる御使は赤を嫌う", "光の海に舞い降りて", "純白の翼を広げよ", "さすれば赤は駆逐されん", "シャインヒーリング"], "chunks_romaji": ["Kiseki no tenshi yo", "inochi no kodo ni tennaru ibuki o ataetamae", "Ten ni itadakishi taiyo", "Shin naru mitsukai wa aka o kirau", "Hikari no umi ni maioorite", "junpaku no tsubasa o hirogeyo", "Sasureba aka wa kuchiku saren", "Shain Hīringu"]}, {"id": 15, "name": "คำสั่งแขนเทียมปฐพี (Earth Arm)", "en": "Earth Prosthetic Arm Command", "jp": "土よ、我が腕(かいな)となれ", "romaji": "Tsuchi yo, waga kaina to nare", "th": "ดินเอ๋ย จงมาเป็นแขนของข้า! (คำสั่งถอด: แขนเอ๋ย จงกลับคืนสู่ดิน)", "element": "Earth", "element_th": "ดิน / อุปกรณ์เวทมนตร์ (Earth / Magic Tool / 土・魔道具)", "tier": "tier1", "rank": "Tool Command (魔道具)", "rank_th": "คำสั่งควบคุมอุปกรณ์เวทมนตร์ (Magic Tool Command)", "mp_cost": 20, "power": 50, "type": "buff", "effect": "Awakens the prosthetic earth arm to sync with user nerves for enhanced physical grip.", "condition": "Requires fitted Zariff Prosthetic Arm artifact.", "casters": ["Zanoba", "Rudeus"], "jp_name": "アースプロステティックアーム", "romaji_name": "Āsu Purosetekku Āmu", "chunks_jp": ["土よ", "我が腕(かいな)となれ"], "chunks_romaji": ["Tsuchi yo", "waga kaina to nare"]}, {"id": 16, "name": "ไลท์นิ่ง (Lightning)", "en": "Lightning", "jp": "雄大なる光の精霊にして、天を支配せし雷帝よ！そびえ立つ者が見えるか！傲慢なりし帝の御敵が！我は神なる剣にてかの者を一撃の元に打倒せんとする者なり！光り輝く力を以って、帝の威を知らしめん！『ライトニング』！", "romaji": "Yudai naru hikari no seirei ni shite, ten o shihaiseshi raitei yo! Sobietatsu mono ga mieru ka! Goman narishi tei no miteki ga! Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni dato sen to suru mono nari! Hikarikagayaku chikara o motte, tei no i o shirashimen! \"Raitoningu\"!", "th": "ภูตแสงอันยิ่งใหญ่ ผู้ปกครองนภาเอ๋ย มองเห็นผู้ที่ยืนตระหง่านอยู่เบื้องนั้นหรือไม่ นั่นคือศัตรูขององค์จักรพรรดิผู้โอหัง ข้าคือผู้ที่จะโค่นล้มผู้นั้นด้วยดาบแห่งเทพ ในการโจมตีเดียว สำแดงเดชของจักรพรรดิ ด้วยพลังอันเจิดจ้า 'ไลท์นิ่ง'", "element": "Water", "element_th": "น้ำ / สายฟ้า (Water / Lightning / 水・雷 / 水王級)", "tier": "tier2", "rank": "King (水王級)", "rank_th": "ระดับราชา (King / 水王級)", "mp_cost": 150, "power": 240, "type": "damage", "effect": "Compresses cumulonimbus thundercloud mana to blast down a single pinpoint godbolt of lightning.", "condition": "Must compress high density mana; capable of overwhelming even high dragon armor.", "casters": ["Roxy", "Rudeus"], "jp_name": "ライトニング", "romaji_name": "Raitoningu", "chunks_jp": ["雄大なる光の精霊にして", "天を支配せし雷帝よ", "そびえ立つ者が見えるか", "傲慢なりし帝の御敵が", "我は神なる剣にてかの者を一撃の元に打倒せんとする者なり", "光り輝く力を以って", "帝の威を知らしめん", "ライトニング"], "chunks_romaji": ["Yudai naru hikari no seirei ni shite", "ten o shihaiseshi raitei yo", "Sobietatsu mono ga mieru ka", "Goman narishi tei no miteki ga", "Ware wa shin naru tsurugi ni te kano mono o ichigeki no moto ni dato sen to suru mono nari", "Hikarikagayaku chikara o motte", "tei no i o shirashimen", "Raitoningu"]}, {"id": 17, "name": "เอิร์ธแลนเซอร์ (Earth Lancer)", "en": "Earth Lancer", "jp": "不確かなる神よ！我が呼び声に答え、大地より天を突け！『土槍(アースランサー)』！", "romaji": "Futashikanaru kami yo! Waga yobigoe ni kotae, daichi yori ten o tsuke! \"Asu Ransa\"!", "th": "ข้าแต่พระผู้เป็นเจ้าผู้ไร้ตัวตนแน่ชัด! จงตอบรับเสียงเพรียกของข้า และแทงทะลุผืนฟ้าจากพสุธา! 'เอิร์ธแลนเซอร์'!", "element": "Earth", "element_th": "ดิน (Earth / 土)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 30, "power": 75, "type": "damage", "effect": "Erupts a stone lance from deep underground beneath the target at blinding speed.", "condition": "Requires solid earth surface; can also launch caster upward to evade snares.", "casters": ["Moore", "Temple Knights"], "jp_name": "アースランサー", "romaji_name": "Āsu Ransā", "chunks_jp": ["不確かなる神よ", "我が呼び声に答え", "大地より天を突け", "土槍(アースランサー)"], "chunks_romaji": ["Futashikanaru kami yo", "Waga yobigoe ni kotae", "daichi yori ten o tsuke", "Asu Ransa"]}, {"id": 18, "name": "ไฟร์บูลเล็ต (Fire Bullet)", "en": "Fire Bullet", "jp": "汝の求める所に大いなる炎の加護あらん――『火弾』", "romaji": "Nanji no motomeru tokoro ni oinaru honoo no kago aran ―― \"Kadan\"", "th": "ณ ที่ซึ่งเจ้าปรารถนา จงมีพิทักษ์แห่งเปลวเพลิงอันยิ่งใหญ่―― 'ไฟร์บูลเล็ต'!", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 15, "power": 40, "type": "damage", "effect": "Launches a compact, high-velocity projectile of pure blazing fire.", "condition": "High accuracy projectile; interrupts enemy channeling.", "casters": ["Asura Royal Mage"], "jp_name": "ファイアバレット", "romaji_name": "Faia Baretto", "chunks_jp": ["汝の求める所に大いなる炎の加護あらん――『火弾"], "chunks_romaji": ["Nanji no motomeru tokoro ni oinaru honoo no kago aran ―― \"Kadan"]}, {"id": 19, "name": "การอัญเชิญประตูมังกร (Dragon Gates)", "en": "Front & Rear Dragon Gates", "jp": "その龍はただ忠義にのみ生きる。両の爪は長く、鋭く、決して拳を握れない。かの龍が怒りしとき、拳は握られん。爪は折れ、牙は抜け、しかし思い知るだろう。忠義を握りし龍が、いかなる思いで忠義を捨てたかを！三番目に死んだ龍。最も鋭き瞳を持つ、白銀鱗の龍将。甲龍王ペルギウスの名を以って召喚する――開け『後龍門』、招け『前龍門』", "romaji": "Sono ryu wa tada chugi ni nomi ikiru. Ryo no tsume wa nagaku, surudoku, kesshite kobushi o nigirenai. Kano ryu ga ikarishi toki, kobushi wa nigiraren. Tsume wa ore, kiba wa nuke, shikashi omoishiru daro. Chugi o nigirishi ryu ga, ikanaru omoi de chugi o suteta ka o! Sanbanme ni shinda ryu. Mottomo surudoki hitomi o motsu, hakuginrin no ryusho. Koryuo Perugiusu no na o motte shokan suru ―― Hirake \"Koryumon\", Maneke \"Zenryumon\"", "th": "มังกรผู้นั้น มีชีวิตอยู่เพื่อความภักดีเท่านั้น\nกรงเล็บทั้งสอง ยาวและแหลมคม ไม่อาจกำหมัดได้\n\nยามเมื่อมังกรผู้นั้นโกรธเกรี้ยว หมัดจักถูกกำขึ้น\nกรงเล็บจักหักสะบั้น เขี้ยวจักหลุดร่วง\nทว่าจักได้รับรู้ ว่ามังกรผู้ยึดมั่นในความภักดี ได้ละทิ้งความภักดีไปด้วยความรู้สึกเช่นใด\n\nมังกรผู้สิ้นชีพเป็นลำดับที่สาม ขุนพลมังกรเกล็ดเงินบริสุทธิ์ ผู้มีดวงตาดุร้ายยิ่ง\n\nด้วยนามของราชา มังกรเกราะ เปอร์กิอุส ขออัญเชิญ\nจงเปิดออก ประตูมังกรหน้า\nจงเรียกหา ประตูมังกรหลัง", "element": "Dragon", "element_th": "มังกรโบราณ / อัญเชิญ (Dragon Secret Art / 召喚)", "tier": "tier2", "rank": "Unique Ancient (王〜帝級相当)", "rank_th": "ระดับโบราณ (Unique Ancient / 王〜帝級相当)", "mp_cost": 220, "power": 320, "type": "damage", "effect": "Summons pair of legendary dragon gates flanking the enemy, completely draining all mana and breaking immortality.", "condition": "Ancient dragon heritage secret technique; absolute nullification of enemy spells.", "casters": ["Armored Dragon King Perugius"], "jp_name": "前龍門・後龍門", "romaji_name": "Zenryūmon & Kōryūmon", "chunks_jp": ["その龍はただ忠義にのみ生きる", "両の爪は長く", "鋭く", "決して拳を握れない", "かの龍が怒りしとき", "拳は握られん", "爪は折れ", "牙は抜け", "しかし思い知るだろう", "忠義を握りし龍が", "いかなる思いで忠義を捨てたかを", "三番目に死んだ龍", "最も鋭き瞳を持つ", "白銀鱗の龍将", "甲龍王ペルギウスの名を以って召喚する――開け『後龍門", "招け『前龍門"], "chunks_romaji": ["Sono ryu wa tada chugi ni nomi ikiru", "Ryo no tsume wa nagaku", "surudoku", "kesshite kobushi o nigirenai", "Kano ryu ga ikarishi toki", "kobushi wa nigiraren", "Tsume wa ore", "kiba wa nuke", "shikashi omoishiru daro", "Chugi o nigirishi ryu ga", "ikanaru omoi de chugi o suteta ka o", "Sanbanme ni shinda ryu", "Mottomo surudoki hitomi o motsu", "hakuginrin no ryusho", "Koryuo Perugiusu no na o motte shokan suru ―― Hirake \"Koryumon", "Maneke \"Zenryumon"]}, {"id": 20, "name": "ไฟเออร์บอล (Fireball)", "en": "Fireball", "jp": "汝の求める所に大いなる炎の加護あらん、勇猛なる灯火の熱さを今ここに、ファイアボール！", "romaji": "Nanji no motomeru tokoro ni ooinaru honoo no kago aran. Yuumou naru tomoshibi no atsusa o ima koko ni, FireBall", "th": "ขอพลังแห่งไฟอันยิ่งใหญ่ ในที่ซึ่งเจ้าปรารถนา ความร้อนของดวงไฟที่หาญกล้า จงมาที่นี่ ณ บัดนี้ 'ไฟเออร์บอล'", "element": "Fire", "element_th": "ไฟ (Fire / 火)", "tier": "tier1", "rank": "Elementary (初級)", "rank_th": "ระดับต้น (Elementary / 初級)", "mp_cost": 12, "power": 35, "type": "damage", "effect": "ควบแน่นเปลวเพลิงเป็นลูกบอลความร้อนสูงแล้วยิงพุ่งเข้าเผาผลาญเป้าหมาย", "condition": "รวบรวมมานาธาตุไฟที่ฝ่ามือ ควบคุมการลุกไหม้และวิถีการยิง", "casters": ["Rudeus", "Roxy"], "jp_name": "ファイアボール", "romaji_name": "Faia Bōru", "chunks_jp": ["汝の求める所に大いなる炎の加護あらん", "勇猛なる灯火の熱さを今ここに", "ファイアボール"], "chunks_romaji": ["Nanji no motomeru tokoro ni ooinaru honoo no kago aran", "Yuumou naru tomoshibi no atsusa o ima koko ni", "FireBall"]}, {"id": 21, "name": "สแปลชโฟลว์ (Splash Flow)", "en": "Splash Flow", "jp": "優柔たる水の精霊にして、地を流れしせせらぎの王女よ。内に秘めたる剛力にて、あらゆるものを押し流せ。スプラッシュフロー！", "romaji": "Yuujuu taru mizu no seirei ni shite, chi o nagareshi seseragi no oujo yo. Uchi ni himetaru gouriki nite, arayuru mono oshinagase. Splash Flow", "th": "เจ้าหญิงแห่งกระแสธารที่ไหลรินสู่พิภพ และสร้างภูตน้ำแห่งความรวนเรเอ๋ย จงพัดพาทุกสรรพสิ่งด้วยพละกำลังที่เก็บงำอยู่ภายใน 'สแปลชโฟลว์'", "element": "Water", "element_th": "น้ำ (Water / 水)", "tier": "tier1", "rank": "Intermediate (中級)", "rank_th": "ระดับกลาง (Intermediate / 中級)", "mp_cost": 32, "power": 70, "type": "damage", "effect": "ปลดปล่อยคลื่นกระแสน้ำเชี่ยวกรากขนาดใหญ่พัดถล่มและกวาดล้างศัตรูเป็นวงกว้าง", "condition": "ควบคุมกระแสธารรอบตัวและรวมศูนย์พลังก่อนปล่อยเป็นคลื่นกระแทก", "casters": ["Roxy", "Rudeus"], "jp_name": "スプラッシュフロー", "romaji_name": "Supurasshu Furō", "chunks_jp": ["優柔たる水の精霊にして", "地を流れしせせらぎの王女よ", "内に秘めたる剛力にて", "あらゆるものを押し流せ", "スプラッシュフロー"], "chunks_romaji": ["Yuujuu taru mizu no seirei ni shite", "chi o nagareshi seseragi no oujo yo", "Uchi ni himetaru gouriki nite", "arayuru mono oshinagase", "Splash Flow"]}, {"id": 22, "name": "เอ็กซอร์ซิสเรท (Exorcist Straight)", "en": "Exorcist Straight", "jp": "母なる大地に恵みを与えし我らが神よ！理に背きし愚かなる者に、神罰を与えよ！『エクソシストレート』！", "romaji": "Haha naru daichi ni megumi o ataeshi warera ga kami yo! Kotowari ni somukishi orokanaru mono ni, shinbatsu o ataeyo! \"Ekusoshisutorēto\"!", "th": "พระผู้เป็นเจ้าของเรา ผู้ประทานพรให้แก่ผืนพสุธา โปรดมอบทัณฑ์สวรรค์แก่คนเขลาที่ไม่ทำตามสัจจะด้วย 'เอ็กซอร์ซิสเรท'", "element": "Healing", "element_th": "ศักดิ์สิทธิ์ / ขับไล่วิญญาณ (Divine / Exorcism / 神聖・解呪)", "tier": "tier2", "rank": "Advanced (神聖魔術・上級相当)", "rank_th": "ระดับสูง (Advanced / 上級相当)", "mp_cost": 65, "power": 100, "type": "damage", "effect": "ปล่อยลำแสงศักดิ์สิทธิ์สีขาวบริสุทธิ์จากคทา ขับไล่วิญญาณ ชำระล้างสิ่งชั่วร้าย และทำลายมนต์สะกด/คำสาป", "condition": "เวทมนตร์ของลัทธิมิลิส ต้องร่ายบทร่ายอธิษฐานต่อพระผู้เป็นเจ้า", "casters": ["Cliff"], "jp_name": "エクソシストレート", "romaji_name": "Ekusoshisutorēto", "chunks_jp": ["母なる大地に恵みを与えし我らが神よ", "理に背きし愚かなる者に", "神罰を与えよ", "エクソシストレート"], "chunks_romaji": ["Haha naru daichi ni megumi o ataeshi warera ga kami yo", "Kotowari ni somukishi orokanaru mono ni", "shinbatsu o ataeyo", "Ekusoshisutorēto"]}];
-
-        // ENGINE CONFIGURATION
-        let currentVoiceEngine = localStorage.getItem('mushoku_voice_engine') || 'stream';
-        let customGroqKey = localStorage.getItem('mushoku_groq_key') || '';
-        let customOpenaiKey = localStorage.getItem('mushoku_openai_key') || '';
-
-        function setVoiceEngine(engine) {
-            currentVoiceEngine = engine;
-            localStorage.setItem('mushoku_voice_engine', engine);
-
-            const btnStream = document.getElementById('engine-btn-stream');
-            const btnCloud = document.getElementById('engine-btn-cloud');
-            const btnBrowserAi = document.getElementById('engine-btn-browser_ai');
-
-            [btnStream, btnCloud, btnBrowserAi].forEach(btn => {
-                if (!btn) return;
-                btn.className = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all";
-            });
-
-            const activeClass = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]";
-
-            if (engine === 'stream' && btnStream) btnStream.className = activeClass;
-            if (engine === 'cloud' && btnCloud) btnCloud.className = activeClass;
-            if (engine === 'browser_ai' && btnBrowserAi) {
-                btnBrowserAi.className = activeClass;
-                preloadBrowserAiModel();
-            }
-
-            const box = document.getElementById('train-transcript-box');
-            if (box) {
-                if (engine === 'stream') box.innerHTML = `<span><i class="fa-solid fa-bolt mr-2 text-magic-gold"></i>Live Web Speech: Recite the full incantation into the microphone.</span>`;
-                else if (engine === 'cloud') box.innerHTML = `<span><i class="fa-solid fa-cloud mr-2 text-cyan-400"></i>Cloud Whisper: Record the full audio and send for AI evaluation.</span>`;
-                else if (engine === 'browser_ai') box.innerHTML = `<span><i class="fa-solid fa-robot mr-2 text-purple-400"></i>Web AI: Client-side Whisper will transcribe 100% locally.</span>`;
-            }
-        }
-
-        function openEngineSettings() {
-            document.getElementById('cfg-groq-key').value = customGroqKey;
-            document.getElementById('cfg-openai-key').value = customOpenaiKey;
-            document.getElementById('engine-settings-modal').classList.remove('hidden');
-        }
-
-        function closeEngineSettings() {
-            document.getElementById('engine-settings-modal').classList.add('hidden');
-        }
-
-        function saveEngineSettings() {
-            customGroqKey = document.getElementById('cfg-groq-key').value.trim();
-            customOpenaiKey = document.getElementById('cfg-openai-key').value.trim();
-            localStorage.setItem('mushoku_groq_key', customGroqKey);
-            localStorage.setItem('mushoku_openai_key', customOpenaiKey);
-            closeEngineSettings();
-            alert('Engine settings saved successfully!');
-        }
 
         // TAB SWITCHER
         function switchTab(tab) {
@@ -650,7 +547,6 @@
             } else if (tab === 'training') {
                 document.getElementById('view-training').classList.remove('hidden');
                 document.getElementById('tab-btn-training').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
-                setVoiceEngine(currentVoiceEngine);
             } else if (tab === 'battle') {
                 document.getElementById('view-battle').classList.remove('hidden');
                 document.getElementById('tab-btn-battle').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
@@ -839,12 +735,6 @@
         let isTrainingRecording = false;
         let accumulatedLiveTranscript = '';
 
-        // Audio Recorder State (for Cloud & Web AI)
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let browserAiTranscriber = null;
-        let isModelLoading = false;
-
         function generateTrainingQueue() {
             const elem = document.getElementById('train-element-select').value;
             const t1Count = parseInt(document.getElementById('train-tier1-count').value) || 0;
@@ -886,9 +776,10 @@
             const s = trainingQueue[trainCurrentIndex];
 
             document.getElementById('train-counter').textContent = `STAGE ${trainCurrentIndex + 1} / ${trainingQueue.length} (${s.rank})`;
-            document.getElementById('train-spell-name').textContent = s.en;
+            document.getElementById('train-spell-name').innerHTML = `${s.en} <span class="text-lg md:text-xl text-magic-gold-light font-normal block md:inline font-prompt">(${s.name.split('(')[0].trim()})</span>`;
             document.getElementById('train-jp-text').textContent = `「${s.jp}」`;
             document.getElementById('train-romaji-text').textContent = s.romaji;
+            document.getElementById('train-thai-text').textContent = `"${s.th}"`;
             document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and recite the full incantation...</span>`;
             document.getElementById('train-result-badge').innerHTML = '';
             document.getElementById('train-mic-btn').classList.remove('recording-pulse');
@@ -910,7 +801,7 @@
         }
 
         // =========================================================
-        // SPEECH RECOGNITION (FULL CHANT EVALUATION)
+        // SPEECH RECOGNITION (LIVE WEB SPEECH - FULL CHANT)
         // =========================================================
 
         let recognition = null;
@@ -923,19 +814,8 @@
         }
 
         function toggleTrainingSpeech() {
-            if (currentVoiceEngine === 'stream') {
-                toggleLiveStreamSpeech();
-            } else if (currentVoiceEngine === 'cloud') {
-                toggleCloudAiRecording();
-            } else if (currentVoiceEngine === 'browser_ai') {
-                toggleBrowserAiRecording();
-            }
-        }
-
-        // ENGINE 1: LIVE WEB SPEECH (Full Chant Continuous Stream)
-        function toggleLiveStreamSpeech() {
             if (!recognition) {
-                const manual = prompt('Speech Recognition not supported in this browser. Enter chant transcript:');
+                const manual = prompt('Speech Recognition is not supported in this browser. Enter chant transcript manually:');
                 if (manual) evaluateFullChant(manual);
                 return;
             }
@@ -955,7 +835,11 @@
                 }
             } else {
                 accumulatedLiveTranscript = '';
-                recognition.start();
+                try {
+                    recognition.start();
+                } catch(e) {
+                    console.warn(e);
+                }
                 isTrainingRecording = true;
                 micBtn.classList.add('recording-pulse');
                 box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-ear-listen mr-2"></i>Listening to full chant... Recite now, and click mic when finished!</span>`;
@@ -968,8 +852,8 @@
                             accumulatedLiveTranscript += ' ' + e.results[i][0].transcript;
                         }
                     }
-                    const liveHeard = accumulatedLiveTranscript + ' ' + interim;
-                    box.innerHTML = `<span class="text-white">Heard: "${liveHeard.trim()}"</span>`;
+                    const liveHeard = (accumulatedLiveTranscript + ' ' + interim).trim();
+                    box.innerHTML = `<span class="text-white">Heard: "${liveHeard}"</span>`;
 
                     // Check if final spell trigger was spoken (auto-complete)
                     const s = trainingQueue[trainCurrentIndex];
@@ -977,7 +861,6 @@
                         const finalTrigger = (s.jp_name || s.en).replace(/[「」『』、。・\s!?]/g, '').toLowerCase();
                         const cleanLive = liveHeard.replace(/[「」『』、。・\s!?]/g, '').toLowerCase();
                         if (cleanLive.includes(finalTrigger) && cleanLive.length >= 8) {
-                            // Automatically evaluate when spell trigger is spoken
                             setTimeout(() => {
                                 if (isTrainingRecording) {
                                     isTrainingRecording = false;
@@ -1003,181 +886,6 @@
                         micBtn.classList.remove('recording-pulse');
                     }
                 };
-            }
-        }
-
-        // ENGINE 2: SERVERLESS CLOUD AI (Groq / OpenAI Whisper)
-        async function toggleCloudAiRecording() {
-            const micBtn = document.getElementById('train-mic-btn');
-            const box = document.getElementById('train-transcript-box');
-
-            if (isTrainingRecording) {
-                isTrainingRecording = false;
-                micBtn.classList.remove('recording-pulse');
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
-            } else {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sending full chant to Serverless Whisper AI...</span>`;
-                        await sendAudioToServerlessWhisper(audioBlob);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-
-                    mediaRecorder.start();
-                    isTrainingRecording = true;
-                    micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Cloud AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
-                } catch (err) {
-                    box.innerHTML = `<span class="text-red-400">Microphone access denied: ${err.message}</span>`;
-                }
-            }
-        }
-
-        async function sendAudioToServerlessWhisper(blob) {
-            const s = trainingQueue[trainCurrentIndex];
-            const box = document.getElementById('train-transcript-box');
-
-            try {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = async () => {
-                    const base64Audio = reader.result.split(',')[1];
-                    let endpoint = '/api/transcribe';
-                    let headers = {
-                        'Content-Type': 'application/json',
-                        'x-target-spell': s.en
-                    };
-                    if (customGroqKey) headers['x-api-key'] = customGroqKey;
-                    else if (customOpenaiKey) headers['x-api-key'] = customOpenaiKey;
-
-                    const res = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify({ audio: base64Audio })
-                    });
-
-                    if (!res.ok) {
-                        const err = await res.json().catch(() => ({}));
-                        box.innerHTML = `<span class="text-yellow-400">Cloud API notice: ${err.error || 'Serverless endpoint unavailable'}. Check API key in settings.</span>`;
-                        return;
-                    }
-
-                    const data = await res.json();
-                    const transcript = data.text || '';
-                    box.innerHTML = `<span class="text-white">AI Heard: "${transcript}"</span>`;
-                    evaluateFullChant(transcript);
-                };
-            } catch (err) {
-                box.innerHTML = `<span class="text-red-400">Error connecting to Whisper API: ${err.message}</span>`;
-            }
-        }
-
-        // ENGINE 3: CLIENT-SIDE WEB AI (Transformers.js Whisper-tiny)
-        async function preloadBrowserAiModel() {
-            if (browserAiTranscriber || isModelLoading) return;
-            const loadBox = document.getElementById('model-loading-box');
-            const loadBar = document.getElementById('model-loading-bar');
-            const loadPercent = document.getElementById('model-loading-percent');
-
-            if (!window.transformersPipeline) {
-                setTimeout(preloadBrowserAiModel, 500);
-                return;
-            }
-
-            try {
-                isModelLoading = true;
-                if (loadBox) loadBox.classList.remove('hidden');
-
-                browserAiTranscriber = await window.transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
-                    progress_callback: (p) => {
-                        if (p.status === 'progress' && loadBar) {
-                            const pct = Math.round(p.progress || 0);
-                            loadBar.style.width = pct + '%';
-                            if (loadPercent) loadPercent.textContent = pct + '%';
-                        }
-                    }
-                });
-
-                if (loadBox) {
-                    loadBox.classList.add('hidden');
-                    alert('Web AI Whisper model loaded into browser cache successfully! 100% offline ready.');
-                }
-            } catch (err) {
-                if (loadBox) loadBox.classList.add('hidden');
-                console.warn('Web AI load error:', err);
-            } finally {
-                isModelLoading = false;
-            }
-        }
-
-        async function toggleBrowserAiRecording() {
-            const micBtn = document.getElementById('train-mic-btn');
-            const box = document.getElementById('train-transcript-box');
-
-            if (isTrainingRecording) {
-                isTrainingRecording = false;
-                micBtn.classList.remove('recording-pulse');
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-            } else {
-                if (!browserAiTranscriber) {
-                    await preloadBrowserAiModel();
-                }
-
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microchip mr-2"></i>Transcribing full chant locally with Web AI Whisper...</span>`;
-                        await runLocalWhisperTranscribe(audioBlob);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-
-                    mediaRecorder.start();
-                    isTrainingRecording = true;
-                    micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Web AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
-                } catch (err) {
-                    box.innerHTML = `<span class="text-red-400">Microphone error: ${err.message}</span>`;
-                }
-            }
-        }
-
-        async function runLocalWhisperTranscribe(blob) {
-            const box = document.getElementById('train-transcript-box');
-            try {
-                const arrayBuffer = await blob.arrayBuffer();
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-                const decoded = await audioCtx.decodeAudioData(arrayBuffer);
-                const float32Data = decoded.getChannelData(0);
-
-                const out = await browserAiTranscriber(float32Data, {
-                    language: 'japanese',
-                    task: 'transcribe'
-                });
-
-                const transcript = out.text || '';
-                box.innerHTML = `<span class="text-white">Local AI Heard: "${transcript}"</span>`;
-                evaluateFullChant(transcript);
-            } catch (err) {
-                box.innerHTML = `<span class="text-red-400">Web AI processing error: ${err.message}</span>`;
             }
         }
 

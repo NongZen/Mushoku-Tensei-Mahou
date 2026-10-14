@@ -23,12 +23,6 @@ html = '''<!DOCTYPE html>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Transformers.js for In-Browser Web AI Whisper -->
-    <script type="module">
-        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
-        env.allowLocalModels = false;
-        window.transformersPipeline = pipeline;
-    </script>
 
     <script>
         tailwind.config = {
@@ -89,15 +83,15 @@ html = '''<!DOCTYPE html>
         }
 
         /* Modal styling */
-        #spell-modal, #training-modal, #battle-chant-modal, #engine-settings-modal {
+        #spell-modal, #training-modal, #battle-chant-modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        #spell-modal.hidden, #training-modal.hidden, #battle-chant-modal.hidden, #engine-settings-modal.hidden {
+        #spell-modal.hidden, #training-modal.hidden, #battle-chant-modal.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        #spell-modal:not(.hidden), #training-modal:not(.hidden), #battle-chant-modal:not(.hidden), #engine-settings-modal:not(.hidden) {
+        #spell-modal:not(.hidden), #training-modal:not(.hidden), #battle-chant-modal:not(.hidden) {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
@@ -111,7 +105,7 @@ html = '''<!DOCTYPE html>
             box-shadow: 0 0 50px rgba(197, 160, 89, 0.25), inset 0 0 30px rgba(197, 160, 89, 0.08);
         }
         
-        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content, #battle-chant-modal:not(.hidden) .modal-content, #engine-settings-modal:not(.hidden) .modal-content {
+        #spell-modal:not(.hidden) .modal-content, #training-modal:not(.hidden) .modal-content, #battle-chant-modal:not(.hidden) .modal-content {
             transform: scale(1) translateY(0);
         }
 
@@ -189,10 +183,10 @@ html = '''<!DOCTYPE html>
             <!-- Navigation Mode Switcher -->
             <div class="flex justify-center items-center gap-3 mt-8 flex-wrap">
                 <button onclick="switchTab('grimoire')" id="tab-btn-grimoire" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]">
-                    <i class="fa-solid fa-book-sparkles mr-2"></i> Grimoire Archive
+                    <i class="fa-solid fa-book-bookmark mr-2"></i> Grimoire Archive
                 </button>
                 <button onclick="switchTab('training')" id="tab-btn-training" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
-                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training (JP/Romaji)
+                    <i class="fa-solid fa-microphone-lines mr-2"></i> Chanting Training
                 </button>
                 <button onclick="switchTab('battle')" id="tab-btn-battle" class="px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold">
                     <i class="fa-solid fa-dragon mr-2"></i> Spell Battle RPG
@@ -249,8 +243,8 @@ html = '''<!DOCTYPE html>
             <!-- Training Queue Generator Configuration -->
             <div class="bg-gradient-to-b from-[#111a24] to-[#0d121c] border-2 border-magic-gold/40 rounded-3xl p-6 md:p-8 backdrop-blur-md max-w-4xl mx-auto mb-10 shadow-2xl">
                 <div class="text-center mb-6">
-                    <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP & Romaji)</h3>
-                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ร่ายทั้งบทสวดเต็มบทเพื่อความสมจริง</p>
+                    <h3 class="font-cinzel text-2xl font-bold text-white mb-2 text-glow"><i class="fa-solid fa-graduation-cap text-magic-gold mr-2"></i>Chanting Academy (JP / Romaji / TH)</h3>
+                    <p class="text-gray-400 text-sm">สร้างคิวฝึกซ้อมร่ายเวทมนตร์ ร่ายทั้งบทสวดเต็มบท พร้อมคำอ่านโรมาจิและคำแปลภาษาไทย</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -293,46 +287,28 @@ html = '''<!DOCTYPE html>
             <!-- Training Stage Box -->
             <div id="training-stage-box" class="hidden bg-gradient-to-b from-[#111a24] to-[#151020] border-2 border-magic-gold rounded-3xl p-6 md:p-10 text-center max-w-4xl mx-auto shadow-2xl relative">
                 
-                <!-- Voice Engine Selector Pill -->
-                <div class="flex flex-wrap items-center justify-center gap-2 mb-6 bg-black/50 p-2 rounded-2xl border border-magic-gold/20 max-w-xl mx-auto">
-                    <span class="text-[11px] uppercase font-cinzel text-gray-400 mr-1"><i class="fa-solid fa-microchip text-magic-gold mr-1"></i> ASR Engine:</span>
-                    <button onclick="setVoiceEngine('stream')" id="engine-btn-stream" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]">
-                        <i class="fa-solid fa-bolt mr-1"></i> 1. Live Web Speech
-                    </button>
-                    <button onclick="setVoiceEngine('cloud')" id="engine-btn-cloud" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
-                        <i class="fa-solid fa-cloud mr-1"></i> 2. Serverless Whisper
-                    </button>
-                    <button onclick="setVoiceEngine('browser_ai')" id="engine-btn-browser_ai" class="px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all">
-                        <i class="fa-solid fa-robot mr-1"></i> 3. Web AI (Offline)
-                    </button>
-                    <button onclick="openEngineSettings()" class="text-xs text-magic-gold hover:text-yellow-300 p-1.5 rounded-lg bg-white/5 border border-white/10 ml-1" title="API Settings">
-                        <i class="fa-solid fa-gear"></i>
-                    </button>
-                </div>
-
-                <!-- Web AI Model Download Progress Indicator -->
-                <div id="model-loading-box" class="hidden mb-6 bg-blue-950/60 border border-blue-400/40 rounded-2xl p-4 max-w-xl mx-auto text-xs text-blue-200">
-                    <div class="flex justify-between items-center mb-1.5">
-                        <span id="model-loading-status"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading Web AI Model (Xenova/whisper-tiny)...</span>
-                        <span id="model-loading-percent" class="font-bold text-white">0%</span>
-                    </div>
-                    <div class="w-full bg-black/60 rounded-full h-2 overflow-hidden border border-blue-500/30">
-                        <div id="model-loading-bar" class="bg-gradient-to-r from-blue-400 to-cyan-300 h-full rounded-full transition-all duration-200" style="width: 0%;"></div>
-                    </div>
+                <!-- Live Web Speech Engine Badge -->
+                <div class="inline-flex items-center gap-2 mb-6 bg-black/50 px-5 py-2 rounded-full border border-magic-gold/30 text-xs text-gray-300 font-cinzel shadow-[0_0_15px_rgba(197,160,89,0.15)]">
+                    <i class="fa-solid fa-bolt text-magic-gold"></i> Engine: <span class="text-magic-gold font-semibold">Live Web Speech Recognition (Full Chant)</span>
                 </div>
 
                 <div id="train-counter" class="font-cinzel text-magic-gold text-xs tracking-widest uppercase mb-1">STAGE 1 / 2</div>
                 <h3 id="train-spell-name" class="font-cinzel text-2xl md:text-3xl font-bold text-white mb-4 text-glow">Water Ball</h3>
 
-                <!-- Active Chant Box (Full Chant) -->
+                <!-- Active Chant Box (Full Chant: JP -> Romaji -> TH) -->
                 <div class="bg-black/60 border border-magic-gold/30 rounded-2xl p-5 md:p-7 mb-6 text-left">
-                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">Full Japanese Incantation:</div>
+                    <div class="text-xs uppercase text-gray-400 font-cinzel mb-2">1. Full Japanese Incantation (คำร่ายภาษาญี่ปุ่น):</div>
                     <div id="train-jp-text" class="font-jp text-lg md:text-xl text-white font-bold leading-relaxed mb-3">
                         「汝の求める所に大いなる水の加護あらん、清涼なるせせらぎの流れを今ここに、ウォーターボール」
                     </div>
-                    <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">Romaji:</div>
-                    <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed">
+                    <div class="text-xs uppercase text-magic-gold font-cinzel mb-1">2. Romaji (คำอ่านโรมาจิ):</div>
+                    <div id="train-romaji-text" class="text-sm md:text-base text-magic-gold-light italic leading-relaxed mb-3">
                         Nanji no motomeru tokoro ni oinaru mizu no kago aran, seiryo naru seseragi no nagare o ima koko ni, Wota Boru
+                    </div>
+                    <div class="h-px bg-white/10 my-3"></div>
+                    <div class="text-xs uppercase text-amber-400 font-cinzel mb-1"><i class="fa-solid fa-book-bookmark mr-1.5"></i> 3. Thai Translation (ความหมายภาษาไทย):</div>
+                    <div id="train-thai-text" class="text-sm md:text-base text-gray-200 font-light leading-relaxed whitespace-pre-line italic">
+                        ...
                     </div>
                 </div>
 
@@ -555,90 +531,11 @@ html = '''<!DOCTYPE html>
         </div>
     </div>
 
-    <!-- Engine API Settings Modal -->
-    <div id="engine-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeEngineSettings()"></div>
-        <div class="modal-content relative w-full max-w-md rounded-2xl p-6 text-left z-10 border-2 border-magic-gold">
-            <h3 class="font-cinzel text-xl font-bold text-magic-gold mb-1"><i class="fa-solid fa-gear mr-2"></i> Voice Engine Settings</h3>
-            <p class="text-xs text-gray-400 mb-4">Configure AI Cloud API Keys for Method 2 (Serverless Whisper).</p>
-
-            <div class="mb-4">
-                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">Groq API Key (Free & 300ms fast):</label>
-                <input type="password" id="cfg-groq-key" placeholder="gsk_..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
-                <p class="text-[11px] text-gray-500 mt-1">Get free key at <a href="https://console.groq.com/keys" target="_blank" class="text-magic-gold hover:underline">groq.com</a> (or set GROQ_API_KEY on Vercel).</p>
-            </div>
-
-            <div class="mb-5">
-                <label class="block text-xs uppercase font-cinzel text-gray-300 mb-1">OpenAI API Key (Optional):</label>
-                <input type="password" id="cfg-openai-key" placeholder="sk-..." class="w-full bg-black/60 border border-magic-gold/30 rounded-lg p-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-magic-gold">
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <button onclick="closeEngineSettings()" class="px-4 py-2 rounded-lg bg-white/10 text-xs font-cinzel text-gray-300">Cancel</button>
-                <button onclick="saveEngineSettings()" class="px-5 py-2 rounded-lg bg-magic-gold text-magic-dark font-cinzel font-bold text-xs">Save Settings</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ======================================================== -->
     <!-- JAVASCRIPT LOGIC -->
     <!-- ======================================================== -->
     <script>
         const spellsData = ''' + json.dumps(spells, ensure_ascii=False) + ''';
-
-        // ENGINE CONFIGURATION
-        let currentVoiceEngine = localStorage.getItem('mushoku_voice_engine') || 'stream';
-        let customGroqKey = localStorage.getItem('mushoku_groq_key') || '';
-        let customOpenaiKey = localStorage.getItem('mushoku_openai_key') || '';
-
-        function setVoiceEngine(engine) {
-            currentVoiceEngine = engine;
-            localStorage.setItem('mushoku_voice_engine', engine);
-
-            const btnStream = document.getElementById('engine-btn-stream');
-            const btnCloud = document.getElementById('engine-btn-cloud');
-            const btnBrowserAi = document.getElementById('engine-btn-browser_ai');
-
-            [btnStream, btnCloud, btnBrowserAi].forEach(btn => {
-                if (!btn) return;
-                btn.className = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-white/10 bg-white/5 text-gray-300 hover:text-white transition-all";
-            });
-
-            const activeClass = "px-3 py-1.5 rounded-xl text-xs font-cinzel border border-magic-gold bg-magic-gold text-magic-dark font-bold transition-all shadow-[0_0_10px_rgba(197,160,89,0.3)]";
-
-            if (engine === 'stream' && btnStream) btnStream.className = activeClass;
-            if (engine === 'cloud' && btnCloud) btnCloud.className = activeClass;
-            if (engine === 'browser_ai' && btnBrowserAi) {
-                btnBrowserAi.className = activeClass;
-                preloadBrowserAiModel();
-            }
-
-            const box = document.getElementById('train-transcript-box');
-            if (box) {
-                if (engine === 'stream') box.innerHTML = `<span><i class="fa-solid fa-bolt mr-2 text-magic-gold"></i>Live Web Speech: Recite the full incantation into the microphone.</span>`;
-                else if (engine === 'cloud') box.innerHTML = `<span><i class="fa-solid fa-cloud mr-2 text-cyan-400"></i>Cloud Whisper: Record the full audio and send for AI evaluation.</span>`;
-                else if (engine === 'browser_ai') box.innerHTML = `<span><i class="fa-solid fa-robot mr-2 text-purple-400"></i>Web AI: Client-side Whisper will transcribe 100% locally.</span>`;
-            }
-        }
-
-        function openEngineSettings() {
-            document.getElementById('cfg-groq-key').value = customGroqKey;
-            document.getElementById('cfg-openai-key').value = customOpenaiKey;
-            document.getElementById('engine-settings-modal').classList.remove('hidden');
-        }
-
-        function closeEngineSettings() {
-            document.getElementById('engine-settings-modal').classList.add('hidden');
-        }
-
-        function saveEngineSettings() {
-            customGroqKey = document.getElementById('cfg-groq-key').value.trim();
-            customOpenaiKey = document.getElementById('cfg-openai-key').value.trim();
-            localStorage.setItem('mushoku_groq_key', customGroqKey);
-            localStorage.setItem('mushoku_openai_key', customOpenaiKey);
-            closeEngineSettings();
-            alert('Engine settings saved successfully!');
-        }
 
         // TAB SWITCHER
         function switchTab(tab) {
@@ -656,7 +553,6 @@ html = '''<!DOCTYPE html>
             } else if (tab === 'training') {
                 document.getElementById('view-training').classList.remove('hidden');
                 document.getElementById('tab-btn-training').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
-                setVoiceEngine(currentVoiceEngine);
             } else if (tab === 'battle') {
                 document.getElementById('view-battle').classList.remove('hidden');
                 document.getElementById('tab-btn-battle').className = "px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]";
@@ -845,12 +741,6 @@ html = '''<!DOCTYPE html>
         let isTrainingRecording = false;
         let accumulatedLiveTranscript = '';
 
-        // Audio Recorder State (for Cloud & Web AI)
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let browserAiTranscriber = null;
-        let isModelLoading = false;
-
         function generateTrainingQueue() {
             const elem = document.getElementById('train-element-select').value;
             const t1Count = parseInt(document.getElementById('train-tier1-count').value) || 0;
@@ -892,9 +782,10 @@ html = '''<!DOCTYPE html>
             const s = trainingQueue[trainCurrentIndex];
 
             document.getElementById('train-counter').textContent = `STAGE ${trainCurrentIndex + 1} / ${trainingQueue.length} (${s.rank})`;
-            document.getElementById('train-spell-name').textContent = s.en;
+            document.getElementById('train-spell-name').innerHTML = `${s.en} <span class="text-lg md:text-xl text-magic-gold-light font-normal block md:inline font-prompt">(${s.name.split('(')[0].trim()})</span>`;
             document.getElementById('train-jp-text').textContent = `「${s.jp}」`;
             document.getElementById('train-romaji-text').textContent = s.romaji;
+            document.getElementById('train-thai-text').textContent = `"${s.th}"`;
             document.getElementById('train-transcript-box').innerHTML = `<span>Press microphone button and recite the full incantation...</span>`;
             document.getElementById('train-result-badge').innerHTML = '';
             document.getElementById('train-mic-btn').classList.remove('recording-pulse');
@@ -916,7 +807,7 @@ html = '''<!DOCTYPE html>
         }
 
         // =========================================================
-        // SPEECH RECOGNITION (FULL CHANT EVALUATION)
+        // SPEECH RECOGNITION (LIVE WEB SPEECH - FULL CHANT)
         // =========================================================
 
         let recognition = null;
@@ -929,19 +820,8 @@ html = '''<!DOCTYPE html>
         }
 
         function toggleTrainingSpeech() {
-            if (currentVoiceEngine === 'stream') {
-                toggleLiveStreamSpeech();
-            } else if (currentVoiceEngine === 'cloud') {
-                toggleCloudAiRecording();
-            } else if (currentVoiceEngine === 'browser_ai') {
-                toggleBrowserAiRecording();
-            }
-        }
-
-        // ENGINE 1: LIVE WEB SPEECH (Full Chant Continuous Stream)
-        function toggleLiveStreamSpeech() {
             if (!recognition) {
-                const manual = prompt('Speech Recognition not supported in this browser. Enter chant transcript:');
+                const manual = prompt('Speech Recognition is not supported in this browser. Enter chant transcript manually:');
                 if (manual) evaluateFullChant(manual);
                 return;
             }
@@ -961,7 +841,11 @@ html = '''<!DOCTYPE html>
                 }
             } else {
                 accumulatedLiveTranscript = '';
-                recognition.start();
+                try {
+                    recognition.start();
+                } catch(e) {
+                    console.warn(e);
+                }
                 isTrainingRecording = true;
                 micBtn.classList.add('recording-pulse');
                 box.innerHTML = `<span class="text-magic-gold animate-pulse"><i class="fa-solid fa-ear-listen mr-2"></i>Listening to full chant... Recite now, and click mic when finished!</span>`;
@@ -974,8 +858,8 @@ html = '''<!DOCTYPE html>
                             accumulatedLiveTranscript += ' ' + e.results[i][0].transcript;
                         }
                     }
-                    const liveHeard = accumulatedLiveTranscript + ' ' + interim;
-                    box.innerHTML = `<span class="text-white">Heard: "${liveHeard.trim()}"</span>`;
+                    const liveHeard = (accumulatedLiveTranscript + ' ' + interim).trim();
+                    box.innerHTML = `<span class="text-white">Heard: "${liveHeard}"</span>`;
 
                     // Check if final spell trigger was spoken (auto-complete)
                     const s = trainingQueue[trainCurrentIndex];
@@ -983,7 +867,6 @@ html = '''<!DOCTYPE html>
                         const finalTrigger = (s.jp_name || s.en).replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
                         const cleanLive = liveHeard.replace(/[「」『』、。・\\s!?]/g, '').toLowerCase();
                         if (cleanLive.includes(finalTrigger) && cleanLive.length >= 8) {
-                            // Automatically evaluate when spell trigger is spoken
                             setTimeout(() => {
                                 if (isTrainingRecording) {
                                     isTrainingRecording = false;
@@ -1009,181 +892,6 @@ html = '''<!DOCTYPE html>
                         micBtn.classList.remove('recording-pulse');
                     }
                 };
-            }
-        }
-
-        // ENGINE 2: SERVERLESS CLOUD AI (Groq / OpenAI Whisper)
-        async function toggleCloudAiRecording() {
-            const micBtn = document.getElementById('train-mic-btn');
-            const box = document.getElementById('train-transcript-box');
-
-            if (isTrainingRecording) {
-                isTrainingRecording = false;
-                micBtn.classList.remove('recording-pulse');
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
-            } else {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sending full chant to Serverless Whisper AI...</span>`;
-                        await sendAudioToServerlessWhisper(audioBlob);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-
-                    mediaRecorder.start();
-                    isTrainingRecording = true;
-                    micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-cyan-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Cloud AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
-                } catch (err) {
-                    box.innerHTML = `<span class="text-red-400">Microphone access denied: ${err.message}</span>`;
-                }
-            }
-        }
-
-        async function sendAudioToServerlessWhisper(blob) {
-            const s = trainingQueue[trainCurrentIndex];
-            const box = document.getElementById('train-transcript-box');
-
-            try {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = async () => {
-                    const base64Audio = reader.result.split(',')[1];
-                    let endpoint = '/api/transcribe';
-                    let headers = {
-                        'Content-Type': 'application/json',
-                        'x-target-spell': s.en
-                    };
-                    if (customGroqKey) headers['x-api-key'] = customGroqKey;
-                    else if (customOpenaiKey) headers['x-api-key'] = customOpenaiKey;
-
-                    const res = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify({ audio: base64Audio })
-                    });
-
-                    if (!res.ok) {
-                        const err = await res.json().catch(() => ({}));
-                        box.innerHTML = `<span class="text-yellow-400">Cloud API notice: ${err.error || 'Serverless endpoint unavailable'}. Check API key in settings.</span>`;
-                        return;
-                    }
-
-                    const data = await res.json();
-                    const transcript = data.text || '';
-                    box.innerHTML = `<span class="text-white">AI Heard: "${transcript}"</span>`;
-                    evaluateFullChant(transcript);
-                };
-            } catch (err) {
-                box.innerHTML = `<span class="text-red-400">Error connecting to Whisper API: ${err.message}</span>`;
-            }
-        }
-
-        // ENGINE 3: CLIENT-SIDE WEB AI (Transformers.js Whisper-tiny)
-        async function preloadBrowserAiModel() {
-            if (browserAiTranscriber || isModelLoading) return;
-            const loadBox = document.getElementById('model-loading-box');
-            const loadBar = document.getElementById('model-loading-bar');
-            const loadPercent = document.getElementById('model-loading-percent');
-
-            if (!window.transformersPipeline) {
-                setTimeout(preloadBrowserAiModel, 500);
-                return;
-            }
-
-            try {
-                isModelLoading = true;
-                if (loadBox) loadBox.classList.remove('hidden');
-
-                browserAiTranscriber = await window.transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
-                    progress_callback: (p) => {
-                        if (p.status === 'progress' && loadBar) {
-                            const pct = Math.round(p.progress || 0);
-                            loadBar.style.width = pct + '%';
-                            if (loadPercent) loadPercent.textContent = pct + '%';
-                        }
-                    }
-                });
-
-                if (loadBox) {
-                    loadBox.classList.add('hidden');
-                    alert('Web AI Whisper model loaded into browser cache successfully! 100% offline ready.');
-                }
-            } catch (err) {
-                if (loadBox) loadBox.classList.add('hidden');
-                console.warn('Web AI load error:', err);
-            } finally {
-                isModelLoading = false;
-            }
-        }
-
-        async function toggleBrowserAiRecording() {
-            const micBtn = document.getElementById('train-mic-btn');
-            const box = document.getElementById('train-transcript-box');
-
-            if (isTrainingRecording) {
-                isTrainingRecording = false;
-                micBtn.classList.remove('recording-pulse');
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-            } else {
-                if (!browserAiTranscriber) {
-                    await preloadBrowserAiModel();
-                }
-
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microchip mr-2"></i>Transcribing full chant locally with Web AI Whisper...</span>`;
-                        await runLocalWhisperTranscribe(audioBlob);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-
-                    mediaRecorder.start();
-                    isTrainingRecording = true;
-                    micBtn.classList.add('recording-pulse');
-                    box.innerHTML = `<span class="text-purple-400 animate-pulse"><i class="fa-solid fa-microphone mr-2"></i>[Web AI] Recording full chant... Recite completely and click mic to evaluate!</span>`;
-                } catch (err) {
-                    box.innerHTML = `<span class="text-red-400">Microphone error: ${err.message}</span>`;
-                }
-            }
-        }
-
-        async function runLocalWhisperTranscribe(blob) {
-            const box = document.getElementById('train-transcript-box');
-            try {
-                const arrayBuffer = await blob.arrayBuffer();
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-                const decoded = await audioCtx.decodeAudioData(arrayBuffer);
-                const float32Data = decoded.getChannelData(0);
-
-                const out = await browserAiTranscriber(float32Data, {
-                    language: 'japanese',
-                    task: 'transcribe'
-                });
-
-                const transcript = out.text || '';
-                box.innerHTML = `<span class="text-white">Local AI Heard: "${transcript}"</span>`;
-                evaluateFullChant(transcript);
-            } catch (err) {
-                box.innerHTML = `<span class="text-red-400">Web AI processing error: ${err.message}</span>`;
             }
         }
 
