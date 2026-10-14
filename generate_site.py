@@ -511,7 +511,7 @@ html = '''<!DOCTYPE html>
                         <h5 class="text-xs uppercase tracking-wider text-magic-gold font-cinzel font-semibold"><i class="fa-solid fa-book mr-1.5"></i> 3. Thai (คำแปลภาษาไทย)</h5>
                         <button id="modal-copy-th-btn" class="text-xs text-magic-gold hover:text-yellow-300 font-cinzel"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <p id="modal-thai-chant" class="text-base sm:text-lg text-gray-200 leading-relaxed font-light italic">"..."</p>
+                    <p id="modal-thai-chant" class="text-base sm:text-lg text-gray-200 leading-relaxed font-light italic whitespace-pre-line">"..."</p>
                 </div>
 
                 <!-- Spell Effect & Mechanics -->
