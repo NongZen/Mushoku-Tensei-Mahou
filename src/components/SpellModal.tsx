@@ -62,6 +62,8 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
     window.speechSynthesis.speak(utterance);
   };
 
+  const isSword = spell.element === 'Sword' || !!spell.sword_school;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
@@ -90,16 +92,17 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
           </div>
           <div className="inline-block px-3 py-1 bg-magic-gold/10 border border-magic-gold/30 rounded-full text-magic-gold-light text-xs mt-3 shadow-[0_0_10px_rgba(197,160,89,0.2)]">
             <span>{spell.rank} • {spell.element_th || spell.element}</span>
+            {spell.sword_school_th && <span className="ml-1.5 font-semibold text-yellow-300">• {spell.sword_school_th}</span>}
           </div>
         </div>
 
         <div className="space-y-4">
-          {/* 1. Japanese Chant */}
+          {/* 1. Japanese Chant / Stance */}
           <div className="bg-black/40 rounded-xl p-5 border-l-4 border-blue-500/70 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="flex justify-between items-center mb-2">
               <h5 className="text-xs uppercase tracking-wider text-blue-400 font-cinzel font-semibold flex items-center gap-1.5">
-                <span>⛩️</span> 1. Japanese (คำร่ายภาษาญี่ปุ่น)
+                <span>{isSword ? '🗡️' : '⛩️'}</span> 1. Japanese ({isSword ? 'คำสั่งกระบวนท่าภาษาญี่ปุ่น' : 'คำร่ายภาษาญี่ปุ่น'})
               </h5>
               <div className="flex gap-3">
                 <button
@@ -124,7 +127,7 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
             </p>
           </div>
 
-          {/* 2. Romaji Chant */}
+          {/* 2. Romaji */}
           <div className="bg-black/40 rounded-xl p-5 border-l-4 border-purple-500/70 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="flex justify-between items-center mb-2">
@@ -145,12 +148,12 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
             </p>
           </div>
 
-          {/* 3. Thai Chant */}
+          {/* 3. Thai */}
           <div className="bg-black/40 rounded-xl p-5 border-l-4 border-magic-gold relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-magic-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="flex justify-between items-center mb-2">
               <h5 className="text-xs uppercase tracking-wider text-magic-gold font-cinzel font-semibold flex items-center gap-1.5">
-                <span>📖</span> 3. Thai (คำแปลภาษาไทย)
+                <span>{isSword ? '⚔️' : '📖'}</span> 3. Thai ({isSword ? 'คำอธิบายกระบวนท่าภาษาไทย' : 'คำแปลภาษาไทย'})
               </h5>
               <div className="flex gap-3">
                 <button
@@ -175,10 +178,10 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
             </p>
           </div>
 
-          {/* Spell Effect & Mechanics */}
+          {/* Spell / Technique Effect & Mechanics */}
           <div className="bg-black/30 rounded-xl p-4 border border-white/5 flex flex-col sm:flex-row justify-between gap-3 text-xs text-gray-400">
             <div>
-              <strong className="text-gray-300">MP Cost:</strong>{' '}
+              <strong className="text-gray-300">{isSword ? 'Stamina / MP:' : 'MP Cost:'}</strong>{' '}
               <span className="text-cyan-400 font-semibold">{spell.mp_cost} MP</span>
             </div>
             <div>
@@ -186,7 +189,7 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
               <span className="text-yellow-400 font-semibold">{spell.rank}</span>
             </div>
             <div>
-              <strong className="text-gray-300">Casters:</strong>{' '}
+              <strong className="text-gray-300">{isSword ? 'Users:' : 'Casters:'}</strong>{' '}
               <span className="text-white font-medium">{spell.casters.join(', ')}</span>
             </div>
           </div>
@@ -197,19 +200,22 @@ export const SpellModal: React.FC<SpellModalProps> = ({ spell, onClose, onPracti
             </div>
           )}
 
-          <div className="text-center pt-2">
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onPracticeSpell(spell);
-              }}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-magic-gold to-yellow-500 text-magic-dark font-cinzel font-bold text-sm uppercase tracking-wider hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(197,160,89,0.3)]"
-            >
-              <Dumbbell className="w-4 h-4" />
-              Practice This Spell In Training Mode
-            </button>
-          </div>
+          {/* Practice Button (Only for magic spells; sword techniques do not have chants to practice) */}
+          {!isSword && (
+            <div className="text-center pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onPracticeSpell(spell);
+                }}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-magic-gold to-yellow-500 text-magic-dark font-cinzel font-bold text-sm uppercase tracking-wider hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(197,160,89,0.3)]"
+              >
+                <Dumbbell className="w-4 h-4" />
+                Practice This Spell In Training Mode
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

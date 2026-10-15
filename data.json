@@ -772,11 +772,11 @@
   },
   {
     "id": 22,
-    "name": "เอ็กซอร์ซิสเรท (Exorcist Straight)",
+    "name": "เอ็กซอร์ซิสเรท (Exorcist Straight / エクソシストレート)",
     "en": "Exorcist Straight",
     "jp": "母なる大地に恵みを与えし我らが神よ！理に背きし愚かなる者に、神罰を与えよ！『エクソシストレート』！",
     "romaji": "Haha naru daichi ni megumi o ataeshi warera ga kami yo! Kotowari ni somukishi orokanaru mono ni, shinbatsu o ataeyo! \"Ekusoshisutorēto\"!",
-    "th": "พระผู้เป็นเจ้าของเรา ผู้ประทานพรให้แก่ผืนพสุธา โปรดมอบทัณฑ์สวรรค์แก่คนเขลาที่ไม่ทำตามสัจจะด้วย 'เอ็กซอร์ซิสเรท'",
+    "th": "พระผู้เป็นเจ้าของเรา ผู้ประทานพรให้แก่ผืนพสุธา โปรดมอบทัณฑ์สวรรค์แก่คนเขลาที่ไม่ทำตามสัจจะด้วย 'เอ็กซอร์ซิสเรท'!",
     "element": "Healing",
     "element_th": "ศักดิ์สิทธิ์ / ขับไล่วิญญาณ (Divine / Exorcism / 神聖・解呪)",
     "tier": "tier2",
@@ -803,6 +803,844 @@
       "Kotowari ni somukishi orokanaru mono ni",
       "shinbatsu o ataeyo",
       "Ekusoshisutorēto"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "แอร์เบิสต์ (Air Burst / 衝撃波)",
+    "en": "Air Burst",
+    "jp": "静かに眠りし翠風の王女よ、その激情を解き放ち、忌まわしき邪悪を跳ね飛ばせ、エアバースト！",
+    "romaji": "Shizuka ni nemurishi suifu no ojo yo, sono gekijo o tokihatachi, imawashiki jaaku o hanetobase, Ea Basuto!",
+    "th": "เจ้าหญิงแห่งวายุเขียวมรกตผู้นิทราอย่างสงบเอ๋ย จงปลดปล่อยเพลิงแค้น และซัดสิ่งชั่วร้ายอันน่ารังเกียจให้กระเด็นไป 'แอร์เบิสต์'!",
+    "element": "Wind",
+    "element_th": "ลม (Wind / 風)",
+    "tier": "tier1",
+    "rank": "Elementary (初級)",
+    "rank_th": "ระดับต้น (Elementary / 初級)",
+    "mp_cost": 15,
+    "power": 45,
+    "type": "damage",
+    "effect": "สั่นสะเทือนมวลอากาศเพื่อสร้างคลื่นกระแทกผลักกระเด็นศัตรู รูเดียสใช้ไร้ร่ายเพื่อเคลื่อนที่หลบหลีก",
+    "condition": "โคจรมานาธาตุลมและบีบอัดอากาศอย่างรวดเร็ว",
+    "casters": [
+      "Rudeus",
+      "Sylphiette"
+    ],
+    "jp_name": "エアバースト",
+    "romaji_name": "Ea Bāsuto",
+    "chunks_jp": [
+      "静かに眠りし翠風の王女よ",
+      "その激情を解き放ち",
+      "忌まわしき邪悪を跳ね飛ばせ",
+      "エアバースト"
+    ],
+    "chunks_romaji": [
+      "Shizuka ni nemurishi suifu no ojo yo",
+      "sono gekijo o tokihatachi",
+      "imawashiki jaaku o hanetobase",
+      "Ea Basuto"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "เอ็กโซดัสเฟลม (Exodus Flame / 獄炎火弾)",
+    "en": "Exodus Flame",
+    "jp": "苛烈なる炎の精霊にして地獄に轟く黒の落とし子よ！今こそ大地に這い上がり拳を振り上げよ！怨敵を叩き潰し燃やし尽くし喰らい尽くし黒に染めよ！エグゾダスフレイム！",
+    "romaji": "Karetsu naru honoo no seirei ni shite jigoku ni todoroku kuro no otoshigo yo! Ima koso daichi ni haiagari kobushi o furiageyo! Onteki o tatakitsubushi moyashitsukushi kuraitsukushi kuro ni someyo! Eguzodasu Fureimu!",
+    "th": "ภูตเพลิงอันเกรี้ยวกราก ทายาททมิฬผู้กึกก้องในอเวจีเอ๋ย! บัดนี้จงคืบคลานขึ้นสู่พิภพและชูกำปั้นขึ้น! จงบดขยี้ เผาผลาญ กลืนกิน และย้อมศัตรูคู่อาฆาตให้เป็นสีดำมืดมิด! 'เอ็กโซดัสเฟลม'!",
+    "element": "Fire",
+    "element_th": "ไฟ (Fire / 火)",
+    "tier": "tier2",
+    "rank": "Advanced (上級)",
+    "rank_th": "ระดับสูง (Advanced / 上級)",
+    "mp_cost": 70,
+    "power": 135,
+    "type": "damage",
+    "effect": "สร้างลูกไฟบรรลัยกัลป์ขนาดยักษ์ เผาผลาญศัตรูและสิ่งก่อสร้างเป็นจุณในพริบตา",
+    "condition": "ควบคุมเพลิงนรกอุณหภูมิสูงพิเศษและรวมศูนย์ที่กำปั้นหรือคทา",
+    "casters": [
+      "Rudeus",
+      "Cliff"
+    ],
+    "jp_name": "エグゾダスフレイム",
+    "romaji_name": "Eguzodasu Fureimu",
+    "chunks_jp": [
+      "苛烈なる炎の精霊にして地獄に轟く黒の落とし子よ",
+      "今こそ大地に這い上がり拳を振り上げよ",
+      "怨敵を叩き潰し燃やし尽くし喰らい尽くし黒に染めよ",
+      "エグゾダスフレイム"
+    ],
+    "chunks_romaji": [
+      "Karetsu naru honoo no seirei ni shite jigoku ni todoroku kuro no otoshigo yo",
+      "Ima koso daichi ni haiagari kobushi o furiageyo",
+      "Onteki o tatakitsubushi moyashitsukushi kuraitsukushi kuro ni someyo",
+      "Eguzodasu Fureimu"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "วอเตอร์ฟอล (Waterfall / 水滝)",
+    "en": "Waterfall",
+    "jp": "天を翔ける清流よ、天蓋より降り注ぎて瀑布となり、大地を洗礼せよ、ウォーターフォール！",
+    "romaji": "Ten o kakeru seiryu yo, tengai yori furisosogite bakufu to nari, daichi o senrei seyo, Wota Foru!",
+    "th": "ธารน้ำบริสุทธิ์ผู้โบยบินบนฟากฟ้า จงเทหลั่งลงมาจากเวหาเป็นน้ำตกโถมกระหน่ำ เพื่อชำระล้างผืนแผ่นดิน 'วอเตอร์ฟอล'! (สร้างน้ำตกมวลน้ำมหาศาล ผสมกับความร้อนและไอซิเคิลฟิลด์สร้างหมอกหนาทึบ)",
+    "element": "Water",
+    "element_th": "น้ำ (Water / 水)",
+    "tier": "tier1",
+    "rank": "Intermediate (中級)",
+    "rank_th": "ระดับกลาง (Intermediate / 中級)",
+    "mp_cost": 30,
+    "power": 60,
+    "type": "setup",
+    "effect": "สร้างมวลน้ำตกหล่นกระหน่ำจากอากาศ ผสมกับไอซิเคิลฟิลด์เพื่อสร้างม่านหมอก",
+    "condition": "เปิดมิติไอน้ำบนท้องฟ้าหรือเพดานห้อง",
+    "casters": [
+      "Roxy",
+      "Rudeus"
+    ],
+    "jp_name": "ウォーターフォール",
+    "romaji_name": "Wōtā Fōru",
+    "chunks_jp": [
+      "天を翔ける清流よ",
+      "天蓋より降り注ぎて瀑布となり",
+      "大地を洗礼せよ",
+      "ウォーターフォール"
+    ],
+    "chunks_romaji": [
+      "Ten o kakeru seiryu yo",
+      "tengai yori furisosogite bakufu to nari",
+      "daichi o senrei seyo",
+      "Wota Foru"
+    ]
+  },
+  {
+    "id": 26,
+    "name": "ฟันหักแขน (Arm Break / 腕落とし)",
+    "en": "Arm Break",
+    "jp": "剣神流技――『腕落とし』！(刀身を以って相手の腕を叩き折り、武装を解除せしめん)",
+    "romaji": "Kenshinryu waza ―― \"Ude Otoshi\"! (Toushin o motte aite no ude o tatakiori, busou o kaijosen)",
+    "th": "วิชาดาบสำนักเทพดาบ―― 'ฟันหักแขน (อุเดะโอโตชิ)'! (ใช้ดาบฟาดหักกระดูกแขนศัตรู ปลดอาวุธและยุติการต่อสู้ในเสี้ยววินาที)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 剣神流)",
+    "sword_school": "Sword God",
+    "sword_school_th": "สำนักเทพดาบ (Sword God Style)",
+    "tier": "tier1",
+    "rank": "Sword Style (剣神流技)",
+    "rank_th": "วิชาดาบเทพดาบ (Sword God Style)",
+    "mp_cost": 20,
+    "power": 85,
+    "type": "damage",
+    "effect": "เพลงดาบจู่โจมข้อต่อแขนอย่างแม่นยำ ทำลายการตั้งรับและหักแขนเป้าหมาย",
+    "condition": "เข้าประชิดระยะดาบและฟาดสันดาบหรือคมดาบที่ข้อต่อ",
+    "casters": [
+      "Rudeus",
+      "Eris",
+      "Ghislaine"
+    ],
+    "jp_name": "腕落とし",
+    "romaji_name": "Ude Otoshi",
+    "chunks_jp": [
+      "剣神流技",
+      "腕落とし"
+    ],
+    "chunks_romaji": [
+      "Kenshinryu waza",
+      "Ude Otoshi"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "ดาบแห่งแสง (Sword of Light / 光の太刀)",
+    "en": "Sword of Light",
+    "jp": "光速を越えし一閃――剣神流奥義『光の太刀』！",
+    "romaji": "Kousoku o koeshi issen ―― Kenshinryu Ougi \"Hikari no Tachi\"!",
+    "th": "เพลงดาบหนึ่งประกายทะลวงแสง―― ท่าไม้ตายสูงสุดสำนักเทพดาบ 'ดาบแห่งแสง (ฮิคาริโนะทาจิ)'!",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 剣神流奥義)",
+    "sword_school": "Sword God",
+    "sword_school_th": "สำนักเทพดาบ (Sword God Style)",
+    "tier": "tier2",
+    "rank": "Saint-King (剣聖〜剣王級相当)",
+    "rank_th": "ระดับศักดิ์สิทธิ์-ราชาดาบ (Sword Saint / King)",
+    "mp_cost": 85,
+    "power": 220,
+    "type": "damage",
+    "effect": "ฟาดฟันดาบด้วยความเร็วเหนือเสียงจนเห็นเป็นประกายแสง ตัดขาดแม้กระทั่งเกราะมังกรหรือร่างอมตะ",
+    "condition": "ถ่ายทอดพลังปราณโทกิลงสู่ดาบและปลดปล่อยด้วยความเร็วสูงสุด",
+    "casters": [
+      "Eris",
+      "Ghislaine",
+      "Gal Farion"
+    ],
+    "jp_name": "光の太刀",
+    "romaji_name": "Hikari no Tachi",
+    "chunks_jp": [
+      "光速を越えし一閃",
+      "剣神流奥義",
+      "光の太刀"
+    ],
+    "chunks_romaji": [
+      "Kousoku o koeshi issen",
+      "Kenshinryu Ougi",
+      "Hikari no Tachi"
+    ]
+  },
+  {
+    "id": 28,
+    "name": "สโตนแคนนอน (Stone Cannon / 岩砲弾)",
+    "en": "Stone Cannon",
+    "jp": "堅牢なる大地の楔よ、高速回転し天を貫く弾丸となれ！『岩砲弾(ストーンキャノン)』！",
+    "romaji": "Kenrou naru daichi no kusabi yo, kousoku kaiten shi ten o tsuranuku dangan to nare! \"Suton Kyanon\"!",
+    "th": "ลิ่มหินแห่งพสุธาอันแข็งแกร่งเอ๋ย จงหมุนควงสว่านด้วยความเร็วสูงกลายเป็นกระสุนทะลวงฟ้า! 'สโตนแคนนอน'!",
+    "element": "Earth",
+    "element_th": "ดิน (Earth / 土)",
+    "tier": "tier2",
+    "rank": "Advanced-Saint (上級〜聖級威力)",
+    "rank_th": "ระดับสูง-ศักดิ์สิทธิ์ (Rudeus Special)",
+    "mp_cost": 45,
+    "power": 125,
+    "type": "damage",
+    "effect": "ควบแน่นกระสุนหินหัวแหลมคม หมุนควงสว่านความเร็วเหนือเสียง พลังเจาะเกราะทะลวงร่างแม้แต่ระดับเทพมังกร",
+    "condition": "บีบอัดความหนาแน่นมวลหินและควบคุมความเร็วการหมุนควงสว่าน",
+    "casters": [
+      "Rudeus",
+      "Sylphiette"
+    ],
+    "jp_name": "ストーンキャノン",
+    "romaji_name": "Sutōn Kyanon",
+    "chunks_jp": [
+      "堅牢なる大地の楔よ",
+      "高速回転し天を貫く弾丸となれ",
+      "岩砲弾(ストーンキャノン)"
+    ],
+    "chunks_romaji": [
+      "Kenrou naru daichi no kusabi yo",
+      "kousoku kaiten shi ten o tsuranuku dangan to nare",
+      "Suton Kyanon"
+    ]
+  },
+  {
+    "id": 29,
+    "name": "อิเล็กทริก (Electric / 電撃)",
+    "en": "Electric",
+    "jp": "水と風の交わりし所に閃く雷光よ、我が指先より放たれ麻痺せしめよ！『電撃(エレクトリック)』！",
+    "romaji": "Mizu to kaze no majiwarishi tokoro ni hirameku raikou yo, waga yubisaki yori hanatare mahiseshimeyo! \"Erekutorikku\"!",
+    "th": "สายฟ้าแลบแปลบปลาบ ณ จุดบรรจบแห่งวารีและวายุเอ๋ย จงปล่อยจากปลายนิ้วของข้าและทำให้ศัตรูเป็นอัมพาต! 'อิเล็กทริก'!",
+    "element": "Water",
+    "element_th": "น้ำ / สายฟ้า (Water / Lightning / 混合魔術)",
+    "tier": "tier1",
+    "rank": "Intermediate-Advanced (中〜上級相当)",
+    "rank_th": "ระดับกลาง-สูง (Rudeus Original)",
+    "mp_cost": 40,
+    "power": 95,
+    "type": "damage",
+    "effect": "ปล่อยประจุไฟฟ้าแรงสูงช็อตศัตรู ทำให้ระบบประสาทเป็นอัมพาตและขยับไม่ได้",
+    "condition": "ผสมผสานละอองน้ำและไฟฟ้าสถิตในอากาศ",
+    "casters": [
+      "Rudeus"
+    ],
+    "jp_name": "エレクトリック",
+    "romaji_name": "Erekutorikku",
+    "chunks_jp": [
+      "水と風の交わりし所に閃く雷光よ",
+      "我が指先より放たれ麻痺せしめよ",
+      "電撃(エレクトリック)"
+    ],
+    "chunks_romaji": [
+      "Mizu to kaze no majiwarishi tokoro ni hirameku raikou yo",
+      "waga yubisaki yori hanatare mahiseshimeyo",
+      "Erekutorikku"
+    ]
+  },
+  {
+    "id": 30,
+    "name": "ควัคไมร์ (Quagmire / 泥沼)",
+    "en": "Quagmire",
+    "jp": "大地を水にて溶かし、底無しの泥濘と化せ！『泥沼(クアグマイア)』！",
+    "romaji": "Daichi o mizu ni te tokashi, sokonashi no deinei to kase! \"Kuagumaia\"!",
+    "th": "จงหลอมละลายผืนพสุธาด้วยสายน้ำ แปรเปลี่ยนเป็นหล่มโคลนดูดอันไร้ก้นบึ้ง! 'ควัคไมร์'!",
+    "element": "Earth",
+    "element_th": "ดิน / น้ำ (Earth / Water / 混合魔術)",
+    "tier": "tier1",
+    "rank": "Intermediate (中級相当)",
+    "rank_th": "ระดับกลาง (Rudeus Signature)",
+    "mp_cost": 25,
+    "power": 50,
+    "type": "setup",
+    "effect": "ฉายา 'รูเดียสแห่งโคลนตม' แปรพื้นดินใต้เท้าศัตรูให้กลายเป็นโคลนดูดขังและลดทอนความเร็ว",
+    "condition": "ผสมผสานเวทดินและน้ำลงสู่พื้นผิวดินโดยตรง",
+    "casters": [
+      "Rudeus"
+    ],
+    "jp_name": "クアグマイア",
+    "romaji_name": "Kuagumaia",
+    "chunks_jp": [
+      "大地を水にて溶かし",
+      "底無しの泥濘と化せ",
+      "泥沼(クアグマイア)"
+    ],
+    "chunks_romaji": [
+      "Daichi o mizu ni te tokashi",
+      "sokonashi no deinei to kase",
+      "Kuagumaia"
+    ]
+  },
+  {
+    "id": 31,
+    "name": "แอบโซลูทซีโร่ (Absolute Zero / 絶対零度)",
+    "en": "Absolute Zero",
+    "jp": "全ての熱を奪い去り、時すらも凍結せしめる極冷の静寂よ、世界を白銀に閉ざせ！『絶対零度(アブソリュートゼロ)』！",
+    "romaji": "Subete no netsu o ubaisari, toki suramo touketsu seshimeru kyokurei no seijaku yo, sekai o hakugin ni tozase! \"Abusoryuto Zero\"!",
+    "th": "ความเงียบงันอันเย็นเยือกที่สุดซึ่งช่วงชิงความร้อนทั้งมวลและแช่แข็งแม้กระทั่งกาลเวลาเอ๋ย จงปิดตายโลกนี้ไว้ใต้สีเงินบริสุทธิ์! 'แอบโซลูทซีโร่'!",
+    "element": "Water",
+    "element_th": "น้ำแข็ง / วารี (Ice / Water / 氷聖級)",
+    "tier": "tier2",
+    "rank": "Saint (水・氷聖級)",
+    "rank_th": "ระดับศักดิ์สิทธิ์ (Saint / 氷聖級)",
+    "mp_cost": 110,
+    "power": 195,
+    "type": "damage",
+    "effect": "แช่แข็งทุกสิ่งรอบตัวให้อยู่ในสภาวะศูนย์สัมบูรณ์ หยุดการเคลื่อนไหวและการหายใจในพริบตา",
+    "condition": "ดึงความร้อนทั้งหมดออกจากมิติเป้าหมายในคราวเดียว",
+    "casters": [
+      "Roxy",
+      "Rudeus"
+    ],
+    "jp_name": "アブソリュートゼロ",
+    "romaji_name": "Abusoryūto Zero",
+    "chunks_jp": [
+      "全ての熱を奪い去り",
+      "時すらも凍結せしめる極冷の静寂よ",
+      "世界を白銀に閉ざせ",
+      "絶対零度(アブソリュートゼロ)"
+    ],
+    "chunks_romaji": [
+      "Subete no netsu o ubaisari",
+      "toki suramo touketsu seshimeru kyokurei no seijaku yo",
+      "sekai o hakugin ni tozase",
+      "Abusoryuto Zero"
+    ]
+  },
+  {
+    "id": 32,
+    "name": "หัตถ์ดาบมังกรเกราะ 'อิจิดัน' (Arm Blade 'Ichidan' / 甲龍手刀『一断』)",
+    "en": "Arm Blade 'Ichidan'",
+    "jp": "白き光を纏いし刃牙よ、我が手のひらに宿りて敵を両断せよ――甲龍手刀『一断』！",
+    "romaji": "Shiroki hikari o matoishi baki yo, waga te no hira ni yadorite teki o ryodan seyo ―― Kouryuu Shutou \"Ichidan\"!",
+    "th": "เขี้ยวประกายแสงสีขาวบริสุทธิ์เอ๋ย จงสถิตสู่ฝ่ามือของข้าและผ่าศัตรูให้ขาดสะบั้น―― หัตถ์ดาบมังกรเกราะ 'อิจิดัน' (เปอร์กิอุสสะบัดมือปล่อยคลื่นดาบแสงตัดขาดแม้จอมมารอมตะในพริบตา)!",
+    "element": "Dragon",
+    "element_th": "มังกรโบราณ / ปราณแสง (Ancient Dragon / 龍神秘奥)",
+    "tier": "tier2",
+    "rank": "King-Emperor (王〜帝級相当)",
+    "rank_th": "ระดับราชา-จักรพรรดิมังกร (Dragon King/Emperor)",
+    "mp_cost": 90,
+    "power": 230,
+    "type": "damage",
+    "effect": "สะบัดฝ่ามือปล่อยคมคลื่นดาบประกายแสงขาวตัดผ่าเป้าหมายขาดเป็นสองท่อน มีพลังทำลายล้างมหาศาลแม้แต่จอมมารอมตะ",
+    "condition": "รวมศูนย์พลังปราณมังกรบริสุทธิ์ที่สันมือแล้วสะบัดออกเป็นคลื่นแสง",
+    "casters": [
+      "Perugius Dola"
+    ],
+    "jp_name": "甲龍手刀『一断』",
+    "romaji_name": "Kouryuu Shutou Ichidan",
+    "chunks_jp": [
+      "白き光を纏いし刃牙よ",
+      "我が手のひらに宿りて敵を両断せよ",
+      "甲龍手刀『一断』"
+    ],
+    "chunks_romaji": [
+      "Shiroki hikari o matoishi baki yo",
+      "waga te no hira ni yadorite teki o ryodan seyo",
+      "Kouryuu Shutou Ichidan"
+    ]
+  },
+  {
+    "id": 33,
+    "name": "หมอกหนาทึบ (Deep Mist / 濃霧)",
+    "en": "Deep Mist",
+    "jp": "水の精霊よ、我に力を――『濃霧(ディープミスト)』！",
+    "romaji": "Mizu no seirei yo, ware ni chikara o ―― \"Dīpu Misuto\"!",
+    "th": "ภูตแห่งสายน้ำเอ๋ย จงมอบพลังให้แก่ข้า―― 'หมอกหนาทึบ (ดีปมิสต์)'! (ร่ายผสม วอเตอร์ฟอล + ฮีตไอแลนด์ + ไอซิเคิลฟิลด์ ปกคลุมสนามรบด้วยหมอกหนาทึบ พรางตัวและลดทอนความแม่นยำศัตรู)",
+    "element": "Water",
+    "element_th": "น้ำ / หมอกผสม (Water / Mist / 混合魔術)",
+    "tier": "tier1",
+    "rank": "Intermediate (中級相当・混合魔術)",
+    "rank_th": "ระดับกลาง (Intermediate / 混合魔術)",
+    "mp_cost": 30,
+    "power": 35,
+    "type": "setup",
+    "effect": "สร้างม่านหมอกสีขาวหนาทึบพรางตัวและสับสนประสาทสัมผัสของศัตรู เพิ่มโอกาสหลบหลีกสูงสุด",
+    "condition": "ควบคุมการระเหยของน้ำและปรับอุณหภูมิอากาศให้เกิดไอหมอกฉับพลัน",
+    "casters": [
+      "Moore",
+      "Rudeus"
+    ],
+    "jp_name": "ディープミスト",
+    "romaji_name": "Dīpu Misuto",
+    "chunks_jp": [
+      "水の精霊よ",
+      "我に力を",
+      "濃霧(ディープミスト)"
+    ],
+    "chunks_romaji": [
+      "Mizu no seirei yo",
+      "ware ni chikara o",
+      "Dipu Misuto"
+    ]
+  },
+  {
+    "id": 34,
+    "name": "รันมะ / สลายเวท (Disturb Magic / 乱魔)",
+    "en": "Disturb Magic",
+    "jp": "魔力を乱し、術式を瓦解せしめん――『乱魔(ディスタブマジック)』！",
+    "romaji": "Maryoku o midashi, jutsushiki o gakai seshimen ―― \"Disutabu Majikku\"!",
+    "th": "จงปั่นป่วนมานาและทลายวงเวทให้สิ้นสูญ―― 'รันมะ (ดิสทรับเมจิก)'! (ปล่อยคลื่นแทรกแซงเข้าไปรบกวนโครงสร้างมานาของคู่ต่อสู้ สลายเวทมนตร์ขณะกำลังร่ายทันที)",
+    "element": "Dragon",
+    "element_th": "มังกรโบราณ / รบกวนมานา (Dragon Art / 反魔術)",
+    "tier": "tier2",
+    "rank": "Emperor-God (帝〜神級奥義)",
+    "rank_th": "ระดับจักรพรรดิ (Dragon Secret Art / Emperor)",
+    "mp_cost": 50,
+    "power": 65,
+    "type": "disrupt",
+    "effect": "ส่งคลื่นความถี่มานาผกผันเข้าแทรกแซงวงจรเวทมนตร์ของศัตรู ขัดขวางและยกเลิกการร่ายเวททันที 100%",
+    "condition": "จับการไหลเวียนของมานาก่อนเวทจะสัมฤทธิ์ผลและปล่อยมานาย้อนศร",
+    "casters": [
+      "Orsted",
+      "Rudeus"
+    ],
+    "jp_name": "ディスタブマジック",
+    "romaji_name": "Disutabu Majikku",
+    "chunks_jp": [
+      "魔力を乱し",
+      "術式を瓦解せしめん",
+      "乱魔(ディスタブマジック)"
+    ],
+    "chunks_romaji": [
+      "Maryoku o midashi",
+      "jutsushiki o gakai seshimen",
+      "Disutabu Majikku"
+    ]
+  },
+  {
+    "id": 35,
+    "name": "สายน้ำไหล (Flow / 流 - Nagare)",
+    "en": "Flow (Nagare)",
+    "jp": "水神流基本技――『流(ナガレ)』！(相手の攻撃を受け流し、体勢を崩さん)",
+    "romaji": "Suijinryu kihon waza ―― \"Nagare\"! (Aite no kougeki o ukenagashi, taisei o kuzusan)",
+    "th": "วิชาดาบสำนักเทพวารี―― 'สายน้ำไหล (นากาเระ)'! (ใช้ดาบและแนวไหลของร่างกายปัดเบี่ยงการฟันของศัตรู ทำลายสมดุลและสร้างจังหวะสวนกลับ)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 水神流)",
+    "sword_school": "Water God",
+    "sword_school_th": "สำนักเทพวารี (Water God Style)",
+    "tier": "tier1",
+    "rank": "Water God Elementary (水神流初級)",
+    "rank_th": "วิชาดาบเทพวารี (Water God Style)",
+    "mp_cost": 15,
+    "power": 75,
+    "type": "damage",
+    "effect": "วิชาปัดป้องพื้นฐานของเทพวารี ปัดเบี่ยงวิถีดาบของศัตรูอย่างนุ่มนวลและแทงสวนกลับทันควัน",
+    "condition": "ไม่เป็นฝ่ายเปิดฉากโจมตี รอจังหวะศัตรูฟันเข้ามาแล้วปัดเบี่ยง",
+    "casters": [
+      "Paul Greyrat",
+      "Isolte Cruel",
+      "Reida Reida"
+    ],
+    "jp_name": "流(ナガレ)",
+    "romaji_name": "Nagare",
+    "chunks_jp": [
+      "水神流基本技",
+      "流(ナガレ)"
+    ],
+    "chunks_romaji": [
+      "Suijinryu kihon waza",
+      "Nagare"
+    ]
+  },
+  {
+    "id": 36,
+    "name": "เบี่ยงวิถี (Deflect / 反らし - Sorashi)",
+    "en": "Deflect (Sorashi)",
+    "jp": "水神流技――『反らし(ソラシ)』！(敵の強撃を刃の腹にて流し、無力化せしめん)",
+    "romaji": "Suijinryu waza ―― \"Sorashi\"! (Teki no kyougeki o ha no hara nite nagashi, muryokuka seshimen)",
+    "th": "วิชาดาบสำนักเทพวารี―― 'เบี่ยงวิถี (โซราชิ)'! (ใช้สันดาบเบี่ยงเบนแรงปะทะหนักหน่วงของศัตรูให้แฉลบออก ลดทอนความเสียหายเป็นศูนย์)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 水神流)",
+    "sword_school": "Water God",
+    "sword_school_th": "สำนักเทพวารี (Water God Style)",
+    "tier": "tier1",
+    "rank": "Water God Intermediate (水神流中級)",
+    "rank_th": "วิชาดาบเทพวารี (Water God Style)",
+    "mp_cost": 25,
+    "power": 90,
+    "type": "damage",
+    "effect": "เบี่ยงเบนการโจมตีทางกายภาพหรือเวทมนตร์ระยะประชิดให้เบี่ยงพ้นตัว พร้อมฟันตัดเอ็นเป้าหมาย",
+    "condition": "จัดวางระนาบดาบทำมุม 45 องศากับวิถีดาบคู่ต่อสู้",
+    "casters": [
+      "Paul Greyrat",
+      "Isolte Cruel"
+    ],
+    "jp_name": "反らし",
+    "romaji_name": "Sorashi",
+    "chunks_jp": [
+      "水神流技",
+      "反らし"
+    ],
+    "chunks_romaji": [
+      "Suijinryu waza",
+      "Sorashi"
+    ]
+  },
+  {
+    "id": 37,
+    "name": "คลื่นหวนกลับ (Wave Return / 波返し - Namigaeshi)",
+    "en": "Wave Return (Namigaeshi)",
+    "jp": "水神流奥技――『波返し(ナミガエシ)』！(受けたる衝撃を倍加して返さん)",
+    "romaji": "Suijinryu ougi ―― \"Namigaeshi\"! (Uketaru shougeki o baika shite kaesan)",
+    "th": "วิชาดาบสำนักเทพวารี―― 'คลื่นหวนกลับ (นามิกาเอชิ)'! (รองรับแรงฟันทั้งหมดของศัตรูไว้ในคมดาบแล้วส่งสะท้อนย้อนคืนสู่เป้าหมายด้วยพลังสองเท่า)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 水神流)",
+    "sword_school": "Water God",
+    "sword_school_th": "สำนักเทพวารี (Water God Style)",
+    "tier": "tier2",
+    "rank": "Water God Saint (水聖級相当)",
+    "rank_th": "ระดับศักดิ์สิทธิ์ (Water God Saint)",
+    "mp_cost": 60,
+    "power": 170,
+    "type": "damage",
+    "effect": "สวนกลับการโจมตีระดับรุนแรง สะท้อนพลังโจมตีของศัตรูกลับไปพร้อมพลังฟันของตนเอง",
+    "condition": "ต้องตั้งสมาธิรับแรงกระแทกจุดตกกระทบโดยไม่สะท้าน",
+    "casters": [
+      "Isolte Cruel",
+      "Reida Reida"
+    ],
+    "jp_name": "波返し",
+    "romaji_name": "Namigaeshi",
+    "chunks_jp": [
+      "水神流奥技",
+      "波返し"
+    ],
+    "chunks_romaji": [
+      "Suijinryu ougi",
+      "Namigaeshi"
+    ]
+  },
+  {
+    "id": 38,
+    "name": "ปลดอาวุธวารี (Sword Strip / 太刀奪い - Tachiubai)",
+    "en": "Sword Strip (Tachiubai)",
+    "jp": "水神流技――『太刀奪い(タチウバイ)』！(刃を絡め取り、得物を弾き飛ばさん)",
+    "romaji": "Suijinryu waza ―― \"Tachiubai\"! (Yaiba o karametori, emono o hajikitobasan)",
+    "th": "วิชาดาบสำนักเทพวารี―― 'ปลดอาวุธวารี (ทาจิอุบาย)'! (ใช้คมดาบเกี่ยวพันคมดาบศัตรู บิดข้อมือปลดอาวุธให้หลุดกระเด็นออกจากมือ)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 水神流)",
+    "sword_school": "Water God",
+    "sword_school_th": "สำนักเทพวารี (Water God Style)",
+    "tier": "tier1",
+    "rank": "Water God Advanced (水神流上級)",
+    "rank_th": "วิชาดาบเทพวารี (Water God Style)",
+    "mp_cost": 30,
+    "power": 110,
+    "type": "damage",
+    "effect": "ปลดอาวุธของเป้าหมายทันที ทำให้พลังโจมตีของศัตรูลดลงอย่างมาก",
+    "condition": "เข้าประชิดโคนดาบของคู่ต่อสู้แล้วบิดหมุนด้ามดาบ",
+    "casters": [
+      "Paul Greyrat",
+      "Isolte Cruel"
+    ],
+    "jp_name": "太刀奪い",
+    "romaji_name": "Tachiubai",
+    "chunks_jp": [
+      "水神流技",
+      "太刀奪い"
+    ],
+    "chunks_romaji": [
+      "Suijinryu waza",
+      "Tachiubai"
+    ]
+  },
+  {
+    "id": 39,
+    "name": "เพลงดาบน้ำคงกระพัน (Water God Ultimate / 水神流奥義)",
+    "en": "Water God Ultimate",
+    "jp": "静水の結界、あらゆる刃を呑み込みて無に帰さん――水神流奥義！",
+    "romaji": "Seisui no kekkai, arayuru yaiba o nomikomite mu ni kisan ―― Suijinryu Ougi!",
+    "th": "อาณาเขตแห่งสายน้ำนิ่ง จงกลืนกินคมดาบทั้งปวงและทำให้สูญสลายเป็นความว่างเปล่า―― ท่าไม้ตายสูงสุดสำนักเทพวารี! (สุดยอดวิชาปัดป้อง 360 องศา ปัดและสวนกลับทุกการโจมตีในระยะดาบ)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 水神流奥義)",
+    "sword_school": "Water God",
+    "sword_school_th": "สำนักเทพวารี (Water God Style)",
+    "tier": "tier2",
+    "rank": "King-God (水王〜水神級)",
+    "rank_th": "ระดับราชา-เทพวารี (Water God King/God)",
+    "mp_cost": 80,
+    "power": 210,
+    "type": "damage",
+    "effect": "กางรัศมีวงดาบแห่งการปัดป้องสมบูรณ์แบบ สะท้อนทุกการโจมตีรอบตัว 360 องศาและปลิดชีพศัตรูในระยะก้าวเดียว",
+    "condition": "เข้าสู่สภาวะจิตสงบนิ่งดั่งผิวน้ำที่ไร้ระลอกคลื่น",
+    "casters": [
+      "Reida Reida",
+      "Isolte Cruel"
+    ],
+    "jp_name": "水神流奥義",
+    "romaji_name": "Suijinryu Ougi",
+    "chunks_jp": [
+      "静水の結界",
+      "あらゆる刃を呑み込みて無に帰さん",
+      "水神流奥義"
+    ],
+    "chunks_romaji": [
+      "Seisui no kekkai",
+      "arayuru yaiba o nomikomite mu ni kisan",
+      "Suijinryu Ougi"
+    ]
+  },
+  {
+    "id": 40,
+    "name": "ดาบสี่ทิศ (Four Stabs / 四ツ太刀 - Yotsutachi)",
+    "en": "Four Stabs (Yotsutachi)",
+    "jp": "北神流技――『四ツ太刀(ヨツタチ)』！(疾風怒濤の四連撃にて防陣を穿て)",
+    "romaji": "Hokushinryu waza ―― \"Yotsutachi\"! (Shippu dotou no yonrengeki nite boujin o ugate)",
+    "th": "วิชาดาบสำนักเทพอุดร―― 'ดาบสี่ทิศ (โยตสึทาจิ)'! (กระหน่ำแทงดาบฉับพลันต่อเนื่อง 4 ทิศทางในเสี้ยวพริบตา ทะลวงแนวรับและจุดตาย)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 北神流)",
+    "sword_school": "North God",
+    "sword_school_th": "สำนักเทพอุดร (North God Style)",
+    "tier": "tier1",
+    "rank": "North God Intermediate (北神流中級)",
+    "rank_th": "วิชาดาบเทพอุดร (North God Style)",
+    "mp_cost": 25,
+    "power": 105,
+    "type": "damage",
+    "effect": "แทงกระหน่ำ 4 ครั้งต่อเนื่องด้วยมุมองศาที่คาดเดาไม่ได้ เจาะทะลุเกราะหนาของเป้าหมาย",
+    "condition": "สลับจังหวะมือและทิศทางข้อเท้าอย่างคล่องแคล่ว",
+    "casters": [
+      "Audech",
+      "Kalman II",
+      "Paul Greyrat"
+    ],
+    "jp_name": "四ツ太刀",
+    "romaji_name": "Yotsutachi",
+    "chunks_jp": [
+      "北神流技",
+      "四ツ太刀"
+    ],
+    "chunks_romaji": [
+      "Hokushinryu waza",
+      "Yotsutachi"
+    ]
+  },
+  {
+    "id": 41,
+    "name": "ทริคขว้างดาบ (Sword Throw / 投剣 - Touken)",
+    "en": "Sword Throw (Touken)",
+    "jp": "北神流実戦技――『投剣(トウケン)』！(虚を突き、刃を投げ放ちて活路を開かん)",
+    "romaji": "Hokushinryu jissen waza ―― \"Touken\"! (Kyo o tsuki, yaiba o nagehanachite katsuro o hirakan)",
+    "th": "วิชาดาบสำนักเทพอุดร―― 'ทริคขว้างดาบ (โทเค็น)'! (ขว้างดาบเล่มรองใส่จุดตายอย่างฉับพลันเพื่อทำลายจังหวะศัตรู แล้วพุ่งชักดาบปลิดชีพ)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 北神流)",
+    "sword_school": "North God",
+    "sword_school_th": "สำนักเทพอุดร (North God Style)",
+    "tier": "tier1",
+    "rank": "North God Intermediate (北神流中級)",
+    "rank_th": "วิชาดาบเทพอุดร (North God Style)",
+    "mp_cost": 20,
+    "power": 95,
+    "type": "damage",
+    "effect": "จู่โจมระยะไกลโดยไม่คาดฝัน ขว้างอาวุธเบี่ยงเบนความสนใจและขัดจังหวะการร่ายมนตร์หรือเพลงดาบ",
+    "condition": "พกพาอาวุธสำรองหรือมีดสั้นไว้ที่สายสะพาย",
+    "casters": [
+      "Kalman III",
+      "Paul Greyrat",
+      "Ruijerd Superdia"
+    ],
+    "jp_name": "投剣",
+    "romaji_name": "Touken",
+    "chunks_jp": [
+      "北神流実戦技",
+      "投剣"
+    ],
+    "chunks_romaji": [
+      "Hokushinryu jissen waza",
+      "Touken"
+    ]
+  },
+  {
+    "id": 42,
+    "name": "สาดทรายลวงตา (Sand Toss / 砂掛け - Sunagake)",
+    "en": "Sand Toss (Sunagake)",
+    "jp": "北神流奇策――『砂掛け(スナガケ)』！(泥砂を舞い上げ、視界を奪いて虚を突け)",
+    "romaji": "Hokushinryu kisaku ―― \"Sunagake\"! (Deisa o maiage, shikai o ubaite kyo o tsuke)",
+    "th": "วิชาดาบสำนักเทพอุดร―― 'สาดทรายลวงตา (ซูนากาเกะ)'! (เตะทรายหรือฝุ่นละอองเข้าตาคู่ต่อสู้เพื่อบดบังวิสัยทัศน์ วิชาเอาชีวิตรอดสุดเจ้าเล่ห์ของเทพอุดร)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 北神流)",
+    "sword_school": "North God",
+    "sword_school_th": "สำนักเทพอุดร (North God Style)",
+    "tier": "tier1",
+    "rank": "North God Elementary (北神流初級)",
+    "rank_th": "วิชาดาบเทพอุดร (North God Style)",
+    "mp_cost": 15,
+    "power": 60,
+    "type": "setup",
+    "effect": "บดบังสายตาของศัตรู ทำให้ศัตรูติดสถานะตาบอดชั่วคราวและลดอัตราความแม่นยำอย่างรุนแรง",
+    "condition": "มีพื้นดิน ทราย หรือเศษหินอยู่ในระยะปลายเท้า",
+    "casters": [
+      "Kalman I",
+      "Kalman II",
+      "Paul Greyrat"
+    ],
+    "jp_name": "砂掛け",
+    "romaji_name": "Sunagake",
+    "chunks_jp": [
+      "北神流奇策",
+      "砂掛け"
+    ],
+    "chunks_romaji": [
+      "Hokushinryu kisaku",
+      "Sunagake"
+    ]
+  },
+  {
+    "id": 43,
+    "name": "ทะยานฟ้า (Swallow Flight / 飛天 - Hiten)",
+    "en": "Swallow Flight (Hiten)",
+    "jp": "北神流跳躍技――『飛天(ヒテン)』！(宙を舞い、死角より急降下一閃)",
+    "romaji": "Hokushinryu choyaku waza ―― \"Hiten\"! (Chuu o mai, shikaku yori kyuukouka issen)",
+    "th": "วิชาดาบสำนักเทพอุดร―― 'ทะยานฟ้า (ฮิเท็น)'! (กระโดดเหยียบสิ่งกีดขวางหรือร่างศัตรู ตีลังกาฟันดาบจากมุมอับสายตากลางเวหา)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 北神流)",
+    "sword_school": "North God",
+    "sword_school_th": "สำนักเทพอุดร (North God Style)",
+    "tier": "tier2",
+    "rank": "North God Advanced (北神流上級)",
+    "rank_th": "วิชาดาบเทพอุดร (North God Style)",
+    "mp_cost": 45,
+    "power": 140,
+    "type": "damage",
+    "effect": "โจมตีจากความสูงกลางอากาศ หลบเลี่ยงการป้องกันพื้นฐานและทิ้งน้ำหนักตัวฟันลงบนจุดตาย",
+    "condition": "ใช้แรงส่งจากพื้นหรือกำแพงเพื่อดีดตัวขึ้นสู่อากาศ",
+    "casters": [
+      "Kalman II",
+      "Kalman III"
+    ],
+    "jp_name": "飛天",
+    "romaji_name": "Hiten",
+    "chunks_jp": [
+      "北神流跳躍技",
+      "飛天"
+    ],
+    "chunks_romaji": [
+      "Hokushinryu choyaku waza",
+      "Hiten"
+    ]
+  },
+  {
+    "id": 44,
+    "name": "ดาบสิบแปดกระบวนยุทธ์ไร้ขอบเขต (North God Ultimate / 北神流奥義)",
+    "en": "North God Ultimate",
+    "jp": "生ある限り剣を捨てず、万象を以って敵を穿て――北神流奥義！",
+    "romaji": "Sei aru kagiri ken o sutezu, bansho o motte teki o ugate ―― Hokushinryu Ougi!",
+    "th": "ตราบที่มีลมหายใจจงอย่ายอมจำนน ใช้สรรพสิ่งเจาะทะลวงศัตรู―― ท่าไม้ตายสูงสุดสำนักเทพอุดร! (วิชาดาบไร้ขอบเขต สู้ได้แม้สูญเสียแขนหรืออาวุธหัก พลิกความตายเป็นชัยชนะ)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 北神流奥義)",
+    "sword_school": "North God",
+    "sword_school_th": "สำนักเทพอุดร (North God Style)",
+    "tier": "tier2",
+    "rank": "North God Saint-King (北聖〜北王級)",
+    "rank_th": "ระดับศักดิ์สิทธิ์-ราชาเทพอุดร (North God Saint/King)",
+    "mp_cost": 75,
+    "power": 205,
+    "type": "damage",
+    "effect": "ปลดปล่อยการต่อสู้ไร้รูปแบบ ผสมผสานทุกเล่ห์เหลี่ยมและพละกำลัง เอาชนะศัตรูแม้ในสภาวะวิกฤตใกล้ตาย",
+    "condition": "มีจิตใจที่มุ่งมั่นเอาชีวิตรอดไม่ว่าจะตกอยู่ในสถานการณ์ใด",
+    "casters": [
+      "Kalman II (Alex)",
+      "Kalman III (Aleksander)"
+    ],
+    "jp_name": "北神流奥義",
+    "romaji_name": "Hokushinryu Ougi",
+    "chunks_jp": [
+      "生ある限り剣を捨てず",
+      "万象を以って敵を穿て",
+      "北神流奥義"
+    ],
+    "chunks_romaji": [
+      "Sei aru kagiri ken o sutezu",
+      "bansho o motte teki o ugate",
+      "Hokushinryu Ougi"
+    ]
+  },
+  {
+    "id": 45,
+    "name": "ดาบเงียบ (Silent Blade / 無音の太刀 - Muon no Tachi)",
+    "en": "Silent Blade (Muon no Tachi)",
+    "jp": "気配を断ち、音を置き去りにせよ――剣神流『無音の太刀』！",
+    "romaji": "Kehai o tachi, oto o okizari ni seyo ―― Kenshinryu \"Muon no Tachi\"!",
+    "th": "จงตัดจิตสังหารและทิ้งเสียงไว้เบื้องหลัง―― วิชาสำนักเทพดาบ 'ดาบเงียบ (มูองโนะทาจิ)'! (ฟันดาบด้วยความเร็วสูงโดยไร้เสียงลมและไร้จิตสังหาร ศัตรูจะไม่รู้ตัวจนกว่าบาดแผลจะเปิดออก)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 剣神流)",
+    "sword_school": "Sword God",
+    "sword_school_th": "สำนักเทพดาบ (Sword God Style)",
+    "tier": "tier2",
+    "rank": "Sword God Advanced-Saint (剣神流上級〜聖級)",
+    "rank_th": "วิชาดาบเทพดาบ (Sword God Style)",
+    "mp_cost": 50,
+    "power": 165,
+    "type": "damage",
+    "effect": "ลบเสียงแหวกอากาศและจิตสังหารโดยสิ้นเชิง ฟันใส่ศัตรูโดยไม่ให้ตั้งตัวติด",
+    "condition": "ควบคุมการหายใจและกล้ามเนื้อให้เคลื่อนไหวอย่างราบรื่นไร้เสียง",
+    "casters": [
+      "Ghislaine Dedoldia",
+      "Gal Farion",
+      "Eris Boreas Greyrat"
+    ],
+    "jp_name": "無音の太刀",
+    "romaji_name": "Muon no Tachi",
+    "chunks_jp": [
+      "気配を断ち",
+      "音を置き去りにせよ",
+      "無音の太刀"
+    ],
+    "chunks_romaji": [
+      "Kehai o tachi",
+      "oto o okizari ni seyo",
+      "Muon no Tachi"
+    ]
+  },
+  {
+    "id": 46,
+    "name": "ดาบผ่าแสง (Light Reversal / 光返し - Hikari Gaeshi)",
+    "en": "Light Reversal (Hikari Gaeshi)",
+    "jp": "光速の一閃を見切り、その刃を断ち切らん――剣神流奥義『光返し』！",
+    "romaji": "Kousoku no issen o mikiri, sono yaiba o tachikiran ―― Kenshinryu Ougi \"Hikari Gaeshi\"!",
+    "th": "จงจับทิศทางประกายแสงความเร็วเสียง และผ่าสะบั้นคมดาบนั้น―― ท่าไม้ตายสำนักเทพดาบ 'ดาบผ่าแสง (ฮิคาริกาเอชิ)'! (วิชาขั้นราชาดาบขึ้นไป ใช้ฟันสวนเข้าใส่ดาบแห่งแสงของศัตรูเพื่อฟันหักล้างและสังหารคู่ต่อสู้)",
+    "element": "Sword",
+    "element_th": "วิชาดาบ (Sword Style / 剣神流奥義)",
+    "sword_school": "Sword God",
+    "sword_school_th": "สำนักเทพดาบ (Sword God Style)",
+    "tier": "tier2",
+    "rank": "Sword God King-Emperor (剣王〜剣帝級)",
+    "rank_th": "ระดับราชา-จักรพรรดิดาบ (Sword King/Emperor)",
+    "mp_cost": 95,
+    "power": 240,
+    "type": "damage",
+    "effect": "มองทะลุดาบแห่งแสงของคู่ต่อสู้ และฟันตัดผ่านวิถีดาบสวนกลับด้วยพลังทำลายสูงสุด",
+    "condition": "ต้องมีปฏิกิริยาตอบสนองและสายตาในระดับราชาดาบขึ้นไป",
+    "casters": [
+      "Gal Farion",
+      "Jina"
+    ],
+    "jp_name": "光返し",
+    "romaji_name": "Hikari Gaeshi",
+    "chunks_jp": [
+      "光速の一閃を見切り",
+      "その刃を断ち切らん",
+      "光返し"
+    ],
+    "chunks_romaji": [
+      "Kousoku no issen o mikiri",
+      "sono yaiba o tachikiran",
+      "Hikari Gaeshi"
     ]
   }
 ]

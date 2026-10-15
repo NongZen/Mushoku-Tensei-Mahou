@@ -1,6 +1,6 @@
 import React from 'react';
 import { TabType } from '../types';
-import { BookMarked, Mic, ShieldAlert } from 'lucide-react';
+import { BookMarked, Mic, ShieldAlert, Swords } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: TabType;
@@ -29,11 +29,11 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
         Mushoku Tensei
         <br />
         <span className="text-2xl md:text-4xl mt-1 block text-white/90 font-normal">
-          Magic Chants Archive
+          Magic & Sword Archive
         </span>
       </h1>
       <p className="text-gray-400 max-w-2xl mx-auto font-light text-sm md:text-base leading-relaxed">
-        คลังบทสวดและคำร่ายเวทมนตร์ฉบับสมบูรณ์ คลิกที่การ์ดเพื่อดูรายละเอียดบทสวดเต็ม หรือเข้าสู่โหมดฝึกท่องและเกมประลองเวทมนตร์
+        คลังบทสวดเวทมนตร์และวิถีดาบสามสำนักใหญ่ฉบับสมบูรณ์ พร้อมระบบฝึกท่องออกเสียงและเกมประลองเวทมนตร์
       </p>
       <div className="h-px w-32 bg-gradient-to-r from-transparent via-magic-gold to-transparent mx-auto mt-6 opacity-50"></div>
 
@@ -42,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
         <button
           type="button"
           onClick={() => onTabChange('grimoire')}
-          className={`px-6 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border flex items-center gap-2 cursor-pointer ${
+          className={`px-5 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border flex items-center gap-2 cursor-pointer ${
             activeTab === 'grimoire'
               ? 'border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]'
               : 'border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold'
@@ -50,6 +50,19 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
         >
           <BookMarked className="w-4 h-4" />
           Grimoire Archive
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onTabChange('sword')}
+          className={`px-5 py-2.5 rounded-full font-cinzel text-sm uppercase tracking-wider font-semibold transition-all border flex items-center gap-2 cursor-pointer ${
+            activeTab === 'sword'
+              ? 'border-magic-gold bg-magic-gold text-magic-dark shadow-[0_0_15px_rgba(197,160,89,0.4)]'
+              : 'border-magic-gold/30 bg-magic-blue/60 text-gray-300 hover:text-white hover:border-magic-gold'
+          }`}
+        >
+          <Swords className="w-4 h-4" />
+          Sword Styles (3 สำนัก)
         </button>
 
         <button

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Spell, Enemy, BattleState } from '../types';
 import { enemiesData } from '../data/spells';
 import { findMatchingSpell } from '../utils/chantEvaluator';
@@ -92,8 +92,23 @@ export const BattleView: React.FC<BattleViewProps> = ({ spells }) => {
     initBattle(eKey);
   };
 
-  const battleSpellIds = [2, 8, 12, 16, 20, 21, 5, 1];
-  const battleSpells = spells.filter((s) => battleSpellIds.includes(s.id));
+  const [battleElementFilter, setBattleElementFilter] = useState<string>('All');
+
+  const battleSpells = useMemo(() => {
+    if (battleElementFilter === 'All') {
+      return spells;
+    }
+    if (battleElementFilter === 'Sword_SwordGod') {
+      return spells.filter((s) => s.sword_school === 'Sword God');
+    }
+    if (battleElementFilter === 'Sword_WaterGod') {
+      return spells.filter((s) => s.sword_school === 'Water God');
+    }
+    if (battleElementFilter === 'Sword_NorthGod') {
+      return spells.filter((s) => s.sword_school === 'North God');
+    }
+    return spells.filter((s) => s.element.toLowerCase() === battleElementFilter.toLowerCase());
+  }, [spells, battleElementFilter]);
 
   const addLog = (msg: string) => {
     setLogs((prev) => [...prev, msg]);
@@ -599,14 +614,44 @@ export const BattleView: React.FC<BattleViewProps> = ({ spells }) => {
         </div>
 
         {/* Spell Action Slots Header */}
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2">
           <span className="text-xs uppercase font-cinzel text-magic-gold tracking-wider">
             Turn: <strong className="text-white">{battleState.turn}</strong> • Spell Action Slots (เลือก Quick Cast ⚡ หรือ Chant 📜)
           </span>
           <div className="text-[11px] text-gray-400 flex items-center gap-1">
             <HelpCircle className="w-3.5 h-3.5 text-magic-gold" />
-            <span>กด "Quick Cast ⚡" จะยิงเวททันทีโดยไม่มี Chanting Phase</span>
+            <span>กด "Quick ⚡" จะร่ายเวททันทีโดยไม่ต้องผ่าน Chanting Phase</span>
           </div>
+        </div>
+
+        {/* Element Filter Pills for Battle */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {[
+            { id: 'All', label: 'All Deck' },
+            { id: 'Water', label: '💧 Water' },
+            { id: 'Fire', label: '🔥 Fire' },
+            { id: 'Earth', label: '⛰️ Earth' },
+            { id: 'Wind', label: '🌪️ Wind' },
+            { id: 'Sword', label: '⚔️ Sword All' },
+            { id: 'Sword_SwordGod', label: '🗡️ เทพดาบ' },
+            { id: 'Sword_WaterGod', label: '🌊 เทพวารี' },
+            { id: 'Sword_NorthGod', label: '🌿 เทพอุดร' },
+            { id: 'Healing', label: '✨ Healing' },
+            { id: 'Dragon', label: '🐉 Dragon' },
+          ].map((elem) => (
+            <button
+              key={elem.id}
+              type="button"
+              onClick={() => setBattleElementFilter(elem.id)}
+              className={`px-3 py-1 rounded-lg text-xs font-cinzel transition-all cursor-pointer ${
+                battleElementFilter === elem.id
+                  ? 'bg-magic-gold text-magic-dark font-bold shadow-[0_0_10px_rgba(197,160,89,0.4)]'
+                  : 'bg-white/5 text-gray-400 hover:text-white border border-white/10'
+              }`}
+            >
+              {elem.label}
+            </button>
+          ))}
         </div>
 
         {/* Spell Action Slots Grid */}

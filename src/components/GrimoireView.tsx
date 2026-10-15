@@ -11,8 +11,9 @@ const elementOrder: Record<string, number> = {
   Water: 1,
   Fire: 2,
   Earth: 3,
-  Healing: 4,
-  Dragon: 5,
+  Wind: 4,
+  Healing: 5,
+  Dragon: 6,
 };
 
 function getSpellRankWeight(rankStr: string): number {
@@ -24,7 +25,7 @@ function getSpellRankWeight(rankStr: string): number {
   if (lower.includes('聖') || lower.includes('saint')) return 4;
   if (lower.includes('王') || lower.includes('king')) return 5;
   if (lower.includes('帝') || lower.includes('emperor')) return 6;
-  if (lower.includes('神') || lower.includes('god') || lower.includes('ancient') || lower.includes('unique')) return 7;
+  if (lower.includes('神') || lower.includes('god') || lower.includes('ancient') || lower.includes('unique') || lower.includes('奥義')) return 7;
   return 3;
 }
 
@@ -37,6 +38,9 @@ export const GrimoireView: React.FC<GrimoireViewProps> = ({ spells, onSelectSpel
     const query = searchQuery.toLowerCase().trim();
 
     const filtered = spells.filter((spell) => {
+      // Exclude sword techniques from Grimoire (they belong exclusively to Sword Styles tab)
+      if (spell.element === 'Sword' || spell.sword_school) return false;
+
       const matchFilter = filterOption === 'all' || spell.element.toLowerCase() === filterOption.toLowerCase();
       const matchSearch =
         !query ||
@@ -79,8 +83,12 @@ export const GrimoireView: React.FC<GrimoireViewProps> = ({ spells, onSelectSpel
         return 'bg-red-500 text-red-500';
       case 'Earth':
         return 'bg-amber-700 text-amber-700';
+      case 'Wind':
+        return 'bg-emerald-400 text-emerald-400';
       case 'Healing':
         return 'bg-yellow-400 text-yellow-400';
+      case 'Sword':
+        return 'bg-cyan-300 text-cyan-300';
       case 'Dragon':
         return 'bg-rose-500 text-rose-500';
       default:
@@ -88,10 +96,56 @@ export const GrimoireView: React.FC<GrimoireViewProps> = ({ spells, onSelectSpel
     }
   };
 
+  // Only magic spells in Grimoire
+  const magicSpells = useMemo(() => {
+    return spells.filter((s) => s.element !== 'Sword' && !s.sword_school);
+  }, [spells]);
+
+  const waterCount = magicSpells.filter((s) => s.element === 'Water').length;
+  const fireCount = magicSpells.filter((s) => s.element === 'Fire').length;
+  const earthCount = magicSpells.filter((s) => s.element === 'Earth').length;
+  const windCount = magicSpells.filter((s) => s.element === 'Wind').length;
+  const healingCount = magicSpells.filter((s) => s.element === 'Healing').length;
+  const dragonCount = magicSpells.filter((s) => s.element === 'Dragon').length;
+
+  const elementPills = [
+    { id: 'all', label: 'ทั้งหมด', icon: '✨', count: magicSpells.length, borderClass: 'border-white/10 hover:border-white/30' },
+    { id: 'Water', label: 'น้ำ / น้ำแข็ง', icon: '💧', count: waterCount, borderClass: 'border-blue-900/50 hover:border-blue-500/60' },
+    { id: 'Fire', label: 'ไฟ', icon: '🔥', count: fireCount, borderClass: 'border-red-900/50 hover:border-red-500/60' },
+    { id: 'Earth', label: 'ดิน', icon: '⛰️', count: earthCount, borderClass: 'border-amber-900/50 hover:border-amber-600/60' },
+    { id: 'Wind', label: 'ลม', icon: '🌪️', count: windCount, borderClass: 'border-emerald-900/50 hover:border-emerald-500/60' },
+    { id: 'Healing', label: 'การรักษา', icon: '🌿', count: healingCount, borderClass: 'border-yellow-900/50 hover:border-yellow-500/60' },
+    { id: 'Dragon', label: 'มังกรโบราณ', icon: '🐉', count: dragonCount, borderClass: 'border-rose-900/50 hover:border-rose-500/60' },
+  ];
+
   return (
     <section>
-      {/* Controls (Search, Sort & Filter) */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-magic-blue/40 p-4 rounded-xl border border-magic-gold/20 backdrop-blur-sm z-20 relative shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+      {/* Controls Container: Top Element Pills + Search & Filter Bar */}
+      <div className="space-y-4 mb-8">
+        {/* Top Element Pill Buttons */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          {elementPills.map((pill) => {
+            const isSelected = filterOption === pill.id;
+            return (
+              <button
+                key={pill.id}
+                type="button"
+                onClick={() => setFilterOption(pill.id)}
+                className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-cinzel font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+                  isSelected
+                    ? 'bg-[#c5a059] text-magic-dark border-[#c5a059] shadow-[0_0_15px_rgba(197,160,89,0.4)]'
+                    : `bg-black/40 text-gray-300 ${pill.borderClass} hover:text-white`
+                }`}
+              >
+                <span>{pill.icon} {pill.label}</span>
+                <span className="text-[11px] opacity-75">({pill.count})</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Controls (Search, Sort & Filter Bar) */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-magic-blue/40 p-4 rounded-xl border border-magic-gold/20 backdrop-blur-sm z-20 relative shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
         {/* Search Box */}
         <div className="relative w-full md:w-72">
           <input
@@ -129,18 +183,20 @@ export const GrimoireView: React.FC<GrimoireViewProps> = ({ spells, onSelectSpel
               id="filter-select"
               value={filterOption}
               onChange={(e) => setFilterOption(e.target.value)}
-              className="w-full md:w-44 py-2 pl-4 pr-10 rounded-lg cursor-pointer font-prompt text-sm transition-all"
+              className="w-full md:w-48 py-2 pl-4 pr-10 rounded-lg cursor-pointer font-prompt text-sm transition-all"
             >
-              <option value="all">ทั้งหมด (All)</option>
+              <option value="all">ทั้งหมด (All Elements)</option>
               <option value="Water">น้ำ / น้ำแข็ง (Water/Ice)</option>
               <option value="Fire">ไฟ (Fire)</option>
               <option value="Earth">ดิน (Earth)</option>
+              <option value="Wind">ลม (Wind)</option>
               <option value="Healing">รักษา / ศักดิ์สิทธิ์ (Healing)</option>
               <option value="Dragon">มังกร / อัญเชิญ (Dragon)</option>
             </select>
           </div>
         </div>
       </div>
+    </div>
 
       {/* Grimoire Cards Grid */}
       {filteredAndSortedSpells.length === 0 ? (

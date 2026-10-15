@@ -61,7 +61,8 @@ export const TrainingView: React.FC<TrainingViewProps> = ({ spells, initialSpell
   }, []);
 
   const handleGenerateQueue = () => {
-    let pool = spells;
+    // Only magic spells for Chanting Training (Sword techniques do not have chants)
+    let pool = spells.filter((s) => s.element !== 'Sword' && !s.sword_school);
     if (targetElement !== 'All') {
       pool = pool.filter((s) => s.element.toLowerCase() === targetElement.toLowerCase());
     }
@@ -203,12 +204,13 @@ export const TrainingView: React.FC<TrainingViewProps> = ({ spells, initialSpell
               onChange={(e) => setTargetElement(e.target.value)}
               className="w-full py-2 px-3 rounded-lg text-sm"
             >
-              <option value="All">All Elements (全属性)</option>
+              <option value="All">All Elements (全属性 - ทุกธาตุเวทมนตร์)</option>
               <option value="Water">Water / Ice (น้ำ / น้ำแข็ง)</option>
               <option value="Fire">Fire (ไฟ)</option>
               <option value="Earth">Earth (ดิน)</option>
+              <option value="Wind">Wind (ลม)</option>
               <option value="Healing">Healing (การรักษา / ศักดิ์สิทธิ์)</option>
-              <option value="Dragon">Dragon Summon (มังกรโบราณ)</option>
+              <option value="Dragon">Dragon Summon / Ancient (มังกรโบราณ)</option>
             </select>
           </div>
 

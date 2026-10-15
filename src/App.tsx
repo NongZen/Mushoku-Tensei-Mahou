@@ -4,6 +4,7 @@ import { spellsData } from './data/spells';
 import { ParticleCanvas } from './components/ParticleCanvas';
 import { Header } from './components/Header';
 import { GrimoireView } from './components/GrimoireView';
+import { SwordView } from './components/SwordView';
 import { TrainingView } from './components/TrainingView';
 import { BattleView } from './components/BattleView';
 import { SpellModal } from './components/SpellModal';
@@ -32,6 +33,13 @@ export const App: React.FC = () => {
         <main className="min-h-[500px]">
           {activeTab === 'grimoire' && (
             <GrimoireView
+              spells={spellsData}
+              onSelectSpell={(spell) => setSelectedSpell(spell)}
+            />
+          )}
+
+          {activeTab === 'sword' && (
+            <SwordView
               spells={spellsData}
               onSelectSpell={(spell) => setSelectedSpell(spell)}
             />

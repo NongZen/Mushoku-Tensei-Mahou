@@ -20,9 +20,11 @@ export interface Spell {
   romaji_name: string;
   chunks_jp?: string[];
   chunks_romaji?: string[];
+  sword_school?: 'Sword God' | 'Water God' | 'North God';
+  sword_school_th?: string;
 }
 
-export type TabType = 'grimoire' | 'training' | 'battle';
+export type TabType = 'grimoire' | 'sword' | 'training' | 'battle';
 
 export interface Enemy {
   name: string;
